@@ -70,7 +70,7 @@ public class DiskCacheManager {
 
 	/**
 	 * 关闭所有的磁盘缓存对象<br>
-	 * 在Activity的onDestory()中调用,关闭之后不能再调用操作数据的方法
+	 * 在Activity的onDestroy()中调用,关闭之后不能再调用操作数据的方法
 	 */
 	public void closeCache() {
 		// 循环遍历所有的磁盘缓存并关闭
