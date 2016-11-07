@@ -263,52 +263,6 @@ public class DiskCacheManager {
 			}
 		}
 	}
-//
-//	/**
-//	 * 异常情况需要关闭之后再打开
-//	 *
-//	 * @param context   Context
-//	 * @param cachePath String
-//	 * @param key       String
-//	 * @param content   String
-//	 * @param maxSize   long
-//	 */
-//	public synchronized void putString(Context context, String cachePath,
-//	                                   String key, String content, long maxSize) {
-//		DiskLruCache diskCache = diskCaches.get(cachePath);
-//		if (diskCache == null) {
-//			LogUtils.i(TAG, "还没有初始化key为 '" + cachePath + "' 的磁盘缓存");
-//			return;
-//		}
-//		// 将要保存的字符窜转换成md5字符窜，用来做文件名
-//		OutputStream os = null;
-//		try {
-//			DiskLruCache.Editor editor = diskCache.edit(StringUtils.encodeToMD5(key));
-//			if (editor != null) {
-//				os = editor.newOutputStream(0);
-//				if (FileUtils.writeStringToStream(content, "utf-8", os)) {
-//					editor.commit();
-//				} else {
-//					editor.abort();
-//				}
-//			}
-//			diskCache.flush();
-//		} catch (Exception e) {
-//			LogUtils.e(TAG, "Exception", e);
-//			// 关闭，再打开
-//			closeCache(cachePath);
-//			openCache(context, maxSize, cachePath);
-//			putString(cachePath, key, content);
-//		} finally {
-//			if (os != null) {
-//				try {
-//					os.close();
-//				} catch (IOException e) {
-//					LogUtils.e(TAG, "IOException", e);
-//				}
-//			}
-//		}
-//	}
 
 	/**
 	 * 将字符窜内容写入磁盘缓存<p>
@@ -385,38 +339,6 @@ public class DiskCacheManager {
 		}
 		return null;
 	}
-
-//	public synchronized String getString(Context context, String cachePath,
-//	                                     String key, long maxSize) {
-//		DiskLruCache diskCache = diskCaches.get(cachePath);
-//		if (diskCache == null) {
-//			LogUtils.i(TAG, "还没有初始化key为 '" + cachePath + "' 的磁盘缓存");
-//			return null;
-//		}
-//		InputStream is = null;
-//		try {
-//			DiskLruCache.Snapshot snapShot = diskCache.get(StringUtils.encodeToMD5(key));
-//			if (snapShot != null) {
-//				is = snapShot.getInputStream(0);
-//				return FileUtils.readStringFromStream(is);
-//			}
-//		} catch (Exception e) {
-//			LogUtils.e(TAG, "IOException", e);
-//			// 关闭，再打开
-//			closeCache(cachePath);
-//			openCache(context, maxSize, cachePath);
-//			return getString(cachePath, key);
-//		} finally {
-//			if (is != null) {
-//				try {
-//					is.close();
-//				} catch (IOException e) {
-//					LogUtils.e(TAG, "IOException", e);
-//				}
-//			}
-//		}
-//		return null;
-//	}
 
 	/**
 	 * 将指定的缓存文件从磁盘上移除<p>
