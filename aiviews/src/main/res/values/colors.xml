@@ -3,30 +3,31 @@
 	<color name="aiview_ripple">#FFFFFF</color>
 	<color name="aiview_none">#00000000</color>
 
-	<color name="aiview_toolbar_btn_rv">#99daf7</color>
+	<color name="aiview_toolbar_btn_rv">#FFFFFF</color>
 	<color name="aiview_toolbar_bg">#356734</color>
 	<color name="aiview_toolbar_title_text">#ffffffff</color>
 	<color name="aiview_toolbar_bottom_divider">#d2d2d2</color>
 	<color name="aiview_toolbar_activity_bg">#ffffff</color>
+
 
 	<!--popupview背景色-->
 	<color name="popupview_text">#ffffff</color>
 	<color name="popupview_bg">#cccccc</color>
 	<drawable name="popupview_bg">#cccccc</drawable>
 
-	<color name="aiview_dialog_window_bg">#00000000</color>
 
+	<color name="aiview_dialog_window_bg">#00000000</color>
 	<color name="aiview_progress_stroke">#00a0e9</color>
 	<color name="aiview_progress_stroke_secondary">#99daf7</color>
 
 	<!--根据不同项目来配置-->
 	<!--主色-->
-	<color name="colorPrimary">#8e5339</color>
-	<!--<color name="colorPrimary">#00000000</color>-->
+	<color name="colorPrimary">#44435B</color>
 	<!--辅色-->
-	<color name="colorPrimaryDark">#a15737</color>
+	<color name="colorPrimaryDark">#44435B</color>
 	<!--控件颜色-->
-	<color name="colorAccent">#99daf7</color>
+	<color name="colorAccent">#44435B</color>
+
 	<color name="colorControlNormal">#99daf7</color>
 
 	<!--文字颜色，根据不同项目来配置-->

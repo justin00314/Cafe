@@ -6,15 +6,18 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ai2020lab.aiutils.common.ResourcesUtils;
 import com.ai2020lab.aiutils.common.ViewUtils;
 import com.ai2020lab.aiviews.R;
+import com.ai2020lab.aiviews.rippleview.RippleView;
 
 /**
  * 自定义ToolbarActivity,实现Toolbar的自定义封装
@@ -33,14 +36,15 @@ public class ToolbarActivity extends AppCompatActivity {
 
 	private AppBarLayout toolbarContainer;
 
+	private View toolbarLeftView;
+
+	private View toolbarRightView;
+
 	private TextView toolbarTitle;
 	private ImageView toolbarLeftIv;
-	private ImageView toolbarRightIv;
-	private TextView toolbarRightTv;
+	private ImageView toolbarRightIv1;
+	private ImageView toolbarRightIv2;
 
-	private OnLeftClickListener onLeftClickListener;
-
-	private OnRightClickListener onRightClickListener;
 
 	/**
 	 * 程序入口
@@ -133,34 +137,18 @@ public class ToolbarActivity extends AppCompatActivity {
 	private void intToolbar() {
 		toolbar.setTitle("");
 		toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
-		toolbarLeftIv = (ImageView) findViewById(R.id.toolbar_left_iv);
-		toolbarRightIv = (ImageView) findViewById(R.id.toolbar_right_iv);
-		toolbarRightTv = (TextView) findViewById(R.id.toolbar_right_tv);
-		toolbarLeftIv.setVisibility(View.GONE);
-		toolbarRightIv.setVisibility(View.GONE);
-		toolbarRightTv.setVisibility(View.GONE);
 		setSupportActionBar(toolbar);
-		toolbarLeftIv.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (onLeftClickListener != null)
-					onLeftClickListener.onClick();
-			}
-		});
-		toolbarRightIv.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (onRightClickListener != null)
-					onRightClickListener.onClick();
-			}
-		});
-		toolbarRightTv.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (onRightClickListener != null)
-					onRightClickListener.onClick();
-			}
-		});
+		toolbarLeftView = ViewUtils.makeView(this, R.layout.toolbar_left);
+		toolbar.addView(toolbarLeftView);
+		toolbarLeftIv = (ImageView) toolbarLeftView.findViewById(R.id.toolbar_left_iv);
+		toolbarTitle = (TextView) toolbarLeftView.findViewById(R.id.toolbar_title);
+		toolbarRightView = ViewUtils.makeView(this, R.layout.toolbar_right);
+		toolbar.addView(toolbarRightView);
+		toolbarRightIv1 = (ImageView) toolbarRightView.findViewById(R.id.toolbar_right_iv1);
+		toolbarRightIv2 = (ImageView) toolbarRightView.findViewById(R.id.toolbar_right_iv2);
+		Toolbar.LayoutParams lp = (Toolbar.LayoutParams) toolbarRightView.getLayoutParams();
+		lp.gravity = Gravity.END | Gravity.CENTER_VERTICAL;
+
 	}
 
 	/**
@@ -168,24 +156,46 @@ public class ToolbarActivity extends AppCompatActivity {
 	 *
 	 * @param title 标题的文字显示
 	 */
-	public void setToolbarTitle(String title) {
-		toolbarTitle.getPaint().setFakeBoldText(true);
+	public void setToolbarTitle(CharSequence title) {
+//		toolbarTitle.getPaint().setFakeBoldText(true);
 		toolbarTitle.setText(title);
+	}
+
+	/**
+	 * 设置Toolbar背景
+	 *
+	 * @param drawableResID Drawable资源ID
+	 */
+	public void setToolbarBackground(int drawableResID) {
+		Drawable drawable = ResourcesUtils.getDrawable(drawableResID);
+		if (drawable == null) {
+			throw new IllegalArgumentException("toolbar背景Drawable资源文件找不到");
+		}
+		toolbar.setBackground(drawable);
 	}
 
 	/**
 	 * 设置工具栏左边按钮图标
 	 *
 	 * @param drawableResID Drawable资源ID
+	 * @param listener      OnLeftClickListener
 	 */
-	@SuppressWarnings("deprecation")
-	public void setToolbarLeft(int drawableResID) {
-		toolbarLeftIv.setVisibility(View.VISIBLE);
+	public void setToolbarLeft(int drawableResID, final OnLeftClickListener listener) {
+		if (toolbarLeftView == null) {
+			throw new IllegalArgumentException("还没有初始化toolbar");
+		}
 		Drawable drawable = ResourcesUtils.getDrawable(drawableResID);
 		if (drawable == null) {
 			throw new IllegalArgumentException("toolbar左边按钮Drawable资源文件找不到");
 		}
 		toolbarLeftIv.setImageDrawable(drawable);
+		toolbarLeftView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (listener != null)
+					listener.onClick();
+			}
+		});
 	}
 
 	/**
@@ -194,8 +204,11 @@ public class ToolbarActivity extends AppCompatActivity {
 	 * @param width  宽度
 	 * @param height 高度
 	 */
-	public void setToolbarLeftDemension(int width, int height) {
-		ViewGroup.LayoutParams lp = toolbarLeftIv.getLayoutParams();
+	public void setToolbarLeftDimension(int width, int height) {
+		if (toolbarLeftView == null) {
+			throw new IllegalArgumentException("还没有初始化toolbar");
+		}
+		RippleView.LayoutParams lp = (RippleView.LayoutParams) toolbarLeftIv.getLayoutParams();
 		if (width > -2) {
 			lp.width = width;
 		}
@@ -206,91 +219,93 @@ public class ToolbarActivity extends AppCompatActivity {
 	}
 
 	/**
-	 * 设置工具栏右边按钮图标
+	 * 设置工具栏右边按钮图标1
 	 *
-	 * @param drawableResID Drawable资源ID
+	 * @param drawableResID int
+	 * @param listener      OnRightClickListener
 	 */
-	public void setToolbarRight(int drawableResID) {
-		toolbarRightTv.setVisibility(View.GONE);
-		toolbarRightIv.setVisibility(View.VISIBLE);
+	public void setToolbarRight1(int drawableResID, final OnRightClickListener listener) {
+		if (toolbarRightView == null) {
+			throw new IllegalArgumentException("还没有初始化toolbar");
+		}
 		Drawable drawable = ResourcesUtils.getDrawable(drawableResID);
 		if (drawable == null) {
-			throw new IllegalArgumentException("toolbar右边按钮Drawable资源文件找不到");
+			throw new IllegalArgumentException("toolbar左边按钮Drawable资源文件找不到");
 		}
-		toolbarRightIv.setImageDrawable(drawable);
+		toolbarRightIv1.setImageDrawable(drawable);
+		toolbarRightIv1.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (listener != null)
+					listener.onClick();
+			}
+		});
 	}
 
 	/**
-	 * 设置工具栏右边文字按钮的文字
+	 * 设置工具栏右边按钮图标2
 	 *
-	 * @param rightText 文字按钮的文字
+	 * @param drawableResID int
+	 * @param listener      OnRightClickListener
 	 */
-	public void setToolbarRight(CharSequence rightText) {
-		toolbarRightTv.setVisibility(View.VISIBLE);
-		toolbarRightIv.setVisibility(View.GONE);
-		toolbarRightTv.setText(rightText);
-		toolbarRightTv.getPaint().setFakeBoldText(true);
+	public void setToolbarRight2(int drawableResID, final OnRightClickListener listener) {
+		if (toolbarRightView == null) {
+			throw new IllegalArgumentException("还没有初始化toolbar");
+		}
+		Drawable drawable = ResourcesUtils.getDrawable(drawableResID);
+		if (drawable == null) {
+			throw new IllegalArgumentException("toolbar左边按钮Drawable资源文件找不到");
+		}
+		toolbarRightIv2.setImageDrawable(drawable);
+		toolbarRightIv2.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (listener != null)
+					listener.onClick();
+			}
+		});
 	}
 
 	/**
-	 * 设置工具栏右边文字按钮的文字
-	 *
-	 * @param rightText 文字按钮的文字
-	 * @param color     文字颜色
-	 */
-	public void setToolbarRight(CharSequence rightText, int color) {
-		toolbarRightTv.setVisibility(View.VISIBLE);
-		toolbarRightIv.setVisibility(View.GONE);
-		toolbarRightTv.setText(rightText);
-		toolbarRightTv.setTextColor(color);
-		toolbarRightTv.getPaint().setFakeBoldText(true);
-	}
-
-	/**
-	 * 设置工具栏右边按钮的尺寸
+	 * 设置工具栏右边按钮1的尺寸
 	 *
 	 * @param width  宽度
 	 * @param height 高度
 	 */
-	public void setToolbarRightDemension(int width, int height) {
-		if (toolbarRightIv.getVisibility() == View.VISIBLE) {
-			ViewGroup.LayoutParams lp = toolbarRightIv.getLayoutParams();
-			if (width > -2) {
-				lp.width = width;
-			}
-			if (height > -2) {
-				lp.height = height;
-			}
-			toolbarRightIv.setLayoutParams(lp);
-		} else if (toolbarRightTv.getVisibility() == View.VISIBLE) {
-			ViewGroup.LayoutParams lp = toolbarRightTv.getLayoutParams();
-			if (width > -2) {
-				lp.width = width;
-			}
-			if (height > -2) {
-				lp.height = height;
-			}
-			toolbarRightTv.setLayoutParams(lp);
+	public void setToolbarRight1Dimension(int width, int height) {
+		if (toolbarRightView == null) {
+			throw new IllegalArgumentException("还没有初始化toolbar");
 		}
+		RippleView.LayoutParams lp = (RippleView.LayoutParams) toolbarRightIv1.getLayoutParams();
+		if (width > -2) {
+			lp.width = width;
+		}
+		if (height > -2) {
+			lp.height = height;
+		}
+		toolbarRightIv1.setLayoutParams(lp);
 	}
 
 	/**
-	 * Toolbar左边按钮点击监听
+	 * 设置工具栏右边按钮2的尺寸
 	 *
-	 * @param onLeftClickListener OnLeftClickListener
+	 * @param width  宽度
+	 * @param height 高度
 	 */
-	public void setOnLeftClickListener(final OnLeftClickListener onLeftClickListener) {
-		this.onLeftClickListener = onLeftClickListener;
+	public void setToolbarRight2Dimension(int width, int height) {
+		if (toolbarRightView == null) {
+			throw new IllegalArgumentException("还没有初始化toolbar");
+		}
+		RippleView.LayoutParams lp = (RippleView.LayoutParams) toolbarRightIv2.getLayoutParams();
+		if (width > -2) {
+			lp.width = width;
+		}
+		if (height > -2) {
+			lp.height = height;
+		}
+		toolbarRightIv2.setLayoutParams(lp);
 	}
 
-	/**
-	 * Toolbar右边按钮点击监听
-	 *
-	 * @param onRightClickListener OnRightClickListener
-	 */
-	public void setOnRightClickListener(final OnRightClickListener onRightClickListener) {
-		this.onRightClickListener = onRightClickListener;
-	}
 
 	/**
 	 * 导航栏左边按钮点击监听

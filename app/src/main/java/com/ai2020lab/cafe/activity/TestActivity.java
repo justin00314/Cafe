@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.ai2020lab.aiutils.common.ToastUtils;
 import com.ai2020lab.cafe.R;
 import com.ai2020lab.cafe.common.DiskCacheManager;
 import com.ai2020lab.cafe.common.DiskCacheMaxSize;
@@ -66,6 +67,7 @@ public class TestActivity extends MVPActivity<TestContract.View,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test);
 		initViews();
+		setToolbar();
 		// 打开磁盘缓存
 		DiskCacheManager.getInstance().openCache(this, DiskCacheMaxSize.AUDIO_DB,
 				DiskCachePath.AUDIO_DB);
@@ -83,4 +85,32 @@ public class TestActivity extends MVPActivity<TestContract.View,
 		DiskCacheManager.getInstance().closeCache();
 
 	}
+
+	private void setToolbar(){
+		supportToolbar(true);
+		setToolbarTitle("主页");
+		setToolbarLeft(R.mipmap.back, new OnLeftClickListener() {
+			@Override
+			public void onClick() {
+				ToastUtils.getInstance().showToast(getActivity(), "点了注销");
+			}
+		});
+		setToolbarRight1(R.mipmap.search, new OnRightClickListener() {
+			@Override
+			public void onClick() {
+				ToastUtils.getInstance().showToast(getActivity(), "点了搜索");
+			}
+		});
+		setToolbarRight2(R.mipmap.scan, new OnRightClickListener() {
+			@Override
+			public void onClick() {
+				ToastUtils.getInstance().showToast(getActivity(), "点了扫描");
+			}
+		});
+	}
+
+
+
+
+
 }
