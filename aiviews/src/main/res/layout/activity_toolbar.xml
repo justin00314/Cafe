@@ -11,7 +11,7 @@
 		android:id="@+id/toolbar_layout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:theme="@style/AppTheme.AppBarOverlay">
+		android:theme="@style/AppTheme.ActionBar">
 
 		<!--自定义Toolbar-->
 		<!--注意自定义toolbar布局的时候左边有个16dp的空间，需要设置app:contentInsetStart=0dp来解决-->
@@ -24,52 +24,9 @@
 			android:contentInsetStart="0dp"
 			app:contentInsetEnd="0dp"
 			app:contentInsetStart="0dp"
-			app:popupTheme="@style/AppTheme.PopupOverlay"
+			app:popupTheme="@style/AppTheme.ActionBar"
 			tools:ignore="UnusedAttribute">
 
-			<!--工具栏返回按钮
-			<ImageView
-				android:id="@+id/toolbar_left_iv"
-				android:layout_width="50dp"
-				android:layout_height="50dp"
-				android:layout_gravity="left|center_vertical"
-				android:layout_marginLeft="10dp"
-				tools:ignore="contentDescription"/>-->
-			<!--工具栏标题
-			<TextView
-				android:id="@+id/toolbar_title"
-				style="@style/TextLarge"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="start|center_vertical"
-				android:layout_marginStart="10dp"
-				android:textColor="@color/aiview_toolbar_title_text"/>-->
-			<!--工具栏右边按钮
-			<ImageView
-				android:id="@+id/toolbar_right_iv"
-				android:layout_width="50dp"
-				android:layout_height="50dp"
-				android:layout_gravity="right|center_vertical"
-				android:layout_marginRight="10dp"
-				tools:ignore="contentDescription"
-				android:visibility="visible"/>
-			<ImageView
-				android:id="@+id/toolbar_right_iv1"
-				android:layout_width="50dp"
-				android:layout_height="50dp"
-				android:layout_gravity="right|center_vertical"
-				android:layout_marginRight="10dp"
-				tools:ignore="contentDescription"
-				android:visibility="visible"/>-->
-			<!--<TextView
-				android:id="@+id/toolbar_right_tv"
-				style="@style/TextNormal"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_gravity="right|center_vertical"
-				android:layout_marginRight="10dp"
-				android:textColor="@android:color/white"
-				android:visibility="gone"/>-->
 
 		</android.support.v7.widget.Toolbar>
 
@@ -86,6 +43,7 @@
 		android:id="@+id/activity_content"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:background="@color/aiview_activity_bg"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

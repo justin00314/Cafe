@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ai2020lab.aiviews.rippleview.RippleView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="wrap_content"
+	android:layout_height="match_parent"
+	android:padding="10dp"
+	app:rv_color="@color/aiview_toolbar_btn_rv"
+	app:rv_type="rectangle">
+
+	<ImageView
+		android:id="@+id/image_text_iv"
+		android:layout_width="25dp"
+		android:layout_height="25dp"
+		android:layout_centerVertical="true"
+		tools:ignore="contentDescription"/>
+
+	<TextView
+		android:id="@+id/image_text_tv"
+		style="@style/TextLittle"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerVertical="true"
+		android:layout_marginStart="5dp"
+		android:layout_toEndOf="@+id/image_text_iv"/>
+
+</com.ai2020lab.aiviews.rippleview.RippleView>

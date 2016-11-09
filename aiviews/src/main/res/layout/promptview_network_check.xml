@@ -2,7 +2,6 @@
 <!--没有网络，检查网络连接提示布局-->
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
@@ -15,8 +14,7 @@
         android:text="@string/prompt_check_network"
         android:textColor="@color/popupview_text"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentLeft="true"
-        tools:conext=".activity.AnalysisResultsActivity"/>
+        android:layout_alignParentLeft="true"/>
 
     <ImageView
         android:layout_width="wrap_content"

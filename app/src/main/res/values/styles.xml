@@ -13,4 +13,13 @@
 		<item name="windowNoTitle">true</item>
 	</style>
 
+	<!--定义fab的样式-->
+	<style name="LightFAB" parent="Material.Drawable.Ripple.Touch.Light">
+		<item name="fab_backgroundColor">@color/aiview_fab_bg</item>
+		<item name="fab_elevation">1dp</item>
+		<item name="rd_delayClick">afterRelease</item>
+		<item name="fab_iconSize">30dp</item>
+		<item name="rd_rippleColor">@color/aiview_fab_ripple</item>
+	</style>
+
 </resources>

@@ -100,7 +100,7 @@ public class RoundImageView extends ImageView {
 								BORDER_RADIUS_DEFAULT, getResources()
 										.getDisplayMetrics()));
 		// 默认为Circle
-		type = getType(a.getInt(R.styleable.RoundImageView_type, TYPE_CIRCLE));
+		type = getType(a.getInt(R.styleable.RoundImageView_type, TYPE_ROUND));
 		a.recycle();
 	}
 

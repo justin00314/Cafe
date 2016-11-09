@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--主界面-->
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<!--header-->
+	<include
+		android:id="@+id/meeting_list_header"
+		layout="@layout/meeting_list_header"/>
+
+
+	<com.rey.material.widget.FloatingActionButton
+		android:id="@+id/brain_storm_fab"
+		style="@style/LightFAB"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentEnd="true"
+		android:layout_marginBottom="20dp"
+		android:layout_marginEnd="20dp"
+		app:fab_elevation="5dp"
+		app:fab_iconSrc="@mipmap/fab_brain_storm"/>
+
+</RelativeLayout>
