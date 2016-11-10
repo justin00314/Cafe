@@ -111,7 +111,7 @@
 		</activity>
 
 		<!--<activity android:name=".activity.LoginActivity"></activity-->>
-		<!--<activity android:name=".activity.RegisteActivity"></activity>-->
+		<!--<activity android:name=".activity.RegisterActivity"></activity>-->
 
 		<!--后台采集数据服务-->
 		<service android:name=".service.FunfManagerService">
