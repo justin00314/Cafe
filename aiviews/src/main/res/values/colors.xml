@@ -21,6 +21,9 @@
 	<color name="aiview_fab_bg">#a17bfd</color>
 	<color name="aiview_fab_ripple">#00c1f1</color>
 
+	<!--列表分割线-->
+	<color name="aiview_divider">#ccbabbc8</color>
+
 	<color name="aiview_dialog_window_bg">#00000000</color>
 	<color name="aiview_progress_stroke">#00a0e9</color>
 	<color name="aiview_progress_stroke_secondary">#99daf7</color>

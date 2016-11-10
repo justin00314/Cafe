@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--会议列表item操作区域-->
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="60dp">
+
+	<ImageView
+		android:id="@+id/top_line_iv"
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:layout_alignParentTop="true"
+		android:layout_marginStart="20dp"
+		android:src="@color/aiview_divider"
+		tools:ignore="contentDescription"/>
+
+	<ImageView
+		android:id="@+id/right_line_iv"
+		android:layout_width="1dp"
+		android:layout_height="match_parent"
+		android:layout_alignParentStart="true"
+		android:layout_marginStart="20dp"
+		android:src="@color/aiview_divider"
+		tools:ignore="contentDescription"/>
+
+
+	<ImageView
+		android:id="@+id/bottom_line_iv"
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:layout_alignParentBottom="true"
+		android:layout_marginStart="20dp"
+		android:src="@color/aiview_divider"
+		tools:ignore="contentDescription"/>
+
+</RelativeLayout>

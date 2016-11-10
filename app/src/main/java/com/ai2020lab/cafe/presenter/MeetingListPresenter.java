@@ -29,11 +29,11 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	}
 
 	/**
-	 * 设置用户信息显示
+	 * 加载会议列表
 	 */
 	@Override
-	public void setUserInfo() {
-		getView().setUserInfo();
+	public void loadMeetingList() {
+
 	}
 
 	@Override
@@ -52,12 +52,12 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	}
 
 	@Override
-	public void createThemeMeeting() {
+	public void createTheme() {
 
 	}
 
 	@Override
-	public void createBrainStormMeeting() {
+	public void createBrainStorm() {
 
 	}
 
@@ -76,10 +76,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 
 	}
 
-	@Override
-	public void skipToMeetingDetailActivity() {
-
-	}
 
 
 

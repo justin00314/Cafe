@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--会议列表item主区域-->
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingBottom="10dp"
+	android:paddingTop="10dp">
+
+	<ImageView
+		android:id="@+id/type_iv"
+		android:layout_width="25dp"
+		android:layout_height="25dp"
+		android:layout_alignParentStart="true"
+		android:layout_centerVertical="true"
+		android:layout_marginStart="25dp"
+		android:src="@mipmap/type_default"
+		tools:ignore="contentDescription"/>
+
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="40dp"
+		android:layout_marginEnd="10dp"
+		android:layout_marginStart="10dp"
+		android:layout_toEndOf="@+id/type_iv">
+
+		<TextView
+			android:id="@+id/meeting_name_tv"
+			style="@style/TextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			tools:text="市场部会议"/>
+
+		<TextView
+			android:id="@+id/meeting_time_tv"
+			style="@style/TextLittle.Light"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			tools:text="2016-11-10 11:10:00"/>
+	</RelativeLayout>
+
+	<ImageView
+		android:id="@+id/qrcode_iv"
+		android:layout_width="25dp"
+		android:layout_height="25dp"
+		android:layout_alignParentEnd="true"
+		android:layout_centerVertical="true"
+		android:layout_marginEnd="20dp"
+		android:src="@mipmap/show_qrcode"
+		tools:ignore="contentDescription"/>
+
+
+</RelativeLayout>

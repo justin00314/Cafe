@@ -1,15 +1,17 @@
 package com.ai2020lab.cafe.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ai2020lab.aiutils.common.ResourcesUtils;
-import com.ai2020lab.aiutils.system.DeviceUtils;
 import com.ai2020lab.aiutils.system.DisplayUtils;
 import com.ai2020lab.aiviews.imageview.RoundImageView;
-import com.ai2020lab.aiviews.textview.ImageTextButton;
 import com.ai2020lab.cafe.R;
 import com.ai2020lab.cafe.common.mvp.MVPActivity;
 import com.ai2020lab.cafe.contract.MeetingListContract;
@@ -22,15 +24,34 @@ import com.ai2020lab.cafe.presenter.MeetingListPresenter;
  */
 
 public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
-		MeetingListPresenter> implements MeetingListContract.View {
+		MeetingListPresenter> implements MeetingListContract.View, View.OnClickListener {
 
 	private final static String TAG = MeetingListActivity.class.getSimpleName();
 
-	private View headerView;
 
+	private CoordinatorLayout meetingListCl;
+	/**
+	 * 用户头像
+	 */
 	private RoundImageView userPortraitIv;
+	/**
+	 * 用户名字
+	 */
 	private TextView userNameTv;
+	/**
+	 * 用户工号
+	 */
 	private TextView workNumberTv;
+	/**
+	 * 创建主题会议FAB
+	 */
+	private FloatingActionButton createThemeMeetingFab;
+	/**
+	 * 创建头脑风暴FAB
+	 */
+	private FloatingActionButton createBrainStormFab;
+
+	private RecyclerView meetingListRv;
 
 
 	@Override
@@ -39,7 +60,22 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		setContentView(R.layout.activity_meeting_list);
 		setToolbar();
 		initViews();
-		getPresenter().setUserInfo();
+		setUserInfo();
+	}
+
+	@Override
+	public void onClick(View view) {
+		switch (view.getId()) {
+			case R.id.theme_meeting_fab:
+				// 创建主题会议
+
+				break;
+			case R.id.brain_storm_fab:
+				// 提示摇一摇手机创建头脑风暴
+				promptShakePhone();
+				break;
+		}
+
 	}
 
 	@Override
@@ -48,14 +84,24 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	}
 
 
+	/**
+	 * 初始化界面元素
+	 */
 	private void initViews() {
-		headerView = findViewById(R.id.meeting_list_header);
-		RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) headerView.getLayoutParams();
+		meetingListCl = (CoordinatorLayout) findViewById(R.id.meeting_list_cl);
+		View headerView = findViewById(R.id.meeting_list_header);
+		CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) headerView.getLayoutParams();
 		lp.height = DisplayUtils.getScreenHeight(this) / 4;
+		lp.gravity = Gravity.TOP;
 		headerView.setLayoutParams(lp);
 		userPortraitIv = (RoundImageView) findViewById(R.id.user_portrait_iv);
 		userNameTv = (TextView) findViewById(R.id.user_name_tv);
 		workNumberTv = (TextView) findViewById(R.id.work_number_tv);
+		createThemeMeetingFab = (FloatingActionButton) findViewById(R.id.theme_meeting_fab);
+		createBrainStormFab = (FloatingActionButton) findViewById(R.id.brain_storm_fab);
+		createThemeMeetingFab.setOnClickListener(this);
+		createBrainStormFab.setOnClickListener(this);
+		meetingListRv = (RecyclerView) findViewById(R.id.meeting_list_Rv);
 	}
 
 	/**
@@ -84,6 +130,11 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	}
 
 
+	@Override
+	public void showMeetingList() {
+
+	}
+
 	/**
 	 * 设置用户信息显示
 	 */
@@ -95,10 +146,21 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	}
 
 	/**
+	 * 提示创建头脑风暴会议
+	 */
+	@Override
+	public void promptShakePhone() {
+		Snackbar.make(meetingListCl, getString(R.string.prompt_shake_phone), Snackbar.LENGTH_LONG)
+				.setAction("Action", null).show();
+	}
+
+	/**
 	 * 跳转到会议详情界面
 	 */
 	@Override
 	public void skipToMeetingDetailActivity() {
 
 	}
+
+
 }

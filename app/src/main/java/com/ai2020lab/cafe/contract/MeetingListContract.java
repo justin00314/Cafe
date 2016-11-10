@@ -1,5 +1,7 @@
 package com.ai2020lab.cafe.contract;
 
+import android.view.View;
+
 import com.ai2020lab.cafe.common.mvp.base.BaseModel;
 import com.ai2020lab.cafe.common.mvp.base.BasePresenter;
 import com.ai2020lab.cafe.common.mvp.base.BaseView;
@@ -16,10 +18,17 @@ public interface MeetingListContract {
 	 */
 	interface View extends BaseView {
 
+		void showMeetingList();
+
 		/**
 		 * 设置用户信息显示
 		 */
 		void setUserInfo();
+
+		/**
+		 * 提示创建头脑风暴会议
+		 */
+		void promptShakePhone();
 
 		void skipToMeetingDetailActivity();
 
@@ -31,9 +40,9 @@ public interface MeetingListContract {
 	interface Presenter extends BasePresenter {
 
 		/**
-		 * 设置用户信息显示
+		 * 加载会议列表
 		 */
-		void setUserInfo();
+		void loadMeetingList();
 		/**
 		 * 登出
 		 */
@@ -52,12 +61,12 @@ public interface MeetingListContract {
 		/**
 		 * 创建主题会议
 		 */
-		void createThemeMeeting();
+		void createTheme();
 
 		/**
 		 * 创建头脑风暴会议
 		 */
-		void createBrainStormMeeting();
+		void createBrainStorm();
 
 		/**
 		 * 解散会议
@@ -73,11 +82,6 @@ public interface MeetingListContract {
 		 * 取消会议预约
 		 */
 		void cancelMeeting();
-
-		/**
-		 * 跳转到会议详情界面
-		 */
-		void skipToMeetingDetailActivity();
 
 
 	}
