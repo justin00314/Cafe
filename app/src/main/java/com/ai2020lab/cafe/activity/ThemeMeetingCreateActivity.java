@@ -54,4 +54,14 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
         com.rey.material.widget.Spinner place = (com.rey.material.widget.Spinner) findViewById(R.id.place).findViewById(R.id.title);
    //     place.getLabelView.setText(R.string.meeting_place);
     }
+
+	@Override
+	public void showLoadingProgress() {
+
+	}
+
+	@Override
+	public void dismissLoadingProgress() {
+
+	}
 }
