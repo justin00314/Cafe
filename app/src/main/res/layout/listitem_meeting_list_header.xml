@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<!--会议列表界面head item-->
+<com.dd.ShadowLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@android:color/white"
+	android:padding="5dp"
+	app:sl_cornerRadius="3dp"
+	app:sl_dx="5dp"
+	app:sl_dy="5dp"
+	app:sl_shadowColor="@color/shadow"
+	app:sl_shadowRadius="10dp">
 
-</LinearLayout>
+	<TextView
+		android:id="@+id/state_tv"
+		style="@style/TextNormal.Light"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		tools:text="2016-11-10 11:10:00"/>
+</com.dd.ShadowLayout>

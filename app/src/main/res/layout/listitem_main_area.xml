@@ -26,7 +26,7 @@
 		android:layout_toEndOf="@+id/type_iv">
 
 		<TextView
-			android:id="@+id/meeting_name_tv"
+			android:id="@+id/name_tv"
 			style="@style/TextNormal"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
 			tools:text="市场部会议"/>
 
 		<TextView
-			android:id="@+id/meeting_time_tv"
+			android:id="@+id/start_time_tv"
 			style="@style/TextLittle.Light"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

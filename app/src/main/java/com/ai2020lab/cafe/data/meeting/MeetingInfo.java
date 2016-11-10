@@ -62,13 +62,13 @@ public class MeetingInfo implements Serializable {
 	 */
 	@Expose
 	@SerializedName("created_flag")
-	public int createdFlag;
+	public boolean createdFlag;
 	/**
 	 * 是否参与标志位
 	 */
 	@Expose
 	@SerializedName("participated_flag")
-	public int participatedFlag;
+	public boolean participatedFlag;
 	/**
 	 * 参与者列表
 	 */

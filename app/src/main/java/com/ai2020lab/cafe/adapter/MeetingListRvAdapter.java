@@ -1,6 +1,7 @@
 package com.ai2020lab.cafe.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -9,10 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ai2020lab.aiutils.common.LogUtils;
+import com.ai2020lab.aiutils.common.ResourcesUtils;
 import com.ai2020lab.aiutils.common.TimeUtils;
 import com.ai2020lab.aiutils.common.ViewUtils;
+import com.ai2020lab.aiviews.textview.ImageTextButton;
 import com.ai2020lab.cafe.R;
 import com.ai2020lab.cafe.data.meeting.MeetingInfo;
+import com.ai2020lab.cafe.data.meeting.MeetingState;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 /**
@@ -28,6 +32,17 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 
 	private Context context;
 
+	// 会议图标
+	private Drawable typeDefaultDrawable;
+	private Drawable typeCreatedDrawable;
+	private Drawable typeParticipatedDrawable;
+	private Drawable typePartiCreatedDrawable;
+	// 操作按钮图标
+	private Drawable opJoinDrawable;
+	private Drawable opQuitDrawable;
+	private Drawable opDismissDrawable;
+	private Drawable opCancelDrawable;
+
 	/**
 	 * 构造方法
 	 *
@@ -35,6 +50,18 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	 */
 	public MeetingListRvAdapter(Context context) {
 		this.context = context;
+		init();
+	}
+
+	private void init() {
+		typeDefaultDrawable = ResourcesUtils.getDrawable(R.mipmap.type_default);
+		typeCreatedDrawable = ResourcesUtils.getDrawable(R.mipmap.type_created);
+		typeParticipatedDrawable = ResourcesUtils.getDrawable(R.mipmap.type_participated);
+		typePartiCreatedDrawable = ResourcesUtils.getDrawable(R.mipmap.type_participated_created);
+		opJoinDrawable = ResourcesUtils.getDrawable(R.mipmap.meeting_join);
+		opQuitDrawable = ResourcesUtils.getDrawable(R.mipmap.meeting_quit);
+		opDismissDrawable = ResourcesUtils.getDrawable(R.mipmap.meeting_dismiss);
+		opCancelDrawable = ResourcesUtils.getDrawable(R.mipmap.meeting_cancel);
 	}
 
 	@Override
@@ -48,10 +75,13 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	public void onBindViewHolder(ItemViewHolder holder, int position) {
 		LogUtils.i(TAG, "--onBindViewHolder--");
 		MeetingInfo meetingInfo = getItem(position);
-		// 加载网络图片
-//		ImageLoader.getInstance().displayImage(growthInfo.pigPhoto, holder.pigPhotoRiv,
-//				ImageLoaderManager.getImageOptions(context),
-//				new AnimationImageLoadingListener());
+		// 设置会议名称
+		holder.nameTv.setText(meetingInfo.name);
+		// 设置会议开始时间
+		holder.startTimeTv.setText(meetingInfo.startTime);
+		// 设置会议图标
+		holder.typeIv.setImageDrawable(getTypeDrawable(meetingInfo));
+
 //		// 设置时间
 //		holder.dateTv.setText(getUploadDateStr(growthInfo));
 //		// 设置体重
@@ -99,32 +129,74 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	}
 
 	/**
+	 * 获取会议显示图标
+	 *
+	 * @param meetingInfo MeetingInfo
+	 */
+	private Drawable getTypeDrawable(MeetingInfo meetingInfo) {
+		switch (meetingInfo.state) {
+			case MeetingState.HISTORY:
+				// 只是创建
+				if (meetingInfo.createdFlag && !meetingInfo.participatedFlag) {
+					return typeCreatedDrawable;
+				}
+				// 只是参与
+				else if (!meetingInfo.createdFlag && meetingInfo.participatedFlag) {
+					return typeParticipatedDrawable;
+				}
+				// 创建和参与
+				else if (meetingInfo.createdFlag && meetingInfo.participatedFlag) {
+					return typePartiCreatedDrawable;
+				}
+			case MeetingState.PROGRESS:
+			case MeetingState.APPOINTMENT:
+				break;
+		}
+		return typeDefaultDrawable;
+	}
+
+	/**
 	 * Item的ViewHolder类
 	 */
 	static class ItemViewHolder extends RecyclerView.ViewHolder {
-		ImageView stateIv;
+		// 主区域
+		ImageView typeIv;
 		TextView nameTv;
 		TextView startTimeTv;
-		ImageView QRcodeIv;
+		ImageView QRCodeIv;
+		// 操作区域
+		ImageView topLineIv;
+		ImageView RightLineIv;
+		ImageView BottomLineIv;
+		ImageTextButton operation1Ibt;
+		ImageTextButton operation2Ibt;
+
 
 		ItemViewHolder(View view) {
 			super(view);
-//			pigPhotoRiv = (ImageView) view.findViewById(R.id.pig_photo_riv);
-//			dateTv = (TextView) view.findViewById(R.id.date_tv);
-//			weightTv = (TextView) view.findViewById(R.id.weight_tv);
-//			weightIncreaseTv = (TextView) view.findViewById(R.id.weight_increase_tv);
+			typeIv = (ImageView) view.findViewById(R.id.type_iv);
+			nameTv = (TextView) view.findViewById(R.id.name_tv);
+			startTimeTv = (TextView) view.findViewById(R.id.start_time_tv);
+			QRCodeIv = (ImageView) view.findViewById(R.id.qrcode_iv);
+			topLineIv = (ImageView) view.findViewById(R.id.top_line_iv);
+			RightLineIv = (ImageView) view.findViewById(R.id.right_line_iv);
+			BottomLineIv = (ImageView) view.findViewById(R.id.bottom_line_iv);
+			operation1Ibt = (ImageTextButton) view.findViewById(R.id.operation1_itb);
+			operation2Ibt = (ImageTextButton) view.findViewById(R.id.operation2_itb);
 		}
+
+
 	}
 
 	/**
 	 * Header的ViewHolder类
 	 */
-	public static class HeaderViewHolder extends RecyclerView.ViewHolder {
-		TextView headerTimeView;
+	static class HeaderViewHolder extends RecyclerView.ViewHolder {
+		TextView stateTv;
 
 		HeaderViewHolder(View itemView) {
 			super(itemView);
-//			headerTimeView = (TextView) itemView.findViewById(R.id.growth_history_time_tv);
+			stateTv = (TextView) itemView.findViewById(R.id.state_tv);
 		}
 
 
