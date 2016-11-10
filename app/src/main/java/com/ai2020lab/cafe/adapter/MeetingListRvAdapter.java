@@ -3,15 +3,15 @@ package com.ai2020lab.cafe.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ai2020lab.aiutils.common.LogUtils;
 import com.ai2020lab.aiutils.common.ResourcesUtils;
-import com.ai2020lab.aiutils.common.TimeUtils;
 import com.ai2020lab.aiutils.common.ViewUtils;
 import com.ai2020lab.aiviews.textview.ImageTextButton;
 import com.ai2020lab.cafe.R;
@@ -38,10 +38,26 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	private Drawable typeParticipatedDrawable;
 	private Drawable typePartiCreatedDrawable;
 	// 操作按钮图标
-	private Drawable opJoinDrawable;
+	private Drawable opAddDrawable;
 	private Drawable opQuitDrawable;
 	private Drawable opDismissDrawable;
 	private Drawable opCancelDrawable;
+
+	private String opAdd;
+	private String opCancel;
+	private String opDismiss;
+	private String opQuit;
+
+	private String stateProgress;
+	private String stateAppointment;
+	private String stateHistory;
+
+	private OnClickItemListener onClickAddListener;
+	private OnClickItemListener onClickQuitListener;
+	private OnClickItemListener onClickDismissListener;
+	private OnClickItemListener onClickCancelListener;
+	private OnClickItemListener onClickQRCodeListener;
+	private OnClickItemListener onClickItemListener;
 
 	/**
 	 * 构造方法
@@ -58,10 +74,17 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 		typeCreatedDrawable = ResourcesUtils.getDrawable(R.mipmap.type_created);
 		typeParticipatedDrawable = ResourcesUtils.getDrawable(R.mipmap.type_participated);
 		typePartiCreatedDrawable = ResourcesUtils.getDrawable(R.mipmap.type_participated_created);
-		opJoinDrawable = ResourcesUtils.getDrawable(R.mipmap.meeting_join);
+		opAddDrawable = ResourcesUtils.getDrawable(R.mipmap.meeting_join);
 		opQuitDrawable = ResourcesUtils.getDrawable(R.mipmap.meeting_quit);
 		opDismissDrawable = ResourcesUtils.getDrawable(R.mipmap.meeting_dismiss);
 		opCancelDrawable = ResourcesUtils.getDrawable(R.mipmap.meeting_cancel);
+		opAdd = context.getString(R.string.op_add);
+		opCancel = context.getString(R.string.op_cancel);
+		opDismiss = context.getString(R.string.op_dismiss);
+		opQuit = context.getString(R.string.op_quit);
+		stateProgress = context.getString(R.string.meeting_state_progress);
+		stateAppointment = context.getString(R.string.meeting_state_appointment);
+		stateHistory = context.getString(R.string.meeting_state_history);
 	}
 
 	@Override
@@ -81,17 +104,12 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 		holder.startTimeTv.setText(meetingInfo.startTime);
 		// 设置会议图标
 		holder.typeIv.setImageDrawable(getTypeDrawable(meetingInfo));
+		// 设置操作区间
+		setOperationArea(meetingInfo, holder);
 
-//		// 设置时间
-//		holder.dateTv.setText(getUploadDateStr(growthInfo));
-//		// 设置体重
-//		holder.weightTv.setText(getWeightStr(growthInfo));
-//		// 设置增长体重
-//		holder.weightIncreaseTv.setText(getIncreasedStr(growthInfo));
 	}
 
-
-	// 根据时间分组
+	// 根据会议状态分组
 	@Override
 	public long getHeaderId(int position) {
 		return getItem(position).state;
@@ -109,23 +127,23 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	public void onBindHeaderViewHolder(HeaderViewHolder holder, int position) {
 		LogUtils.i(TAG, "--onBindHeaderViewHolder--");
 		MeetingInfo meetingInfo = getItem(position);
-//		holder.headerTimeView.setText(getYMD(context, growthInfo.collectedTime));
-//		holder.headerTimeView.getPaint().setFakeBoldText(true);
+		holder.stateTv.setText(getMeetingState(meetingInfo));
+		holder.stateTv.getPaint().setFakeBoldText(true);
 	}
 
 	/**
 	 * 获取分组时间显示
 	 */
-	private String getYMD(Context context, long timeStamp) {
-		String YMD = TimeUtils.formatTimeStamp(timeStamp, TimeUtils.Template.YMD);
-		if (!TextUtils.isEmpty(YMD)) {
-			String year = YMD.substring(0, 4);
-			String month = YMD.substring(5, 7);
-			String day = YMD.substring(8, 10);
-//			return String.format(context.getString(R.string.year_month_day),
-//					year, month, day);
+	private String getMeetingState(MeetingInfo meetingInfo) {
+		switch (meetingInfo.state) {
+			case MeetingState.HISTORY:
+				return stateHistory;
+			case MeetingState.PROGRESS:
+				return stateProgress;
+			case MeetingState.APPOINTMENT:
+				return stateAppointment;
 		}
-		return null;
+		return stateHistory;
 	}
 
 	/**
@@ -136,17 +154,15 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	private Drawable getTypeDrawable(MeetingInfo meetingInfo) {
 		switch (meetingInfo.state) {
 			case MeetingState.HISTORY:
-				// 只是创建
-				if (meetingInfo.createdFlag && !meetingInfo.participatedFlag) {
-					return typeCreatedDrawable;
+				if (meetingInfo.createdFlag) {
+					if (meetingInfo.participatedFlag)
+						return typePartiCreatedDrawable;
+					else
+						return typeCreatedDrawable;
 				}
 				// 只是参与
-				else if (!meetingInfo.createdFlag && meetingInfo.participatedFlag) {
+				else {
 					return typeParticipatedDrawable;
-				}
-				// 创建和参与
-				else if (meetingInfo.createdFlag && meetingInfo.participatedFlag) {
-					return typePartiCreatedDrawable;
 				}
 			case MeetingState.PROGRESS:
 			case MeetingState.APPOINTMENT:
@@ -154,6 +170,67 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 		}
 		return typeDefaultDrawable;
 	}
+
+
+	/**
+	 * 设置操作区域
+	 */
+	private void setOperationArea(MeetingInfo meetingInfo, ItemViewHolder holder) {
+		switch (meetingInfo.state) {
+			// 历史会议没有操作区域
+			case MeetingState.HISTORY:
+				holder.topLineIv.setVisibility(View.VISIBLE);
+				holder.RightLineIv.setVisibility(View.GONE);
+				holder.BottomLineIv.setVisibility(View.GONE);
+				holder.operation1Ibt.setVisibility(View.GONE);
+				holder.operation2Ibt.setVisibility(View.GONE);
+				holder.QRCodeIb.setVisibility(View.GONE);
+				break;
+			// 正在进行的会议
+			case MeetingState.PROGRESS:
+				holder.QRCodeIb.setVisibility(View.VISIBLE);
+				holder.topLineIv.setVisibility(View.VISIBLE);
+				holder.RightLineIv.setVisibility(View.VISIBLE);
+				holder.BottomLineIv.setVisibility(View.VISIBLE);
+				// 自己是创建人的情况
+				if (meetingInfo.createdFlag) {
+					holder.operation2Ibt.setVisibility(View.VISIBLE);
+					holder.operation2Ibt.setImage(opDismissDrawable);
+					holder.operation2Ibt.setText(opDismiss);
+					holder.operation1Ibt.setVisibility(View.VISIBLE);
+					// 参与了的就显示为退出会议
+					if (meetingInfo.participatedFlag) {
+						holder.operation1Ibt.setImage(opQuitDrawable);
+						holder.operation1Ibt.setText(opQuit);
+					}
+					// 没参与就显示为加入会议
+					else {
+						holder.operation1Ibt.setImage(opAddDrawable);
+						holder.operation1Ibt.setText(opAdd);
+					}
+				}
+				// 不是创建人的情况，这种情况下一定是已经加入了会议才显示
+				else {
+					holder.operation2Ibt.setVisibility(View.GONE);
+					holder.operation1Ibt.setVisibility(View.VISIBLE);
+					holder.operation1Ibt.setImage(opQuitDrawable);
+					holder.operation1Ibt.setText(opQuit);
+				}
+				break;
+			case MeetingState.APPOINTMENT:
+				holder.topLineIv.setVisibility(View.VISIBLE);
+				holder.RightLineIv.setVisibility(View.VISIBLE);
+				holder.BottomLineIv.setVisibility(View.VISIBLE);
+				holder.QRCodeIb.setVisibility(View.GONE);
+				holder.operation2Ibt.setVisibility(View.GONE);
+				holder.operation1Ibt.setVisibility(View.VISIBLE);
+				holder.operation1Ibt.setImage(opCancelDrawable);
+				holder.operation1Ibt.setText(opCancel);
+				break;
+		}
+
+	}
+
 
 	/**
 	 * Item的ViewHolder类
@@ -163,7 +240,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 		ImageView typeIv;
 		TextView nameTv;
 		TextView startTimeTv;
-		ImageView QRCodeIv;
+		ImageButton QRCodeIb;
 		// 操作区域
 		ImageView topLineIv;
 		ImageView RightLineIv;
@@ -177,15 +254,13 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 			typeIv = (ImageView) view.findViewById(R.id.type_iv);
 			nameTv = (TextView) view.findViewById(R.id.name_tv);
 			startTimeTv = (TextView) view.findViewById(R.id.start_time_tv);
-			QRCodeIv = (ImageView) view.findViewById(R.id.qrcode_iv);
+			QRCodeIb = (ImageButton) view.findViewById(R.id.qrcode_ib);
 			topLineIv = (ImageView) view.findViewById(R.id.top_line_iv);
 			RightLineIv = (ImageView) view.findViewById(R.id.right_line_iv);
 			BottomLineIv = (ImageView) view.findViewById(R.id.bottom_line_iv);
 			operation1Ibt = (ImageTextButton) view.findViewById(R.id.operation1_itb);
 			operation2Ibt = (ImageTextButton) view.findViewById(R.id.operation2_itb);
 		}
-
-
 	}
 
 	/**
@@ -198,8 +273,38 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 			super(itemView);
 			stateTv = (TextView) itemView.findViewById(R.id.state_tv);
 		}
+	}
 
+//	/**
+//	 * 点击加入会议监听
+//	 */
+//	public interface OnClickAddListener {
+//		void onClick(MeetingInfo info);
+//	}
+//
+//	/**
+//	 * 点击退出会议监听
+//	 */
+//	public interface OnClickQuitListener {
+//		void onClick(MeetingInfo info);
+//	}
+//
+//	/**
+//	 * 点击取消会议监听
+//	 */
+//	public interface OnClickCancelListener {
+//		void onClick(MeetingInfo info);
+//	}
+//
+//	/**
+//	 * 点击解散会议监听
+//	 */
+//	public interface OnClickDismissListener {
+//		void onClick(MeetingInfo info);
+//	}
 
+	public interface OnClickItemListener {
+		void onClick(MeetingInfo info);
 	}
 
 
