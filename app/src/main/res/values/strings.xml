@@ -27,4 +27,12 @@
 	<string name="op_dismiss">解散会议</string>
 	<string name="op_quit">退出会议</string>
 
+	<string name="submit">提交</string>
+	<string name="theme_meeting">主题会议</string>
+	<string name="meeting_theme">会议主题</string>
+	<string name="meeting_number">会议人数</string>
+	<string name="meeting_organizer">会议组织者</string>
+	<string name="meeting_place">会议地点</string>
+
+
 </resources>

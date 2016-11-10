@@ -31,4 +31,17 @@
 		<item name="fabSize">auto</item>
 	</style>
 
+	<style name="BaseButton" parent="TextLittle">
+		<item name="android:background">@mipmap/bottom_layer_bg</item>
+		<item name="android:layout_height">40dp</item>
+		<item name="android:textColor">@android:color/white</item>
+		<item name="android:layout_width">match_parent</item>
+	</style>
+
+	<style name="BaseSpinner" parent="Material.Widget.Spinner">
+		<item name="spn_labelTextColor">@color/aiview_text_normal</item>
+		<item name="spn_labelEnable">true</item>
+		<item name="spn_dividerHeight">0dp</item>
+	</style>
+
 </resources>
