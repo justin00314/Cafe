@@ -1,21 +1,34 @@
 package com.ai2020lab.cafe.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ai2020lab.aiutils.common.LogUtils;
 import com.ai2020lab.aiutils.common.ResourcesUtils;
 import com.ai2020lab.aiutils.system.DisplayUtils;
 import com.ai2020lab.aiviews.imageview.RoundImageView;
 import com.ai2020lab.cafe.R;
+import com.ai2020lab.cafe.adapter.MeetingListRvAdapter;
 import com.ai2020lab.cafe.common.mvp.MVPActivity;
 import com.ai2020lab.cafe.contract.MeetingListContract;
+import com.ai2020lab.cafe.data.meeting.MeetingInfo;
 import com.ai2020lab.cafe.presenter.MeetingListPresenter;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
+
+import java.util.List;
+
+import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
 
 /**
  * 会议列表界面
@@ -52,6 +65,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	private FloatingActionButton createBrainStormFab;
 
 	private RecyclerView meetingListRv;
+	private MeetingListRvAdapter meetingListRvAdapter;
 
 
 	@Override
@@ -61,6 +75,15 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		setToolbar();
 		initViews();
 		setUserInfo();
+		setMeetingListRv();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		// TODO:简单处理：每次进入界面都重新加载会议列表
+//		getPresenter().loadMeetingList();
+		getPresenter().loadMeetingListTest();
 	}
 
 	@Override
@@ -90,7 +113,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	private void initViews() {
 		meetingListCl = (CoordinatorLayout) findViewById(R.id.meeting_list_cl);
 		View headerView = findViewById(R.id.meeting_list_header);
-		CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) headerView.getLayoutParams();
+		AppBarLayout.LayoutParams lp = (AppBarLayout.LayoutParams) headerView.getLayoutParams();
 		lp.height = DisplayUtils.getScreenHeight(this) / 4;
 		lp.gravity = Gravity.TOP;
 		headerView.setLayoutParams(lp);
@@ -101,7 +124,27 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		createBrainStormFab = (FloatingActionButton) findViewById(R.id.brain_storm_fab);
 		createThemeMeetingFab.setOnClickListener(this);
 		createBrainStormFab.setOnClickListener(this);
-		meetingListRv = (RecyclerView) findViewById(R.id.meeting_list_Rv);
+		meetingListRv = (RecyclerView) findViewById(R.id.meeting_list_rv);
+	}
+
+	/**
+	 * 初始化会议列表
+	 */
+	private void setMeetingListRv() {
+		meetingListRvAdapter = new MeetingListRvAdapter(this);
+		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		meetingListRv.setLayoutManager(layoutManager);
+		// 加入分组头部
+		final StickyRecyclerHeadersDecoration headersDecor = new
+				StickyRecyclerHeadersDecoration(meetingListRvAdapter);
+		meetingListRv.addItemDecoration(headersDecor);
+		meetingListRv.setAdapter(meetingListRvAdapter);
+		// 加入item动画效果
+		SlideInDownAnimator animator = new SlideInDownAnimator();
+		animator.setAddDuration(500);
+		animator.setInterpolator(new BounceInterpolator());
+		meetingListRv.setItemAnimator(animator);
 	}
 
 	/**
@@ -129,9 +172,21 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		});
 	}
 
-
+	/**
+	 * 加载会议列表
+	 */
 	@Override
-	public void showMeetingList() {
+	public void loadMeetingList(List<MeetingInfo> meetingInfos) {
+		meetingListRvAdapter.clear();
+		if (meetingInfos == null || meetingInfos.size() == 0) {
+			LogUtils.i(TAG, "-->没有会议列表数据");
+			return;
+		}
+		int size = meetingInfos.size();
+		for (int i = 0; i < size; i++) {
+			LogUtils.i(TAG, "加入数据-->" + i);
+			meetingListRvAdapter.add(i, meetingInfos.get(i));
+		}
 
 	}
 
@@ -162,5 +217,13 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 
 	}
 
+	@Override
+	public void showLoadingProgress() {
+		showLoading(getString(R.string.prompt_loading));
+	}
 
+	@Override
+	public void dismissLoadingProgress() {
+		dismissLoading();
+	}
 }

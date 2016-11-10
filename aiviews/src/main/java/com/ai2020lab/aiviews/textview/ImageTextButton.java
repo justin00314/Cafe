@@ -80,5 +80,12 @@ public class ImageTextButton extends LinearLayout {
 		titleIv.setImageDrawable(drawable);
 	}
 
+	public void setImage(Drawable drawable) {
+		if (drawable == null) {
+			throw new IllegalArgumentException("toolbar背景Drawable资源文件找不到");
+		}
+		titleIv.setImageDrawable(drawable);
+	}
+
 
 }

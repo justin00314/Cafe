@@ -18,6 +18,7 @@ import com.ai2020lab.aiutils.common.LogUtils;
 import com.ai2020lab.aiutils.common.ResourcesUtils;
 import com.ai2020lab.aiutils.common.ViewUtils;
 import com.ai2020lab.aiviews.R;
+import com.rey.material.widget.ProgressView;
 
 
 /**
@@ -29,7 +30,7 @@ public class LoadingDialog extends DialogFragment {
 	/**
 	 * 加载动画ImageView
 	 */
-	private ImageView loadingIv;
+	private ProgressView loadingPv;
 	/**
 	 * 加载提示TextView
 	 */
@@ -74,7 +75,7 @@ public class LoadingDialog extends DialogFragment {
 		BaseDialog dialog = createDialog(contentView);
 		assignViews(contentView);
 		setLoadingTv();
-		loadAnimation();
+//		loadAnimation();
 		return dialog;
 	}
 
@@ -98,8 +99,8 @@ public class LoadingDialog extends DialogFragment {
 	}
 
 	private void assignViews(View view) {
-		loadingIv = (ImageView) view.findViewById(R.id.loadingIv);
-		loadingTv = (TextView) view.findViewById(R.id.loadingTv);
+		loadingPv = (ProgressView) view.findViewById(R.id.loading_pv);
+		loadingTv = (TextView) view.findViewById(R.id.loading_tv);
 	}
 
 	private void setLoadingTv() {
@@ -107,11 +108,11 @@ public class LoadingDialog extends DialogFragment {
 		loadingTv.getPaint().setFakeBoldText(true);
 	}
 
-	private void loadAnimation() {
-		loadingIv.setImageDrawable(ResourcesUtils.getDrawable(R.drawable.loading_anim));
-		loadingAnim = (AnimationDrawable) loadingIv.getDrawable();
-		loadingAnim.start();
-	}
+//	private void loadAnimation() {
+//		loadingIv.setImageDrawable(ResourcesUtils.getDrawable(R.drawable.loading_anim));
+//		loadingAnim = (AnimationDrawable) loadingIv.getDrawable();
+//		loadingAnim.start();
+//	}
 
 
 }

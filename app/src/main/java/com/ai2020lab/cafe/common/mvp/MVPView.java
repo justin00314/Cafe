@@ -5,4 +5,5 @@ package com.ai2020lab.cafe.common.mvp;
  * 502953057@qq.com
  */
 public interface MVPView {
+
 }

@@ -7,5 +7,9 @@ package com.ai2020lab.cafe.common.mvp.base;
  */
 public interface BaseView {
 
+	void showLoadingProgress();
+
+	void dismissLoadingProgress();
+
 
 }

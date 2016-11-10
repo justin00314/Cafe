@@ -17,7 +17,7 @@ public class UserInfo implements Serializable {
 	 */
 	@Expose
 	@SerializedName("user_id")
-	public int userID;
+	public String userID;
 	/**
 	 * 用户名
 	 */

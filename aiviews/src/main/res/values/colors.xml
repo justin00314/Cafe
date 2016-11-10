@@ -4,6 +4,7 @@
 	<color name="aiview_none">#00000000</color>
 
 	<color name="aiview_toolbar_btn_rv">#FFFFFF</color>
+	<color name="aiview_image_text_btn_rv">#999999</color>
 	<color name="aiview_toolbar_bg">#356734</color>
 	<color name="aiview_toolbar_title_text">#ffffffff</color>
 	<color name="aiview_toolbar_bottom_divider">#d2d2d2</color>

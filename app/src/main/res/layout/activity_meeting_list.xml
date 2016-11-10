@@ -3,20 +3,28 @@
 <android.support.design.widget.CoordinatorLayout
 	android:id="@+id/meeting_list_cl"
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<!--header-->
-	<include
-		android:id="@+id/meeting_list_header"
-		layout="@layout/meeting_list_header"/>
+	<android.support.design.widget.AppBarLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/aiview_activity_bg"
+		android:theme="@style/AppTheme.ActionBar">
+		<!--header-->
+		<include
+			android:id="@+id/meeting_list_header"
+			layout="@layout/meeting_list_header"/>
+	</android.support.design.widget.AppBarLayout>
 
 	<android.support.v7.widget.RecyclerView
-		android:id="@+id/meeting_list_Rv"
+		android:id="@+id/meeting_list_rv"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_height="wrap_content"
 		android:clipToPadding="true"
-		android:saveEnabled="false"/>
+		android:saveEnabled="false"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/brain_storm_fab"
@@ -26,6 +34,7 @@
 		android:layout_gravity="bottom|end"
 		android:layout_marginBottom="20dp"
 		android:layout_marginEnd="20dp"
-		android:src="@mipmap/fab_brain_storm"/>
+		android:src="@mipmap/fab_brain_storm"
+		app:layout_behavior="com.ai2020lab.cafe.common.FABBehavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

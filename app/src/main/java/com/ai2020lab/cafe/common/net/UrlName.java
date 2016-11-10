@@ -5,7 +5,9 @@ package com.ai2020lab.cafe.common.net;
  */
 public enum UrlName {
 	// 上传采集数据
-	UPLOAD_DATA("uploadFunf");
+	UPLOAD_DATA("uploadFunf"),
+	// 会议列表
+	MEETING_LIST("meetingList");
 
 	private String name;
 

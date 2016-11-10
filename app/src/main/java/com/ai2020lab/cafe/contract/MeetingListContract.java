@@ -5,6 +5,10 @@ import android.view.View;
 import com.ai2020lab.cafe.common.mvp.base.BaseModel;
 import com.ai2020lab.cafe.common.mvp.base.BasePresenter;
 import com.ai2020lab.cafe.common.mvp.base.BaseView;
+import com.ai2020lab.cafe.data.meeting.MeetingInfo;
+import com.loopj.android.http.ResponseHandlerInterface;
+
+import java.util.List;
 
 /**
  * Created by Justin Z on 2016/11/7.
@@ -18,7 +22,7 @@ public interface MeetingListContract {
 	 */
 	interface View extends BaseView {
 
-		void showMeetingList();
+		void loadMeetingList(List<MeetingInfo> meetingInfoList);
 
 		/**
 		 * 设置用户信息显示
@@ -39,6 +43,9 @@ public interface MeetingListContract {
 	 */
 	interface Presenter extends BasePresenter {
 
+
+
+		void loadMeetingListTest();
 		/**
 		 * 加载会议列表
 		 */
@@ -90,6 +97,10 @@ public interface MeetingListContract {
 	 * Model接口方法，一般是数据操作方法,不一定存在Model
 	 */
 	interface Model extends BaseModel {
+		/**
+		 * 加载会议列表网络数据
+		 */
+		void loadMeetingList(ResponseHandlerInterface response);
 
 	}
 

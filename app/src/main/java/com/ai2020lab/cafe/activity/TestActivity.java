@@ -109,8 +109,13 @@ public class TestActivity extends MVPActivity<TestContract.View,
 		});
 	}
 
+	@Override
+	public void showLoadingProgress() {
 
+	}
 
+	@Override
+	public void dismissLoadingProgress() {
 
-
+	}
 }

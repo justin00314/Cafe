@@ -2,9 +2,9 @@
 <!--会议列表item主区域-->
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
+	android:layout_width="match_parent" android:layout_height="wrap_content"
 	android:paddingBottom="10dp"
 	android:paddingTop="10dp">
 
@@ -14,7 +14,7 @@
 		android:layout_height="25dp"
 		android:layout_alignParentStart="true"
 		android:layout_centerVertical="true"
-		android:layout_marginStart="25dp"
+		android:layout_marginStart="45dp"
 		android:src="@mipmap/type_default"
 		tools:ignore="contentDescription"/>
 
@@ -42,15 +42,20 @@
 			tools:text="2016-11-10 11:10:00"/>
 	</RelativeLayout>
 
-	<ImageView
-		android:id="@+id/qrcode_iv"
-		android:layout_width="25dp"
-		android:layout_height="25dp"
+	<com.ai2020lab.aiviews.rippleview.RippleView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		android:layout_alignParentEnd="true"
 		android:layout_centerVertical="true"
 		android:layout_marginEnd="20dp"
-		android:src="@mipmap/show_qrcode"
-		tools:ignore="contentDescription"/>
-
+		app:rv_color="@color/aiview_image_text_btn_rv"
+		app:rv_type="rectangle">
+		<ImageButton
+			android:id="@+id/qrcode_ib"
+			android:layout_width="30dp"
+			android:layout_height="30dp"
+			android:src="@mipmap/show_qrcode"
+			tools:ignore="contentDescription"/>
+	</com.ai2020lab.aiviews.rippleview.RippleView>
 
 </RelativeLayout>

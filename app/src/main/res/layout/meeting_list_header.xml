@@ -4,26 +4,27 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="200dp"
-	android:background="@mipmap/header">
+	android:layout_height="150dp"
+	android:background="@mipmap/header"
+	app:layout_scrollFlags="scroll|enterAlways">
 
 	<LinearLayout
 		android:layout_width="wrap_content"
-		android:layout_height="60dp"
+		android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
-		android:layout_marginStart="20dp"
+		android:layout_marginStart="30dp"
 		android:orientation="horizontal">
 
 		<com.ai2020lab.aiviews.imageview.RoundImageView
 			android:id="@+id/user_portrait_iv"
-			android:layout_width="60dp"
-			android:layout_height="60dp"
+			android:layout_width="50dp"
+			android:layout_height="50dp"
 			app:borderRadius="5dp"
 			tools:ignore="contentDescription"/>
 
 		<RelativeLayout
 			android:layout_width="wrap_content"
-			android:layout_height="60dp"
+			android:layout_height="50dp"
 			android:layout_marginStart="10dp">
 
 			<TextView
