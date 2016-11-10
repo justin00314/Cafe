@@ -21,4 +21,12 @@
 	<string name="meeting_state_appointment">预约会议</string>
 	<string name="meeting_state_history">历史会议</string>
 
+	<string name="submit">提交</string>
+	<string name="theme_meeting">主题会议</string>
+	<string name="meeting_theme">会议主题</string>
+	<string name="meeting_number">会议人数</string>
+	<string name="meeting_organizer">会议组织者</string>
+	<string name="meeting_place">会议地点</string>
+
+
 </resources>
