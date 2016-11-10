@@ -20,9 +20,9 @@ import java.util.List;
 import static android.text.InputType.TYPE_CLASS_TEXT;
 import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
 
-public class RegisteActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
-    private static final String TAG = "RegisteActivity";
+    private static final String TAG = "RegisterActivity";
 
     private EditText mName;
     private EditText mId;
