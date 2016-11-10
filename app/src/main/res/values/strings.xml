@@ -16,6 +16,7 @@
 	<string name="confirm_password">确认密码</string>
 
 
+	<string name="prompt_shake_phone">找几个同学一起摇一摇手机试试</string>
 	<string name="meeting_state_progress">正在进行中的会议</string>
 	<string name="meeting_state_appointment">预约会议</string>
 	<string name="meeting_state_history">历史会议</string>
