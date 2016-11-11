@@ -110,13 +110,17 @@
 
         <!-- <activity android:name=".activity.LoginActivity"></activity -->
 
+
         <!-- <activity android:name=".activity.RegisterActivity"></activity> -->
 
-        <!--<activity android:name=".activity.ThemeMeetingCreateActivity"></activity>-->
+
+        <!-- <activity android:name=".activity.ThemeMeetingCreateActivity"></activity> -->
+
+        <!--<activity android:name=".activity.SearchMeetingActivity"></activity>-->
 
 
         <!-- 后台采集数据服务 -->
-        <service android:name=".service.FunfManagerService"></service>
+        <service android:name=".service.FunfManagerService" />
 
 
     </application>
