@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CollapsingToolbarLayout
+	android:id="@+id/header_ctl"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
@@ -9,6 +10,7 @@
 	app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 	<LinearLayout
+		android:id="@+id/user_ll"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
@@ -58,8 +60,7 @@
 		android:layout_gravity="bottom|end"
 		android:layout_marginEnd="20dp"
 		android:src="@mipmap/fab_theme_meeting"
-		app:layout_collapseMode="pin"
-		app:layout_collapseParallaxMultiplier="0.2"/>
-
+		app:layout_anchor="@id/user_ll"
+		app:layout_anchorGravity="bottom|end|right"/>
 
 </android.support.design.widget.CollapsingToolbarLayout>
