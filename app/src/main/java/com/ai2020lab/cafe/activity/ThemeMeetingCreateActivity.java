@@ -1,7 +1,7 @@
 package com.ai2020lab.cafe.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.ai2020lab.cafe.R;
@@ -11,6 +11,8 @@ import com.ai2020lab.cafe.presenter.ThemeMeetingCreatePresenter;
 
 public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateContract.View,
         ThemeMeetingCreatePresenter> implements ThemeMeetingCreateContract.View {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,10 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
     @Override
     public ThemeMeetingCreatePresenter initPresenter() {
         return new ThemeMeetingCreatePresenter();
+    }
+
+    public void submit(View v) {
+
     }
 
 
@@ -54,4 +60,6 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
         com.rey.material.widget.Spinner place = (com.rey.material.widget.Spinner) findViewById(R.id.place).findViewById(R.id.title);
    //     place.getLabelView.setText(R.string.meeting_place);
     }
+
+
 }

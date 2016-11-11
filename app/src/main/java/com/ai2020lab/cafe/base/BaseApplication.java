@@ -6,6 +6,7 @@ import com.ai2020lab.aiutils.common.LogUtils;
 import com.ai2020lab.aiutils.common.ResourcesUtils;
 import com.ai2020lab.cafe.common.DiskCacheManager;
 import com.ai2020lab.cafe.common.ImageLoaderManager;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 
 /**
@@ -49,6 +50,8 @@ public class BaseApplication extends Application {
 //						.setFontAttrId(R.attr.fontPath)
 //						.build()
 //		);
+
+		ZXingLibrary.initDisplayOpinion(this);
 	}
 
 	@Override
