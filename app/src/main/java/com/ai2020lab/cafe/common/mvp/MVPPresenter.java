@@ -2,6 +2,7 @@ package com.ai2020lab.cafe.common.mvp;
 
 import com.ai2020lab.cafe.common.mvp.base.BaseModel;
 import com.ai2020lab.cafe.common.mvp.base.BaseView;
+import com.ai2020lab.cafe.common.mvp.base.IMVPPresent;
 
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
@@ -12,7 +13,7 @@ import java.lang.ref.WeakReference;
  * Created by Justin Z on 2016/10/14.
  * 502953057@qq.com
  */
-public abstract class MVPPresenter<V extends BaseView, M extends BaseModel> {
+public abstract class MVPPresenter<V extends BaseView, M extends BaseModel> implements IMVPPresent<V, M>{
 
 	public Reference<V> mViewRef;
 
@@ -21,8 +22,6 @@ public abstract class MVPPresenter<V extends BaseView, M extends BaseModel> {
 	public MVPPresenter() {
 		mModelRef = new WeakReference<>(initModel());
 	}
-
-	public abstract M initModel();
 
 	/**
 	 * 初始化Presenter
