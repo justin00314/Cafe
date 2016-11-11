@@ -44,4 +44,18 @@
 		<item name="spn_dividerHeight">0dp</item>
 	</style>
 
+	<style name="BaseEdit" parent="TextNormal.Light">
+		<item name="android:background">@null</item>
+		<item name="android:maxLines">1</item>
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+	</style>
+
+	<style name="SeperatorLine" >
+		<item name="android:background">@android:color/darker_gray</item>
+		<item name="android:maxLines">1</item>
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">0.5dp</item>
+	</style>
+
 </resources>

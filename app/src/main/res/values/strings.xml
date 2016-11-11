@@ -35,6 +35,8 @@
 	<string name="meeting_place">会议地点</string>
 	<string name="success">成功</string>
 	<string name="fail">失败</string>
+	<string name="result">结果</string>
+
 
 
 </resources>
