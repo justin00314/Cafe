@@ -58,7 +58,7 @@
 		android:layout_gravity="bottom|end"
 		android:layout_marginEnd="20dp"
 		android:src="@mipmap/fab_theme_meeting"
-		app:layout_collapseMode="parallax"
+		app:layout_collapseMode="pin"
 		app:layout_collapseParallaxMultiplier="0.2"/>
 
 
