@@ -33,6 +33,8 @@
 	<string name="meeting_number">会议人数</string>
 	<string name="meeting_organizer">会议组织者</string>
 	<string name="meeting_place">会议地点</string>
+	<string name="success">成功</string>
+	<string name="fail">失败</string>
 
 
 </resources>

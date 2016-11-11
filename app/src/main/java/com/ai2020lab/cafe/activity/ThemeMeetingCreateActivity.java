@@ -1,6 +1,7 @@
 package com.ai2020lab.cafe.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -10,8 +11,7 @@ import com.ai2020lab.cafe.contract.ThemeMeetingCreateContract;
 import com.ai2020lab.cafe.presenter.ThemeMeetingCreatePresenter;
 
 public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateContract.View,
-        ThemeMeetingCreatePresenter> implements ThemeMeetingCreateContract.View {
-
+        ThemeMeetingCreateContract.Presenter> implements ThemeMeetingCreateContract.View {
 
 
     @Override
@@ -29,7 +29,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
     }
 
     public void submit(View v) {
-
+        getPresenter().submit();
     }
 
 
@@ -54,20 +54,23 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
         TextView number = (TextView) findViewById(R.id.number).findViewById(R.id.editor_title);
         number.setText(R.string.meeting_number);
 
-        com.rey.material.widget.Spinner organizer = (com.rey.material.widget.Spinner) findViewById(R.id.organizer).findViewById(R.id.title);
-   //     organizer.getLabelView.setText(R.string.meeting_organizer);
+        com.rey.material.widget.Spinner organizer =
+                (com.rey.material.widget.Spinner) findViewById(R.id.organizer).findViewById(R.id.title);
+        //     organizer.getLabelView.setText(R.string.meeting_organizer);
 
-        com.rey.material.widget.Spinner place = (com.rey.material.widget.Spinner) findViewById(R.id.place).findViewById(R.id.title);
-   //     place.getLabelView.setText(R.string.meeting_place);
+        com.rey.material.widget.Spinner place =
+                (com.rey.material.widget.Spinner) findViewById(R.id.place).findViewById(R.id.title);
+        //     place.getLabelView.setText(R.string.meeting_place);
     }
-    
-	@Override
-	public void showLoadingProgress() {
 
-	}
-
-	@Override
-	public void dismissLoadingProgress() {
-
-	}
+    @Override
+    public void submitDone(boolean success) {
+        if (success) {
+            Snackbar.make(findViewById(R.id.coordinator_layout), getString(R.string.success),
+                    Snackbar.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(findViewById(R.id.coordinator_layout), getString(R.string.fail),
+                    Snackbar.LENGTH_SHORT).show();
+        }
+    }
 }

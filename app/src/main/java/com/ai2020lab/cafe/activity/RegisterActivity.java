@@ -1,11 +1,8 @@
 package com.ai2020lab.cafe.activity;
 
 import android.graphics.ImageFormat;
-import android.graphics.PixelFormat;
 import android.hardware.Camera;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -14,13 +11,16 @@ import android.widget.TextView;
 import com.ai2020lab.cafe.R;
 import com.ai2020lab.cafe.common.CameraUtils;
 import com.ai2020lab.cafe.common.camera.HeadOnlyCameraPreview;
+import com.ai2020lab.cafe.common.mvp.MVPActivity;
+import com.ai2020lab.cafe.contract.RegisterContract;
 
 import java.util.List;
 
 import static android.text.InputType.TYPE_CLASS_TEXT;
 import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends MVPActivity<RegisterContract.View,
+        RegisterContract.Presenter> implements RegisterContract.View {
 
     private static final String TAG = "RegisterActivity";
 
@@ -63,6 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
         setupUI();
 
     }
+
 
     private void setupUI() {
         ImageView userImage = (ImageView) findViewById(R.id.user_name).findViewById(R.id.editor_icon);
@@ -144,5 +145,16 @@ public class RegisterActivity extends AppCompatActivity {
             FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
             preview.removeView(mPreview);
         }
+    }
+
+    @Override
+    public RegisterContract.Presenter initPresenter() {
+        return null;
+    }
+
+
+    @Override
+    public void registerDone(boolean success) {
+
     }
 }

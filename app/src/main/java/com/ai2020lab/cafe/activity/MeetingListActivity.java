@@ -217,13 +217,5 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 
 	}
 
-	@Override
-	public void showLoadingProgress() {
-		showLoading(getString(R.string.prompt_loading));
-	}
 
-	@Override
-	public void dismissLoadingProgress() {
-		dismissLoading();
-	}
 }

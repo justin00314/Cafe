@@ -1,19 +1,21 @@
 package com.ai2020lab.cafe.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ai2020lab.cafe.R;
+import com.ai2020lab.cafe.common.mvp.MVPActivity;
+import com.ai2020lab.cafe.contract.LoginContract;
 
-import static android.text.InputType.*;
+import static android.text.InputType.TYPE_CLASS_TEXT;
+import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends MVPActivity<LoginContract.View,
+        LoginContract.Presenter> implements LoginContract.View {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,17 @@ public class LoginActivity extends AppCompatActivity {
         passwordText.setText(R.string.password);
     }
 
+    @Override
+    public LoginContract.Presenter initPresenter() {
+        return null;
+    }
+
     public void login(View v) {
+
+    }
+
+    @Override
+    public void loginDone(boolean success) {
 
     }
 }

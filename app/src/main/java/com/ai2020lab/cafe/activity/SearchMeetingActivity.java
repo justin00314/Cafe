@@ -2,17 +2,19 @@ package com.ai2020lab.cafe.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ai2020lab.cafe.R;
+import com.ai2020lab.cafe.common.mvp.MVPActivity;
+import com.ai2020lab.cafe.contract.MeetingSearchContract;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
-public class SearchMeetingActivity extends AppCompatActivity {
+public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.View,
+        MeetingSearchContract.Presenter> implements MeetingSearchContract.View {
 
     public static final int REQUEST_CODE = 111;
 
@@ -20,6 +22,11 @@ public class SearchMeetingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_meeting);
+    }
+
+    @Override
+    public MeetingSearchContract.Presenter initPresenter() {
+        return null;
     }
 
     public void test(View v) {
@@ -52,5 +59,10 @@ public class SearchMeetingActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    public void showSearchResults() {
+
     }
 }
