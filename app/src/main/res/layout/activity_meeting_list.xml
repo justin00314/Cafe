@@ -8,6 +8,7 @@
 	android:layout_height="match_parent">
 
 	<android.support.design.widget.AppBarLayout
+		android:id="@+id/abl"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:background="@color/aiview_activity_bg"
@@ -16,6 +17,7 @@
 		<include
 			android:id="@+id/meeting_list_header"
 			layout="@layout/meeting_list_header"/>
+
 	</android.support.design.widget.AppBarLayout>
 
 	<android.support.v7.widget.RecyclerView
@@ -25,6 +27,7 @@
 		android:clipToPadding="true"
 		android:saveEnabled="false"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
 
 	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/brain_storm_fab"
