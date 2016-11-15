@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--展示会议二维码弹出对话框-->
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<TextView
+		android:id="@+id/qrcode_title_tv"
+		style="@style/TextLittle.Light"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_marginBottom="10dp"
+		android:layout_marginTop="10dp"
+		android:text="@string/dialog_qrcode_title"/>
+
+	<ImageView
+		android:id="@+id/qrcode_iv"
+		android:layout_width="100dp"
+		android:layout_height="100dp"
+		android:layout_below="@+id/qrcode_title_tv"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginBottom="10dp"
+		tools:ignore="contentDescription"/>
+
+	<TextView
+		android:id="@+id/qrcode_theme_tv"
+		style="@style/TextLittle.Light"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/qrcode_iv"
+		android:layout_centerHorizontal="true"
+		android:layout_marginBottom="10dp"
+		android:text="@string/dialog_qrcode_theme"/>
+	<TextView
+		android:id="@+id/qrcode_id_tv"
+		style="@style/TextLittle.Light"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/qrcode_theme_tv"
+		android:layout_centerHorizontal="true"
+		android:layout_marginBottom="10dp"
+		android:text="@string/dialog_qrcode_id"/>
+	<TextView
+		android:id="@+id/qrcode_time_tv"
+		style="@style/TextLittle.Light"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/qrcode_id_tv"
+		android:layout_centerHorizontal="true"
+		android:layout_marginBottom="10dp"
+		android:text="@string/dialog_qrcode_time"/>
+	<TextView
+		android:id="@+id/qrcode_location_tv"
+		style="@style/TextLittle.Light"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/qrcode_time_tv"
+		android:layout_centerHorizontal="true"
+		android:layout_marginBottom="15dp"
+		android:text="@string/dialog_qrcode_location"/>
+
+	<com.rey.material.widget.Button
+		android:id="@+id/qrcode_ensure_btn"
+		style="@style/TextLittle"
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
+		android:background="@mipmap/ensure_btn_bg"
+		android:text="@string/ensure"
+		android:textColor="@android:color/white"
+		app:rd_rippleType="wave"
+		app:rippleColor="@color/aiview_ripple"/>
+
+</RelativeLayout>
