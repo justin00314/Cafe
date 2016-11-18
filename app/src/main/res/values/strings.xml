@@ -45,7 +45,13 @@
 	<string name="success">成功</string>
 	<string name="fail">失败</string>
 	<string name="result">结果</string>
-
+	<string name="meeting_date">会议时间</string>
+	<string name="meeting_ID">会议ID</string>
+	<string name="camera_rationale">拍摄头像需要使用您的相机</string>
+	<string name="rationale_ask_again">获取需要使用您的相机</string>
+	<string name="title_settings_dialog">进入设置</string>
+	<string name="prompt_open_camera_failure">相机打开失败，请重试</string>
+	<string name="photo_prompt_saving_failure">保存照片失败</string>
 
 
 </resources>

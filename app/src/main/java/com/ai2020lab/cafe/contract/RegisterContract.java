@@ -15,6 +15,8 @@ public interface RegisterContract {
      */
     interface View extends BaseView {
         void registerDone(boolean success);
+        void initCameraSurface();
+        void loadCameraFail();
     }
 
     /**
@@ -22,6 +24,7 @@ public interface RegisterContract {
      */
     interface Presenter<V extends RegisterContract.View, M extends RegisterContract.Model> extends IMVPPresent<V, M> {
         void register();
+        void loadCamera();
     }
 
     /**

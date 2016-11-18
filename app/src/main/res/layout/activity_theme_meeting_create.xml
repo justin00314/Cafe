@@ -1,59 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="26dp"
-    android:paddingRight="4dp"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/aiview_activity_bg"
-    tools:context="com.ai2020lab.cafe.activity.ThemeMeetingCreateActivity">
-
-    <include
-        android:id="@+id/theme"
-        layout="@layout/include_icon_title_editor"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="26dp"
+        android:paddingRight="4dp"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:background="@color/aiview_activity_bg"
+        tools:context="com.ai2020lab.cafe.activity.ThemeMeetingCreateActivity">
 
-    <include
-        android:id="@+id/number"
-        layout="@layout/include_icon_title_editor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
+        <include
+            android:id="@+id/theme"
+            layout="@layout/include_icon_title_editor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
 
-    <include
-        android:id="@+id/organizer"
-        layout="@layout/include_icon_title_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
+        <include
+            android:id="@+id/number"
+            layout="@layout/include_icon_title_editor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
 
-    <include
-        android:id="@+id/place"
-        layout="@layout/include_icon_title_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
+        <include
+            android:id="@+id/organizer"
+            layout="@layout/include_icon_title_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        <include
+            android:id="@+id/place"
+            layout="@layout/include_icon_title_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
 
-    <com.rey.material.widget.Button
-        style="@style/BaseButton"
-        android:layout_marginBottom="30dp"
-        android:layout_marginRight="12dp"
-        android:onClick="submit"
-        android:text="@string/submit"
-        app:rd_enable="true" />
-</LinearLayout>
+        <include
+            android:id="@+id/date"
+            layout="@layout/include_icon_title_imagebutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <com.rey.material.widget.Button
+            style="@style/BaseButton"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="12dp"
+            android:onClick="submit"
+            android:text="@string/submit"
+            app:rd_enable="true" />
+    </LinearLayout>
+</ScrollView>
+
+
 <!--<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"

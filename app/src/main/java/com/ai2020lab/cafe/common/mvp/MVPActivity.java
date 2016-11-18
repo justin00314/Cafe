@@ -25,8 +25,12 @@ public abstract class MVPActivity<V extends BaseView, P extends IMVPPresent>
 	@SuppressWarnings("unchecked")
 	public void initMVP() {
 		mPresenter = initPresenter();
-		// 这里一定是传入泛型
-		mPresenter.attachView((V) this);
+
+		if (mPresenter != null) {
+			// 这里一定是传入泛型
+			mPresenter.attachView((V) this);
+		}
+
 	}
 
 	/**
@@ -41,7 +45,10 @@ public abstract class MVPActivity<V extends BaseView, P extends IMVPPresent>
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		mPresenter.detachView();
+
+		if (mPresenter != null) {
+			mPresenter.detachView();
+		}
 	}
 
 	@Override

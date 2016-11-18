@@ -12,12 +12,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
             android:src="@mipmap/type_default" />
 
         <LinearLayout
@@ -25,36 +28,35 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <TextView
+                style="@style/TextLittle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/meeting_ID" />
 
-                <TextView
-                    android:id="@+id/id"
-                    style="@style/TextLittle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_toLeftOf="@+id/glass"
-                    android:text="id" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical">
 
                 <EditText
                     android:id="@+id/editor_id"
                     style="@style/BaseEdit"
-                    android:layout_below="@id/id"
-                    android:layout_marginTop="10dp"
-                    android:layout_toLeftOf="@+id/glass"
-                    android:text="112431243" />
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:id="@+id/glass"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/reading_glass" />
+                    android:src="@mipmap/reading_glass"
+                    android:layout_marginRight="15dp"
+                    android:onClick="search"
+                    android:clickable="true"/>
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <View
                 android:id="@+id/seperator"
@@ -67,6 +69,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/result" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/meeting_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

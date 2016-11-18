@@ -1,68 +1,134 @@
 package com.ai2020lab.cafe.activity;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ai2020lab.aiutils.common.ViewUtils;
 import com.ai2020lab.cafe.R;
 import com.ai2020lab.cafe.common.mvp.MVPActivity;
 import com.ai2020lab.cafe.contract.MeetingSearchContract;
-import com.uuzuche.lib_zxing.activity.CaptureActivity;
-import com.uuzuche.lib_zxing.activity.CodeUtils;
+import com.ai2020lab.cafe.data.meeting.MeetingInfo;
+import com.ai2020lab.cafe.presenter.MeetingSearchMockPresenter;
+
+import java.util.List;
 
 public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.View,
         MeetingSearchContract.Presenter> implements MeetingSearchContract.View {
 
-    public static final int REQUEST_CODE = 111;
+    private RecyclerView mMeetintsRv;
+    private EditText mMeetintId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_meeting);
+
+        setupUI();
     }
 
     @Override
     public MeetingSearchContract.Presenter initPresenter() {
-        return null;
+        return new MeetingSearchMockPresenter();
     }
 
-    public void test(View v) {
-        Intent intent = new Intent(getApplication(), CaptureActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
-    }
 
-    public void createImage(View v) {
-        Bitmap bitmap = CodeUtils.createImage("2020lab", 400, 400, null);
-        ((ImageView) findViewById(R.id.code)).setImageBitmap(bitmap);
-    }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        /**
-         * 处理二维码扫描结果
-         */
-        if (requestCode == REQUEST_CODE) {
-            //处理扫描结果（在界面上显示）
-            if (null != data) {
-                Bundle bundle = data.getExtras();
-                if (bundle == null) {
-                    return;
-                }
-                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
-                    String result = bundle.getString(CodeUtils.RESULT_STRING);
-                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
-                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
-                    Toast.makeText(this, "解析二维码失败", Toast.LENGTH_LONG).show();
-                }
+    public void showSearchResults(List<MeetingInfo> meetings) {
+        mMeetintsRv.setAdapter(new SearchMeetingListAdapter(meetings));
+    }
+
+    public void search(View v) {
+        getPresenter().search("");
+    }
+
+    private void setupUI() {
+        mMeetintsRv = (RecyclerView) findViewById(R.id.meeting_list);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mMeetintsRv.setLayoutManager(layoutManager);
+
+    }
+
+    public static  class SearchMeetingListAdapter extends RecyclerView.Adapter<SearchMeetingListAdapter.ItemViewHolder> {
+
+        private final List<MeetingInfo> mmMeetings;
+
+        public SearchMeetingListAdapter(List<MeetingInfo> meetings) {
+            mmMeetings = meetings;
+        }
+
+        @Override
+        public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = ViewUtils.makeView(parent.getContext(), R.layout.listitem_search_meeting_list, parent, false);
+            return new ItemViewHolder(view);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mmMeetings.size();
+        }
+
+        @Override
+        public void onBindViewHolder(ItemViewHolder holder, int position) {
+            MeetingInfo meeting = mmMeetings.get(position);
+
+            holder.themeName.setText(meeting.name);
+            holder.id.setText(meeting.id);
+            holder.date.setText(meeting.startTime);
+            holder.place.setText(meeting.address);
+        }
+
+        class ItemViewHolder extends RecyclerView.ViewHolder {
+
+            TextView themeName;
+            TextView id;
+            TextView date;
+            TextView place;
+
+            ItemViewHolder(View view) {
+                super(view);
+
+                final Context context = view.getContext();
+
+                themeName = (TextView) view.findViewById(R.id.theme).findViewById(R.id.content);
+                id = (TextView) view.findViewById(R.id.id).findViewById(R.id.content);
+                date = (TextView) view.findViewById(R.id.date).findViewById(R.id.content);
+                place = (TextView) view.findViewById(R.id.place).findViewById(R.id.content);
+
+                TextView themeTitle = (TextView) view.findViewById(R.id.theme).findViewById(R.id.label);
+                themeTitle.setText(String.format(context.getString(R.string.dialog_qrcode_theme),
+                        ""));
+                TextView idTitle = (TextView) view.findViewById(R.id.id).findViewById(R.id.label);
+                idTitle.setText(String.format(context.getString(R.string.dialog_qrcode_id),
+                        ""));
+                TextView dateTitle = (TextView) view.findViewById(R.id.date).findViewById(R.id.label);
+                dateTitle.setText(String.format(context.getString(R.string.dialog_qrcode_time),
+                        ""));
+                TextView placeTitle = (TextView) view.findViewById(R.id.place).findViewById(R.id.label);
+                placeTitle.setText(String.format(context.getString(R.string.dialog_qrcode_location),
+                        ""));
+
+                View joinBtn = view.findViewById(R.id.join);
+                joinBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int position = getAdapterPosition();
+
+                        MeetingInfo meeting = mmMeetings.get(position);
+
+                        Toast.makeText(view.getContext(), meeting.id, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }
-    }
-
-    @Override
-    public void showSearchResults() {
-
     }
 }

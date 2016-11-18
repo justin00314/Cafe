@@ -3,6 +3,7 @@ package com.ai2020lab.cafe.activity;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.ai2020lab.cafe.R;
@@ -55,12 +56,24 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
         number.setText(R.string.meeting_number);
 
         com.rey.material.widget.Spinner organizer =
-                (com.rey.material.widget.Spinner) findViewById(R.id.organizer).findViewById(R.id.title);
+                (com.rey.material.widget.Spinner) findViewById(R.id.organizer).findViewById(R.id.spinner);
         //     organizer.getLabelView.setText(R.string.meeting_organizer);
 
         com.rey.material.widget.Spinner place =
-                (com.rey.material.widget.Spinner) findViewById(R.id.place).findViewById(R.id.title);
+                (com.rey.material.widget.Spinner) findViewById(R.id.place).findViewById(R.id.spinner);
         //     place.getLabelView.setText(R.string.meeting_place);
+
+        TextView meetingDate = (TextView) findViewById(R.id.date).findViewById(R.id.title);
+        meetingDate.setText(R.string.meeting_date);
+
+        ImageButton dateButton = (ImageButton) findViewById(R.id.date).findViewById(R.id.button);
+        dateButton.setImageResource(R.mipmap.icon_calendar);
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override

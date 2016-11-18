@@ -3,6 +3,9 @@ package com.ai2020lab.cafe.contract;
 import com.ai2020lab.cafe.common.mvp.base.BaseModel;
 import com.ai2020lab.cafe.common.mvp.base.BaseView;
 import com.ai2020lab.cafe.common.mvp.base.IMVPPresent;
+import com.ai2020lab.cafe.data.meeting.MeetingInfo;
+
+import java.util.List;
 
 /**
  * Created by Rocky on 2016/11/11.
@@ -14,7 +17,7 @@ public interface MeetingSearchContract {
      * View的接口方法，由Activity去实现
      */
     interface View extends BaseView {
-        void showSearchResults();
+        void showSearchResults(List<MeetingInfo> meetings);
     }
 
     /**

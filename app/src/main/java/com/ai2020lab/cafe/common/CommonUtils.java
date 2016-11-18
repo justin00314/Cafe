@@ -80,5 +80,10 @@ public class CommonUtils {
 		return StringUtils.parseInt(day);
 	}
 
-
+	/**
+	 * 4舍5入只保留整数
+	 */
+	public static int roundInt(float num) {
+		return (int) (num + 0.5);
+	}
 }

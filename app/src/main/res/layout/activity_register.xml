@@ -6,10 +6,39 @@
     android:background="@mipmap/login_bg"
     android:gravity="center_horizontal">
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/camera_preview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="260dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="40dp">
+
+        <View
+            android:id="@+id/head_rect"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="30dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/head_rect"
+            android:src="@mipmap/icon_camera"
+            android:onClick="takePhoto"/>
+
+    </RelativeLayout>
+
+    <!--<FrameLayout-->
+        <!--android:id="@+id/camera_preview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginBottom="260dp"-->
+        <!--android:layout_marginRight="100dp"-->
+        <!--android:layout_marginLeft="100dp"-->
+        <!--android:layout_marginTop="40dp"/>-->
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -31,7 +60,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
             android:clickable="true"
-            android:onClick="registe"
+            android:onClick="register"
             android:text="@string/register"
             android:textColor="@android:color/white" />
     </RelativeLayout>
