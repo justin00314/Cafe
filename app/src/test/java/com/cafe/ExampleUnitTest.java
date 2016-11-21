@@ -1,4 +1,4 @@
-package com.ai2020lab.cafe;
+package com.cafe;
 
 import org.junit.Test;
 

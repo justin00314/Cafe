@@ -1,4 +1,4 @@
-package com.ai2020lab.cafe;
+package com.cafe;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
