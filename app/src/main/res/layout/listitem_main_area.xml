@@ -43,7 +43,7 @@
 			tools:text="2016-11-10 11:10:00"/>
 	</RelativeLayout>
 
-	<com.ai2020lab.aiviews.rippleview.RippleView
+	<com.aiviews.rippleview.RippleView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentEnd="true"
@@ -57,6 +57,6 @@
 			android:layout_height="30dp"
 			android:src="@mipmap/show_qrcode"
 			tools:ignore="contentDescription"/>
-	</com.ai2020lab.aiviews.rippleview.RippleView>
+	</com.aiviews.rippleview.RippleView>
 
 </RelativeLayout>

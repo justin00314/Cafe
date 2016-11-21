@@ -8,7 +8,7 @@
 	android:layout_gravity="end|center_vertical"
 	android:orientation="horizontal">
 
-	<com.ai2020lab.aiviews.rippleview.RippleView
+	<com.aiviews.rippleview.RippleView
 		android:layout_width="wrap_content"
 		android:layout_height="match_parent"
 		android:padding="10dp"
@@ -20,8 +20,8 @@
 			android:layout_height="25dp"
 			android:layout_centerVertical="true"
 			tools:ignore="contentDescription"/>
-	</com.ai2020lab.aiviews.rippleview.RippleView>
-	<com.ai2020lab.aiviews.rippleview.RippleView
+	</com.aiviews.rippleview.RippleView>
+	<com.aiviews.rippleview.RippleView
 		android:layout_width="wrap_content"
 		android:layout_height="match_parent"
 		android:layout_marginEnd="10dp"
@@ -34,7 +34,7 @@
 			android:layout_height="25dp"
 			android:layout_centerVertical="true"
 			tools:ignore="contentDescription"/>
-	</com.ai2020lab.aiviews.rippleview.RippleView>
+	</com.aiviews.rippleview.RippleView>
 
 
 </LinearLayout>

@@ -19,7 +19,7 @@
 		app:layout_collapseMode="parallax"
 		app:layout_collapseParallaxMultiplier="0.4">
 
-		<com.ai2020lab.aiviews.imageview.RoundImageView
+		<com.aiviews.imageview.RoundImageView
 			android:id="@+id/user_portrait_iv"
 			android:layout_width="50dp"
 			android:layout_height="50dp"

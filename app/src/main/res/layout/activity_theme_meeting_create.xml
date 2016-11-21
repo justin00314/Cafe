@@ -14,7 +14,7 @@
         android:paddingRight="4dp"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:background="@color/aiview_activity_bg"
-        tools:context="com.ai2020lab.cafe.activity.ThemeMeetingCreateActivity">
+        tools:context="com.ai2020lab.cafe.com.cafe.activity.ThemeMeetingCreateActivity">
 
         <include
             android:id="@+id/theme"
@@ -83,7 +83,7 @@
         android:paddingRight="4dp"
         android:paddingTop="@dimen/activity_vertical_margin"
 
-        tools:context="com.ai2020lab.cafe.activity.ThemeMeetingCreateActivity">
+        tools:context="ThemeMeetingCreateActivity">
 
         <include
             android:id="@+id/theme"

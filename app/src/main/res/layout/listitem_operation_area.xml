@@ -24,13 +24,13 @@
 		android:src="@color/aiview_divider"
 		tools:ignore="contentDescription"/>
 
-	<com.ai2020lab.aiviews.textview.ImageTextButton
+	<com.aiviews.textview.ImageTextButton
 		android:id="@+id/operation1_itb"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_centerVertical="true"
 		android:layout_toEndOf="@+id/right_line_iv"/>
-	<com.ai2020lab.aiviews.textview.ImageTextButton
+	<com.aiviews.textview.ImageTextButton
 		android:id="@+id/operation2_itb"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
