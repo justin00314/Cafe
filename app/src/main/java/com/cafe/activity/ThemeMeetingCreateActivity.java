@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.ai2020lab.cafe.R;
+import com.cafe.R;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.ThemeMeetingCreateContract;
 import com.cafe.presenter.ThemeMeetingCreatePresenter;

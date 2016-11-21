@@ -10,12 +10,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ai2020lab.aiutils.common.ViewUtils;
-import com.ai2020lab.cafe.R;
+import com.cafe.R;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.MeetingSearchContract;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.presenter.MeetingSearchMockPresenter;
+
+import org.justin.utils.common.ViewUtils;
 
 import java.util.List;
 
