@@ -8,7 +8,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <LinearLayout
@@ -17,8 +17,8 @@
             android:layout_height="wrap_content"
             android:background="@color/aiview_activity_bg"
             android:orientation="vertical"
-            android:paddingLeft="26dp"
-            android:paddingRight="4dp"
+            android:paddingStart="26dp"
+            android:paddingEnd="4dp"
             android:paddingTop="@dimen/activity_vertical_margin"
             tools:context="com.ai2020lab.cafe.com.cafe.activity.ThemeMeetingCreateActivity">
 

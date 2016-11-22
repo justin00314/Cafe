@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -7,20 +8,21 @@
         android:id="@+id/editor_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@id/editor_layout"
+        android:layout_marginStart="10dp"
+        tools:ignore="ContentDescription" />
 
-    <TextView
-        android:id="@+id/editor_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:layout_toLeftOf="@id/editor_icon" />
+    <android.support.design.widget.TextInputLayout
+        style="@style/BaseTextInputLayout"
+        android:id="@+id/editor_layout"
+        android:layout_toStartOf="@id/editor_icon" >
 
-    <EditText
-        android:id="@+id/editor_content"
-        style="@style/BaseEdit"
-        android:layout_below="@id/editor_title"
-        android:layout_toLeftOf="@id/editor_icon" />
+        <EditText
+            style="@style/BaseEdit"
+            android:id="@+id/editor_content"
+            android:labelFor="@id/editor_content"/>
+
+    </android.support.design.widget.TextInputLayout>
+
 </RelativeLayout>

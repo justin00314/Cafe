@@ -4,14 +4,13 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-
 
 import com.cafe.R;
 import com.cafe.common.camera.HeadOnlyCameraPreview;
@@ -67,9 +66,9 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
         ImageView idImage = (ImageView) findViewById(R.id.user_id).findViewById(R.id.editor_icon);
         idImage.setImageResource(R.mipmap.icon_id);
         ImageView passwordImage = (ImageView) findViewById(R.id.user_password).findViewById(R.id.editor_icon);
-        passwordImage.setImageResource(R.mipmap.icon_key);
+        passwordImage.setVisibility(View.GONE);
         ImageView repasswordImage = (ImageView) findViewById(R.id.user_repassword).findViewById(R.id.editor_icon);
-        repasswordImage.setImageResource(R.mipmap.icon_key);
+        repasswordImage.setVisibility(View.GONE);
 
         mName = (EditText) findViewById(R.id.user_name).findViewById(R.id.editor_content);
         mId = (EditText) findViewById(R.id.user_id).findViewById(R.id.editor_content);
@@ -78,14 +77,14 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
         mRepassword = (EditText) findViewById(R.id.user_repassword).findViewById(R.id.editor_content);
         mRepassword.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
 
-        TextView userName = (TextView) findViewById(R.id.user_name).findViewById(R.id.editor_title);
-        userName.setText(R.string.user_name);
-        TextView passwordText = (TextView) findViewById(R.id.user_password).findViewById(R.id.editor_title);
-        passwordText.setText(R.string.password);
-        TextView userId = (TextView) findViewById(R.id.user_id).findViewById(R.id.editor_title);
-        userId.setText(R.string.user_id);
-        TextView repasswordText = (TextView) findViewById(R.id.user_repassword).findViewById(R.id.editor_title);
-        repasswordText.setText(R.string.confirm_password);
+        TextInputLayout userName = (TextInputLayout) findViewById(R.id.user_name).findViewById(R.id.editor_layout);
+        userName.setHint(getString(R.string.user_name));
+        TextInputLayout passwordText = (TextInputLayout) findViewById(R.id.user_password).findViewById(R.id.editor_layout);
+        passwordText.setHint(getString(R.string.password));
+        TextInputLayout userId = (TextInputLayout) findViewById(R.id.user_id).findViewById(R.id.editor_layout);
+        userId.setHint(getString(R.string.user_id));
+        TextInputLayout repasswordText = (TextInputLayout) findViewById(R.id.user_repassword).findViewById(R.id.editor_layout);
+        repasswordText.setHint(getString(R.string.confirm_password));
     }
 
     @Override

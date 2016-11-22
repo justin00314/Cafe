@@ -4,13 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
-import android.util.Pair;
-import android.view.LayoutInflater;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +25,6 @@ import com.cafe.fragment.SublimePickerFragment;
 import com.cafe.presenter.ThemeMeetingCreatePresenter;
 import com.rey.material.widget.Spinner;
 
-
-import org.justin.utils.common.ToastUtils;
 import org.justin.utils.common.ViewUtils;
 
 import java.text.SimpleDateFormat;
@@ -44,6 +42,8 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
 
     private TextView mStartDate;
     private TextView mFinishDate;
+    private EditText mMeetingTheme;
+    private EditText mParticipantNumber;
     private Calendar mStartCalendar;
     private Calendar mFinishCalendar;
 
@@ -112,11 +112,14 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
     }
 
     private void setupUI() {
-        TextView theme = (TextView) findViewById(R.id.theme).findViewById(R.id.editor_title);
-        theme.setText(R.string.meeting_theme);
+        TextInputLayout theme = (TextInputLayout) findViewById(R.id.theme).findViewById(R.id.editor_layout);
+        theme.setHint(getString(R.string.meeting_theme));
+        mMeetingTheme = (EditText) findViewById(R.id.theme).findViewById(R.id.editor_content);
 
-        TextView number = (TextView) findViewById(R.id.number).findViewById(R.id.editor_title);
-        number.setText(R.string.meeting_number);
+        TextInputLayout number = (TextInputLayout) findViewById(R.id.number).findViewById(R.id.editor_layout);
+        number.setHint(getString(R.string.meeting_number));
+        mParticipantNumber = (EditText) findViewById(R.id.number).findViewById(R.id.editor_content);
+        mParticipantNumber.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         mOrganizerSpinner =
                 (Spinner) findViewById(R.id.organizer).findViewById(R.id.spinner);
@@ -150,7 +153,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
             @Override
             public void onClick(View view) {
                 if (mStartCalendar == null) {
-                    Toast.makeText(ThemeMeetingCreateActivity.this, "请先选择会议开始时间", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ThemeMeetingCreateActivity.this, R.string.prompt_select_start_date, Toast.LENGTH_SHORT).show();
                 } else {
                     mDateType = DATE_TYPE_FINISH;
                     showDateTimePicker();
@@ -281,7 +284,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
             String datetime = fmt.format(date.getTime());
             mFinishDate.setText(datetime);
         } else {
-            Toast.makeText(this, "结束时间必须晚于开始时间", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.prompt_finish_date_wrong, Toast.LENGTH_LONG).show();
         }
 
 

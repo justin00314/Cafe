@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
@@ -10,16 +11,17 @@
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginRight="10dp"
-        android:src="@mipmap/type_participated" />
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="10dp"
+        android:src="@mipmap/type_participated"
+        tools:ignore="ContentDescription" />
 
     <com.rey.material.widget.Spinner
         android:id="@+id/spinner"
         style="@style/BaseSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/icon"
+        android:layout_toEndOf="@id/icon"
         app:rd_style="@style/Material.Drawable.Ripple.Wave"
         app:spn_label="@string/meeting_organizer"/>
 

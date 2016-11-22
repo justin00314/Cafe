@@ -5,23 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/aiview_activity_bg"
-    android:paddingLeft="32dp"
+    android:paddingStart="32dp"
+    android:paddingEnd="0dp"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.ai2020lab.cafe.com.cafe.activity.SearchMeetingActivity">
+    tools:context="com.cafe.activity.SearchMeetingActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="0dp"
         android:paddingTop="10dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginTop="2dp"
-            android:src="@mipmap/type_default" />
+            android:src="@mipmap/type_default"
+            tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,17 +47,19 @@
                 <EditText
                     android:id="@+id/editor_id"
                     style="@style/BaseEdit"
-                    android:layout_width="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:labelFor="@id/editor_id"/>
 
                 <ImageView
                     android:id="@+id/glass"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/reading_glass"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginEnd="15dp"
                     android:onClick="search"
-                    android:clickable="true"/>
+                    android:clickable="true"
+                    tools:ignore="ContentDescription" />
 
             </LinearLayout>
 

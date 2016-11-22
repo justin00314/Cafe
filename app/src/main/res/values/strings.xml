@@ -53,6 +53,8 @@
 	<string name="title_settings_dialog">进入设置</string>
 	<string name="prompt_open_camera_failure">相机打开失败，请重试</string>
 	<string name="photo_prompt_saving_failure">保存照片失败</string>
+	<string name="prompt_select_start_date">请先选择会议开始时间</string>
+	<string name="prompt_finish_date_wrong">结束时间必须晚于开始时间</string>
 
 
 </resources>
