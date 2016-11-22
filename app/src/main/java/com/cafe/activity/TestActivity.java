@@ -4,14 +4,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.ai2020lab.aiutils.common.ToastUtils;
-import com.ai2020lab.cafe.R;
+import com.cafe.R;
 import com.cafe.common.DiskCacheManager;
 import com.cafe.common.DiskCacheMaxSize;
 import com.cafe.common.DiskCachePath;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.TestContract;
 import com.cafe.presenter.test.TestPresenter;
+
+import org.justin.utils.common.ToastUtils;
 
 
 /**

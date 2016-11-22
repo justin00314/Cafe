@@ -18,10 +18,12 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.ImageView;
 
-import com.ai2020lab.aiutils.common.LogUtils;
-import com.ai2020lab.aiutils.image.ImageUtils;
-import com.ai2020lab.aiutils.system.DisplayUtils;
-import com.ai2020lab.aiviews.R;
+import com.aiviews.R;
+
+import org.justin.utils.common.LogUtils;
+import org.justin.utils.image.ImageUtils;
+import org.justin.utils.system.DisplayUtils;
+
 
 /**
  * 圆角和圆形ImageView

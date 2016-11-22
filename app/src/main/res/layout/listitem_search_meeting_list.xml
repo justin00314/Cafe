@@ -2,6 +2,7 @@
 <!--会议列表界面 item-->
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:layout_marginBottom="15dp"
@@ -43,7 +44,8 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_margin="10dp"
-			android:src="@mipmap/meeting_join"/>
+			android:src="@mipmap/meeting_join"
+			tools:ignore="ContentDescription" />
 
 		<TextView
 			android:layout_width="wrap_content"

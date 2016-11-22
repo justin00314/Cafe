@@ -8,8 +8,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ai2020lab.aiutils.common.ResourcesUtils;
-import com.ai2020lab.aiviews.R;
+import com.aiviews.R;
+
+import org.justin.utils.common.ResourcesUtils;
+
 
 /**
  * Created by Justin Z on 2016/11/8.
@@ -61,7 +63,7 @@ public class ImageTextButton extends LinearLayout {
 	/**
 	 * 设置文字颜色
 	 *
-	 * @param color 颜色资源ID
+	 * @param colorResID 颜色资源ID
 	 */
 	public void setTextColor(int colorResID) {
 		contentTv.setTextColor(ResourcesUtils.getColor(colorResID));

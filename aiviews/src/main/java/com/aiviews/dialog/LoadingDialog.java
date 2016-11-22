@@ -13,10 +13,12 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.ai2020lab.aiutils.common.LogUtils;
-import com.ai2020lab.aiutils.common.ViewUtils;
-import com.ai2020lab.aiviews.R;
+
+import com.aiviews.R;
 import com.rey.material.widget.ProgressView;
+
+import org.justin.utils.common.LogUtils;
+import org.justin.utils.common.ViewUtils;
 
 
 /**

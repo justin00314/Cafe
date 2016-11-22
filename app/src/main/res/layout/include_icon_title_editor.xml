@@ -26,6 +26,5 @@
         android:id="@+id/editor_content"
         style="@style/BaseEdit"
         android:layout_below="@id/editor_title"
-        android:layout_toRightOf="@id/editor_icon"
-        android:text="content"/>
+        android:layout_toRightOf="@id/editor_icon" />
 </RelativeLayout>

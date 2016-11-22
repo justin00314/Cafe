@@ -17,7 +17,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.ai2020lab.aiviews.R;
+import com.aiviews.R;
 import com.bigkoo.pickerview.adapter.WheelAdapter;
 import com.bigkoo.pickerview.listener.OnItemSelectedListener;
 

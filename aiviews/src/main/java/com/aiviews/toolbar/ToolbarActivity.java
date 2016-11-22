@@ -12,9 +12,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ai2020lab.aiutils.common.ResourcesUtils;
-import com.ai2020lab.aiutils.common.ViewUtils;
-import com.ai2020lab.aiviews.R;
+import org.justin.utils.common.ResourcesUtils;
+import org.justin.utils.common.ViewUtils;
+import com.aiviews.R;
 import com.aiviews.rippleview.RippleView;
 
 /**

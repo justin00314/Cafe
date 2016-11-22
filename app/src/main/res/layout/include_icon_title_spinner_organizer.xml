@@ -20,15 +20,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/icon"
-        app:rd_style="@style/Material.Drawable.Ripple.Wave" />
+        app:rd_style="@style/Material.Drawable.Ripple.Wave"
+        app:spn_label="@string/meeting_organizer"/>
 
-    <TextView
-        android:id="@+id/content"
-        style="@style/TextLittle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/spinner"
-        android:layout_toRightOf="@id/icon"
-        android:maxLines="1" />
+    <!--<TextView-->
+        <!--android:id="@+id/content"-->
+        <!--style="@style/TextLittle"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/spinner"-->
+        <!--android:layout_toRightOf="@id/icon"-->
+        <!--android:maxLines="1" />-->
 
 </RelativeLayout>

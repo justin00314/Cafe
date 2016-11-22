@@ -14,9 +14,10 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ai2020lab.aiutils.common.LogUtils;
-import com.ai2020lab.aiutils.common.ResourcesUtils;
-import com.ai2020lab.aiviews.R;
+import com.aiviews.R;
+
+import org.justin.utils.common.LogUtils;
+import org.justin.utils.common.ResourcesUtils;
 
 /**
  * 自定义描边的TextView<p>

@@ -43,7 +43,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 
-import com.ai2020lab.aiviews.R;
+import com.aiviews.R;
 
 
 /**

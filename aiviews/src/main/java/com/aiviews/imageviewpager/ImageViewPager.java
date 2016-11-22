@@ -11,9 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ai2020lab.aiutils.common.LogUtils;
-import com.ai2020lab.aiutils.common.ViewUtils;
-import com.ai2020lab.aiviews.R;
+
+import com.aiviews.R;
+
+import org.justin.utils.common.LogUtils;
+import org.justin.utils.common.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
