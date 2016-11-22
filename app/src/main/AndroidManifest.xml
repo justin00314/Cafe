@@ -96,7 +96,7 @@
 
         <!-- 测试Activity -->
         <activity
-            android:name="com.cafe.activity.ThemeMeetingCreateActivity"
+            android:name="com.cafe.activity.MeetingListActivity"
             android:configChanges="orientation|screenLayout|keyboardHidden|screenSize|navigation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
