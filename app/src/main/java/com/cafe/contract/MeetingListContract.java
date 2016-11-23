@@ -32,6 +32,16 @@ public interface MeetingListContract {
 		 */
 		void promptShakePhone();
 
+		/**
+		 * 显示二维码对话框
+		 */
+		void showQRcodeDialog();
+
+		/**
+		 * 显示操作会议对话框
+		 */
+		void showOperatingMeetingDialog();
+
 		void skipToMeetingDetailActivity();
 
 	}
