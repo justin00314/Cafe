@@ -3,10 +3,6 @@ package com.cafe.funf.base;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.ai2020lab.aiutils.common.JsonUtils;
-import com.ai2020lab.aiutils.common.LogUtils;
-import com.ai2020lab.aiutils.system.NetworkUtils;
-import com.ai2020lab.aiutils.thread.ThreadUtils;
 import com.cafe.common.DiskCacheManager;
 import com.cafe.common.net.HttpManager;
 import com.cafe.common.net.JsonHttpResponseHandler;
@@ -15,6 +11,11 @@ import com.cafe.data.funf.FunfData;
 import com.cafe.data.funf.FunfDataRequest;
 import com.cafe.data.funf.FunfDataResponse;
 import com.cafe.data.funf.KeysData;
+
+import org.justin.utils.common.JsonUtils;
+import org.justin.utils.common.LogUtils;
+import org.justin.utils.system.NetworkUtils;
+import org.justin.utils.thread.ThreadUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;

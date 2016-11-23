@@ -19,6 +19,7 @@ import com.cafe.adapter.MeetingListRvAdapter;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.MeetingListContract;
 import com.cafe.data.meeting.MeetingInfo;
+import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.presenter.MeetingListPresenter;
 import com.aiviews.toolbar.ToolbarActivity;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
@@ -177,7 +178,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 * 加载会议列表
 	 */
 	@Override
-	public void loadMeetingList(List<MeetingInfo> meetingInfos) {
+	public void loadMeetingList(List<MeetingUserInfo> meetingInfos) {
 		meetingListRvAdapter.clear();
 		if (meetingInfos == null || meetingInfos.size() == 0) {
 			LogUtils.i(TAG, "-->没有会议列表数据");

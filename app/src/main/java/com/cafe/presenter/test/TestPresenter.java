@@ -3,12 +3,13 @@ package com.cafe.presenter.test;
 import android.content.Context;
 import android.content.Intent;
 
-import com.ai2020lab.aiutils.common.LogUtils;
 import com.cafe.common.DiskCacheManager;
 import com.cafe.common.DiskCachePath;
 import com.cafe.common.mvp.MVPPresenter;
 import com.cafe.contract.TestContract;
 import com.cafe.service.FunfManagerService;
+
+import org.justin.utils.common.LogUtils;
 
 /**
  * 测试Presenter

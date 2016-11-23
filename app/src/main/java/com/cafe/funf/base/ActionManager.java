@@ -1,6 +1,6 @@
 package com.cafe.funf.base;
 
-import com.ai2020lab.aiutils.common.LogUtils;
+import org.justin.utils.common.LogUtils;
 
 import java.util.HashMap;
 import java.util.Map;

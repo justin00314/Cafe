@@ -5,8 +5,9 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ai2020lab.aiutils.common.LogUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.justin.utils.common.LogUtils;
 
 import java.util.List;
 

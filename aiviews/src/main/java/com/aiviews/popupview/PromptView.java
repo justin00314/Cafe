@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
-import com.ai2020lab.aiutils.common.LogUtils;
+import org.justin.utils.common.LogUtils;
+
 
 /**
  * PopupWindow的封装

@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ai2020lab.aiutils.common.LogUtils;
+import org.justin.utils.common.LogUtils;
 
 /**
  * 自定义高度自适应的LinearLayoutManager
