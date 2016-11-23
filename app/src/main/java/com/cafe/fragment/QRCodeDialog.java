@@ -108,7 +108,7 @@ public class QRCodeDialog extends DialogFragment {
 		timeTv.setText(String.format(getString(R.string.dialog_qrcode_time),
 				info.startTime));
 		locationTv.setText(String.format(getString(R.string.dialog_qrcode_location),
-				info.address));
+				info.meetingRoomId));
 		qrcodeBitmap = CodeUtils.createImage(info.id, qrcodeIv.getWidth(),
 				qrcodeIv.getHeight(), null);
 		qrcodeIv.setImageBitmap(qrcodeBitmap);

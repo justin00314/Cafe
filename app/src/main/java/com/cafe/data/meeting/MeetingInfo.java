@@ -1,11 +1,9 @@
 package com.cafe.data.meeting;
 
-import com.cafe.data.account.UserInfo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 会议实体类
@@ -18,69 +16,59 @@ public class MeetingInfo implements Serializable {
 	/**
 	 * 会议ID
 	 */
-	@Expose
-	@SerializedName("id")
-	public String id;
+	@SerializedName("meeting_id")
+	public int id;
 	/**
 	 * 会议名字
 	 */
-	@Expose
-	@SerializedName("name")
+	@SerializedName("meeting_name")
 	public String name;
+	/**
+	 * 会议详情
+	 */
+	@SerializedName("meeting_desc")
+	public String desc;
 	/**
 	 * 会议开始时间
 	 */
-	@Expose
 	@SerializedName("start_time")
 	public String startTime;
 	/**
-	 * 开会地点
+	 * 会议结束时间
 	 */
-	@Expose
-	@SerializedName("address")
-	public String address;
+	@SerializedName("end_time")
+	public String endTime;
+	/**
+	 * 会议创建时间
+	 */
+	@SerializedName("create_time")
+	public String createTime;
+	/**
+	 * 会议室id
+	 */
+	@SerializedName("meeting_room_id")
+	public String meetingRoomId;
+	/**
+	 * 会议室名字
+	 */
+	@SerializedName("meeting_room_name")
+	public String meetingRoomName;
 	/**
 	 * 参会人数
 	 */
-	@Expose
-	@SerializedName("member_number")
-	public int memberNumber;
+	@SerializedName("attendance")
+	public int attendance;
 	/**
 	 * 会议类型,头脑风暴或主题会议
 	 */
-	@Expose
-	@SerializedName("type")
+	@SerializedName("meeting_type")
 	public int type;
 	/**
 	 * 会议状态
 	 */
 	@Expose
-	@SerializedName("state")
+	@SerializedName("meeting_state")
 	public int state;
-	/**
-	 * 是否自己创建标志位
-	 */
-	@Expose
-	@SerializedName("created_flag")
-	public boolean createdFlag;
-	/**
-	 * 是否参与标志位
-	 */
-	@Expose
-	@SerializedName("participated_flag")
-	public boolean participatedFlag;
-	/**
-	 * 参与者列表
-	 */
-	@Expose
-	@SerializedName("participated_user_list")
-	public List<UserInfo> participatedUsers;
 
-	/**
-	 * 创建者对象
-	 */
-	@Expose
-	@SerializedName("created_user")
-	public UserInfo createdUser;
 
 }
