@@ -119,18 +119,43 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 
 	}
 
+	/**
+	 * 显示会议二维码
+	 */
 	@Override
-	public void dismissMeeting() {
+	public void showQRCode(MeetingUserInfo meetingInfo) {
 
 	}
 
+	/**
+	 * 退出会议
+	 */
 	@Override
-	public void joinMeeting() {
+	public void quitMeeting(MeetingUserInfo meetingInfo) {
 
 	}
 
+	/**
+	 * 解散会议
+	 */
 	@Override
-	public void cancelMeeting() {
+	public void dismissMeeting(MeetingUserInfo meetingInfo) {
+
+	}
+
+	/**
+	 * 加入会议
+	 */
+	@Override
+	public void joinMeeting(MeetingUserInfo meetingInfo) {
+
+	}
+
+	/**
+	 * 取消会议
+	 */
+	@Override
+	public void cancelMeeting(MeetingUserInfo meetingInfo) {
 
 	}
 

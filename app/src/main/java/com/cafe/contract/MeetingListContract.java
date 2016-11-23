@@ -35,7 +35,7 @@ public interface MeetingListContract {
 		/**
 		 * 显示二维码对话框
 		 */
-		void showQRcodeDialog();
+		void showQRcodeDialog(MeetingUserInfo meetingInfo);
 
 		/**
 		 * 显示操作会议对话框
@@ -52,12 +52,13 @@ public interface MeetingListContract {
 	interface Presenter extends BasePresenter {
 
 
-
 		void loadMeetingListTest();
+
 		/**
 		 * 加载会议列表
 		 */
 		void loadMeetingList();
+
 		/**
 		 * 登出
 		 */
@@ -70,7 +71,7 @@ public interface MeetingListContract {
 
 		/**
 		 * 扫描二维码
- 		 */
+		 */
 		void scanQRCode();
 
 		/**
@@ -84,19 +85,29 @@ public interface MeetingListContract {
 		void createBrainStorm();
 
 		/**
+		 * 显示会议二维码
+		 */
+		void showQRCode(MeetingUserInfo meetingInfo);
+
+		/**
+		 * 退出会议
+		 */
+		void quitMeeting(MeetingUserInfo meetingInfo);
+
+		/**
 		 * 解散会议
 		 */
-		void dismissMeeting();
+		void dismissMeeting(MeetingUserInfo meetingInfo);
 
 		/**
 		 * 加入会议
 		 */
-		void joinMeeting();
+		void joinMeeting(MeetingUserInfo meetingInfo);
 
 		/**
 		 * 取消会议预约
 		 */
-		void cancelMeeting();
+		void cancelMeeting(MeetingUserInfo meetingInfo);
 
 
 	}

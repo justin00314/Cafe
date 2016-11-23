@@ -88,6 +88,41 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 		stateHistory = context.getString(R.string.meeting_state_history);
 	}
 
+	/**
+	 * 绑定二维码显示点击事件
+	 */
+	public void setOnClickQRCodeListener(OnClickItemListener onClickQRCodeListener) {
+		this.onClickQRCodeListener = onClickQRCodeListener;
+	}
+
+	/**
+	 * 绑定加入会议事件
+	 */
+	public void setOnClickAddListener(OnClickItemListener onClickAddListener) {
+		this.onClickAddListener = onClickAddListener;
+	}
+
+	/**
+	 * 绑定退出会议事件
+	 */
+	public void setOnClickQuitListener(OnClickItemListener onClickQuitListener) {
+		this.onClickQuitListener = onClickQuitListener;
+	}
+
+	/**
+	 * 绑定取消会议事件
+	 */
+	public void setOnClickCancelListener(OnClickItemListener onClickCancelListener) {
+		this.onClickCancelListener = onClickCancelListener;
+	}
+
+	/**
+	 * 绑定解散会议事件
+	 */
+	public void setOnClickDismissListener(OnClickItemListener onClickDismissListener) {
+		this.onClickDismissListener = onClickDismissListener;
+	}
+
 	@Override
 	public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		LogUtils.i(TAG, "--onCreateViewHolder--");
@@ -172,11 +207,10 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 		return typeDefaultDrawable;
 	}
 
-
 	/**
 	 * 设置操作区域
 	 */
-	private void setOperationArea(MeetingUserInfo meetingInfo, ItemViewHolder holder) {
+	private void setOperationArea(final MeetingUserInfo meetingInfo, ItemViewHolder holder) {
 		switch (meetingInfo.state) {
 			// 历史会议没有操作区域
 			case MeetingState.HISTORY:
@@ -198,16 +232,40 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 					holder.operation2Ibt.setVisibility(View.VISIBLE);
 					holder.operation2Ibt.setImage(opDismissDrawable);
 					holder.operation2Ibt.setText(opDismiss);
+					// 解散会议点击事件
+					holder.operation2Ibt.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View view) {
+							if (onClickDismissListener != null)
+								onClickDismissListener.onClick(meetingInfo);
+						}
+					});
 					holder.operation1Ibt.setVisibility(View.VISIBLE);
 					// 参与了的就显示为退出会议
 					if (meetingInfo.participatedFlag) {
 						holder.operation1Ibt.setImage(opQuitDrawable);
 						holder.operation1Ibt.setText(opQuit);
+						// 退出会议点击事件
+						holder.operation1Ibt.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View view) {
+								if (onClickQuitListener != null)
+									onClickQuitListener.onClick(meetingInfo);
+							}
+						});
 					}
 					// 没参与就显示为加入会议
 					else {
 						holder.operation1Ibt.setImage(opAddDrawable);
 						holder.operation1Ibt.setText(opAdd);
+						// 加入会议点击事件
+						holder.operation1Ibt.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View view) {
+								if (onClickAddListener != null)
+									onClickAddListener.onClick(meetingInfo);
+							}
+						});
 					}
 				}
 				// 不是创建人的情况，这种情况下一定是已经加入了会议才显示
@@ -216,6 +274,14 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 					holder.operation1Ibt.setVisibility(View.VISIBLE);
 					holder.operation1Ibt.setImage(opQuitDrawable);
 					holder.operation1Ibt.setText(opQuit);
+					// 退出会议点击事件
+					holder.operation1Ibt.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View view) {
+							if (onClickQuitListener != null)
+								onClickQuitListener.onClick(meetingInfo);
+						}
+					});
 				}
 				break;
 			case MeetingState.APPOINTMENT:
@@ -227,6 +293,14 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 				holder.operation1Ibt.setVisibility(View.VISIBLE);
 				holder.operation1Ibt.setImage(opCancelDrawable);
 				holder.operation1Ibt.setText(opCancel);
+				// 取消会议按钮点击
+				holder.operation1Ibt.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						if (onClickCancelListener != null)
+							onClickCancelListener.onClick(meetingInfo);
+					}
+				});
 				break;
 		}
 
@@ -305,7 +379,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 //	}
 
 	public interface OnClickItemListener {
-		void onClick(MeetingInfo info);
+		void onClick(MeetingUserInfo info);
 	}
 
 

@@ -1,5 +1,8 @@
 package com.cafe.activity;
 
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -20,6 +23,7 @@ import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.MeetingListContract;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingUserInfo;
+import com.cafe.fragment.QRCodeDialog;
 import com.cafe.presenter.MeetingListPresenter;
 import com.aiviews.toolbar.ToolbarActivity;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
@@ -42,6 +46,11 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		MeetingListPresenter> implements MeetingListContract.View, View.OnClickListener {
 
 	private final static String TAG = MeetingListActivity.class.getSimpleName();
+
+	/**
+	 * 显示会议二维码对话框TAG
+	 */
+	private final static String TAG_DIALOG_QRCODE = "tag_dialog_qrcode";
 
 
 	private CoordinatorLayout meetingListCl;
@@ -147,6 +156,27 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		animator.setAddDuration(500);
 		animator.setInterpolator(new BounceInterpolator());
 		meetingListRv.setItemAnimator(animator);
+		// 点击显示二维码
+		meetingListRvAdapter.setOnClickQRCodeListener(new MeetingListRvAdapter.OnClickItemListener() {
+			@Override
+			public void onClick(MeetingUserInfo info) {
+				getPresenter().showQRCode(info);
+			}
+		});
+		// 加入会议
+		meetingListRvAdapter.setOnClickAddListener(new MeetingListRvAdapter.OnClickItemListener() {
+			@Override
+			public void onClick(MeetingUserInfo info) {
+				getPresenter().joinMeeting(info);
+			}
+		});
+		// 退出会议
+
+		// 解散会议
+
+		// 解散会议
+
+
 	}
 
 	/**
@@ -209,6 +239,29 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	public void promptShakePhone() {
 		Snackbar.make(meetingListCl, getString(R.string.prompt_shake_phone), Snackbar.LENGTH_LONG)
 				.setAction("Action", null).show();
+	}
+
+	/**
+	 * 显示二维码对话框
+	 * @param meetingInfo
+	 */
+	@Override
+	public void showQRcodeDialog(MeetingUserInfo meetingInfo) {
+		QRCodeDialog dialog = QRCodeDialog.newInstance(true, meetingInfo);
+		Fragment fragment = getFragmentManager().findFragmentByTag(TAG_DIALOG_QRCODE);
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		if (fragment != null)
+			ft.remove(fragment);
+		ft.addToBackStack(null);
+		dialog.show(ft, TAG_DIALOG_QRCODE);
+	}
+
+	/**
+	 * 显示会议操作对话框
+	 */
+	@Override
+	public void showOperatingMeetingDialog() {
+
 	}
 
 	/**
