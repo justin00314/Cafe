@@ -20,6 +20,7 @@ import com.cafe.common.camera.SavingHeadPhotoTask;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.RegisterContract;
+import com.cafe.data.account.RegisterRequest;
 import com.cafe.data.base.ResultResponse;
 import com.cafe.presenter.RegisterPresenter;
 
@@ -68,6 +69,8 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
 
     private void setupUI() {
+        supportToolbar(false);
+
         ImageView userImage = (ImageView) findViewById(R.id.user_name).findViewById(R.id.editor_icon);
         userImage.setImageResource(R.mipmap.icon_people);
         ImageView idImage = (ImageView) findViewById(R.id.user_id).findViewById(R.id.editor_icon);
@@ -174,7 +177,12 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
             Snackbar.make(findViewById(R.id.container_layout), getString(R.string.prompt_need_photo),
                     Snackbar.LENGTH_SHORT).show();
         } else {
-            getPresenter().register(null, photoFile.getPath());
+            RegisterRequest request = new RegisterRequest();
+            request.password = mPassword.getText().toString();
+            request.userName = mName.getText().toString();
+            request.workNumber = mId.getText().toString();
+
+            getPresenter().register(request, photoFile.getPath());
         }
     }
 
@@ -182,18 +190,24 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
      * 自动对焦并拍照
      */
     public void takePhoto(View v) {
-        CameraManager.getInstance().takePicture(new PhotoTakenCallback() {
-            @Override
-            public void photoTakenSuccess(byte[] data, int orientation) {
-                // 调用异步任务保存相片
-                savePhoto(data, orientation);
-            }
+        if (canTakePhoto) {
 
-            @Override
-            public void photoTakenFailure() {
-                photoFile = null;
-            }
-        });
+            canTakePhoto = false;
+
+            CameraManager.getInstance().takePicture(new PhotoTakenCallback() {
+                @Override
+                public void photoTakenSuccess(byte[] data, int orientation) {
+                    // 调用异步任务保存相片
+                    savePhoto(data, orientation);
+                }
+
+                @Override
+                public void photoTakenFailure() {
+                    photoFile = null;
+                    canTakePhoto = true;
+                }
+            });
+        }
     }
 
     private void savePhoto(byte[] data, int orientation) {
@@ -251,6 +265,8 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
         ViewGroup preview = (ViewGroup) findViewById(R.id.camera_preview);
         preview.removeView(mPreview);
+
+        canTakePhoto = false;
     }
 
     @Override
@@ -278,6 +294,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
     @Override
     public void loadCameraFail() {
+        canTakePhoto = false;
         Snackbar.make(findViewById(R.id.container_layout), getString(R.string.prompt_open_camera_failure),
                 Snackbar.LENGTH_SHORT).show();
     }
@@ -291,6 +308,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
         @Override
         public void surfaceCreated(SurfaceHolder surfaceHolder) {
             CameraManager.getInstance().startPreview(surfaceHolder);
+            canTakePhoto = true;
         }
 
         @Override
@@ -308,6 +326,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
             // start preview with new settings
             CameraManager.getInstance().startPreview(holder);
+            canTakePhoto = true;
         }
 
         @Override
@@ -331,6 +350,8 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
                     Snackbar.LENGTH_SHORT).show();
 
             photoFile = null;
+
+            canTakePhoto = true;
         }
 
         @Override
@@ -342,6 +363,8 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
                 LogUtils.i(TAG, "拍照成功，照片截图路径-->" + photo.getPath());
                 photoFile = photo;
             }
+
+            canTakePhoto = true;
 
         }
     }

@@ -1,8 +1,8 @@
 package com.cafe.presenter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import com.cafe.common.mvp.MVPPresenter;
 import com.cafe.common.net.JsonHttpResponseHandler;
@@ -12,6 +12,8 @@ import com.cafe.data.base.ResultResponse;
 import com.cafe.model.register.BDKRegisterBiz;
 
 import org.justin.media.CameraManager;
+
+import java.lang.ref.WeakReference;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -25,16 +27,28 @@ public class RegisterPresenter extends MVPPresenter<RegisterContract.View, Regis
     private Context mContext;
 
     public RegisterPresenter(Context context) {
+        super();
         mContext = context;
+
+        mode = initModel();
+   //     mModelRef = new WeakReference<>(initModel());
     }
 
     @Override
     public void register(RegisterRequest request, String headFilePath) {
-        getModel().register(request, headFilePath, new JsonHttpResponseHandler<ResultResponse>() {
+        getView().showLoadingProgress();
+
+        RegisterContract.Model model = getModel();
+
+
+
+        model.register(request, headFilePath, new JsonHttpResponseHandler<ResultResponse>() {
             @Override
             public void onHandleFailure(String errorMsg) {
 
                 if (getView() != null) {
+                    getView().dismissLoadingProgress();
+
                     new Handler(mContext.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
@@ -50,6 +64,8 @@ public class RegisterPresenter extends MVPPresenter<RegisterContract.View, Regis
                     // do nothing
                     return;
                 }
+
+                getView().dismissLoadingProgress();
 
                 final boolean[] registerResult = {false};
 
