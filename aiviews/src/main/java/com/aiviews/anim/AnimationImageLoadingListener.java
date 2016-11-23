@@ -3,10 +3,10 @@ package com.aiviews.anim;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
-
-import com.ai2020lab.aiutils.common.LogUtils;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
+import org.justin.utils.common.LogUtils;
 
 /**
  * 自定义图片加载事件监听器，实现加载完成后用动画的方式载入图片
