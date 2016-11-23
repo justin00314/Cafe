@@ -55,6 +55,6 @@
 	<string name="photo_prompt_saving_failure">保存照片失败</string>
 	<string name="prompt_select_start_date">请先选择会议开始时间</string>
 	<string name="prompt_finish_date_wrong">结束时间必须晚于开始时间</string>
-
+	<string name="prompt_need_photo">请先拍照</string>
 
 </resources>

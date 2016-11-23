@@ -20,7 +20,7 @@ import java.io.FileNotFoundException;
  * Created by Rocky on 2016/11/16.
  */
 
-public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File[]> {
+public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
 
     private final static String TAG = SavingHeadPhotoTask.class.getSimpleName();
     private final static int COMPRESS_QUALITY = 100;
@@ -32,7 +32,7 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File[]> {
     private int orientation;
     private boolean isUpdateMedia;
     private ClipRect clipRect;
-    private PhotoSavedListener callback;
+    private HeadPhotoSavedListener callback;
 
     /**
      * @param context       Context
@@ -47,7 +47,7 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File[]> {
     public SavingHeadPhotoTask(Context context, byte[] data,
                            String name, String path,
                            int orientation, boolean isUpdateMedia,
-                           ClipRect clipRect, PhotoSavedListener callback) {
+                           ClipRect clipRect, HeadPhotoSavedListener callback) {
         this.context = context;
         this.data = data;
         this.name = name;
@@ -86,26 +86,26 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File[]> {
      * 保存照片后台线程处理
      */
     @Override
-    protected File[] doInBackground(Void... params) {
-        File[] fileArr = saveByteArrayWithOrientation(data, orientation);
-        if (FileUtils.isExist(fileArr[0].getPath())) {
+    protected File doInBackground(Void... params) {
+        File photoFile = saveByteArrayWithOrientation(data, orientation);
+        if (FileUtils.isExist(photoFile.getPath())) {
             if (isUpdateMedia)
                 // 同步更新到系统图库
-                updateToSystemMedia(context, fileArr[0]);
+                updateToSystemMedia(context, photoFile);
         }
-        return fileArr;
+        return photoFile;
     }
 
     @Override
-    protected void onPostExecute(File[] fileArr) {
-        super.onPostExecute(fileArr);
-        photoSaved(fileArr);
+    protected void onPostExecute(File photoFile) {
+        super.onPostExecute(photoFile);
+        photoSaved(photoFile);
     }
 
-    private void photoSaved(File[] fileArr) {
+    private void photoSaved(File photoFile) {
         if (callback != null) {
-            if (fileArr != null && fileArr[0] != null && FileUtils.isExist(fileArr[0].getPath()))
-                callback.savedSuccess(fileArr[0], fileArr[1]);
+            if (photoFile != null && FileUtils.isExist(photoFile.getPath()))
+                callback.savedSuccess(photoFile);
             else
                 callback.savedFailure();
         }
@@ -114,15 +114,12 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File[]> {
     /**
      * 指定旋转角度保存照片
      */
-    private File[] saveByteArrayWithOrientation(byte[] data, int orientation) {
-        File photo = getPhotoFile();
+    private File saveByteArrayWithOrientation(byte[] data, int orientation) {
         File cropPhoto = getCropperPhotoFile();
-        File[] fileArr = new File[2];
-        fileArr[0] = photo;
-        fileArr[1] = cropPhoto;
+
         LogUtils.i(TAG, "旋转角度-->" + orientation);
-        if (photo == null) {
-            return fileArr;
+        if (cropPhoto == null) {
+            return null;
         }
 
         try {
@@ -139,7 +136,7 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File[]> {
                     bitmap = ImageUtils.getRotateBitmap(bitmap, orientation, true);
                 }
                 // 保存图片
-                ImageUtils.saveBitmapAsJpeg(bitmap, photo.getPath(), COMPRESS_QUALITY);
+          //      ImageUtils.saveBitmapAsJpeg(bitmap, photo.getPath(), COMPRESS_QUALITY);
                 // 截取图片
                 Bitmap cropBitmap = cropPhoto(bitmap);
                 if (cropBitmap != null && cropPhoto != null) {
@@ -152,7 +149,7 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File[]> {
         } catch (Exception e) {
             LogUtils.e(TAG, "--保存旋转照片异常", e);
         }
-        return fileArr;
+        return cropPhoto;
     }
 
     /**
@@ -198,7 +195,8 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File[]> {
     private File getCropperPhotoFile() {
         String tmpName = name.substring(0, name.indexOf("."));
         LogUtils.i(TAG, "没有扩展名的照片文件名-->" + tmpName);
-        return new File(path + File.separator + tmpName + "_crop." + FileUtils.ExtensionName.JPG);
+        return new File(path + File.separator + name);
+   //     return new File(path + File.separator + tmpName + "_crop." + FileUtils.ExtensionName.JPG);
     }
 
     /**
@@ -296,4 +294,13 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File[]> {
             }
         }
     }
+
+    public interface HeadPhotoSavedListener {
+        void savedBefore();
+
+        void savedFailure();
+
+        void savedSuccess(File photoFile);
+    }
+
 }

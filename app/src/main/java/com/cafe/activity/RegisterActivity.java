@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.view.SurfaceHolder;
@@ -11,12 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.cafe.R;
 import com.cafe.common.camera.HeadOnlyCameraPreview;
 import com.cafe.common.camera.SavingHeadPhotoTask;
 import com.cafe.common.mvp.MVPActivity;
+import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.RegisterContract;
+import com.cafe.data.base.ResultResponse;
 import com.cafe.presenter.RegisterPresenter;
 
 import org.justin.media.CameraManager;
@@ -29,6 +33,7 @@ import org.justin.utils.storage.FileUtils;
 import java.io.File;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -48,6 +53,8 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
     private EditText mRepassword;
 
     private HeadOnlyCameraPreview mPreview;
+    private File photoFile;
+    private boolean canTakePhoto;
 
 
     @Override
@@ -163,7 +170,12 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
     }
 
     public void register(android.view.View v) {
-        takePhoto(null);
+        if (photoFile == null) {
+            Snackbar.make(findViewById(R.id.container_layout), getString(R.string.prompt_need_photo),
+                    Snackbar.LENGTH_SHORT).show();
+        } else {
+            getPresenter().register(null, photoFile.getPath());
+        }
     }
 
     /**
@@ -179,7 +191,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
             @Override
             public void photoTakenFailure() {
-
+                photoFile = null;
             }
         });
     }
@@ -193,12 +205,16 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
     }
 
     private String getPhotoFileName() {
-        return "test" + "." + FileUtils.ExtensionName.JPG;
+        return "registerHead" + "." + FileUtils.ExtensionName.JPG;
     }
 
     private String getPhotoPath() {
         File photoDir = FileUtils.getDiskCacheDir(getActivity(), "headers");
         return photoDir.getPath();
+    }
+
+    private String getPhotoFullName() {
+        return getPhotoPath() + File.separator + getPhotoFileName();
     }
 
     private SavingHeadPhotoTask.ClipRect getHeadRect() {
@@ -262,8 +278,8 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
     @Override
     public void loadCameraFail() {
-        ToastUtils.getInstance().showToast(getActivity(),
-                R.string.prompt_open_camera_failure);
+        Snackbar.make(findViewById(R.id.container_layout), getString(R.string.prompt_open_camera_failure),
+                Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -301,7 +317,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
         }
     }
 
-    private class SavePhotoCallback implements PhotoSavedListener {
+    private class SavePhotoCallback implements SavingHeadPhotoTask.HeadPhotoSavedListener {
         @Override
         public void savedBefore() {
             showLoadingProgress();
@@ -310,19 +326,23 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
         @Override
         public void savedFailure() {
             dismissLoading();
-            ToastUtils.getInstance().showToast(getActivity(),
-                    R.string.photo_prompt_saving_failure);
+
+            Snackbar.make(findViewById(R.id.container_layout), getString(R.string.photo_prompt_saving_failure),
+                    Snackbar.LENGTH_SHORT).show();
+
+            photoFile = null;
         }
 
         @Override
-        public void savedSuccess(File photo, File cropperPhoto) {
+        public void savedSuccess(File photo) {
             dismissLoading();
             LogUtils.i(TAG, "拍照成功，照片路径-->" + photo.getPath());
-            String cropPath = null;
-            if (cropperPhoto != null && FileUtils.isExist(cropperPhoto.getPath())) {
-                cropPath = cropperPhoto.getPath();
+
+            if (photo != null && photo.exists()) {
+                LogUtils.i(TAG, "拍照成功，照片截图路径-->" + photo.getPath());
+                photoFile = photo;
             }
-            LogUtils.i(TAG, "拍照成功，照片截图路径-->" + cropPath);
+
         }
     }
 }
