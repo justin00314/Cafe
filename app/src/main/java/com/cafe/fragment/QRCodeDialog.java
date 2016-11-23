@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.aiviews.dialog.BaseDialog;
 import com.cafe.R;
 import com.cafe.data.meeting.MeetingInfo;
+import com.cafe.data.meeting.MeetingUserInfo;
 import com.rey.material.widget.Button;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
@@ -29,7 +30,7 @@ public class QRCodeDialog extends DialogFragment {
 	private final static String TAG = QRCodeDialog.class.getSimpleName();
 
 	private boolean loadAnim;
-	private MeetingInfo info;
+	private MeetingUserInfo info;
 
 	private TextView titleTv;
 	private ImageView qrcodeIv;
@@ -49,7 +50,7 @@ public class QRCodeDialog extends DialogFragment {
 	 * @param info     MeetingInfo
 	 * @return QRCodeDialog
 	 */
-	public static QRCodeDialog newInstance(boolean loadAnim, MeetingInfo info) {
+	public static QRCodeDialog newInstance(boolean loadAnim, MeetingUserInfo info) {
 		QRCodeDialog qrCodeDialog = new QRCodeDialog();
 		qrCodeDialog.loadAnim = loadAnim;
 		qrCodeDialog.info = info;
@@ -104,12 +105,12 @@ public class QRCodeDialog extends DialogFragment {
 		themeTv.setText(String.format(getString(R.string.dialog_qrcode_theme),
 				info.name));
 		idTv.setText(String.format(getString(R.string.dialog_qrcode_id),
-				info.id));
+				info.id + ""));
 		timeTv.setText(String.format(getString(R.string.dialog_qrcode_time),
 				info.startTime));
 		locationTv.setText(String.format(getString(R.string.dialog_qrcode_location),
 				info.meetingRoomId));
-		qrcodeBitmap = CodeUtils.createImage(info.id, qrcodeIv.getWidth(),
+		qrcodeBitmap = CodeUtils.createImage(info.id + "", qrcodeIv.getWidth(),
 				qrcodeIv.getHeight(), null);
 		qrcodeIv.setImageBitmap(qrcodeBitmap);
 	}
