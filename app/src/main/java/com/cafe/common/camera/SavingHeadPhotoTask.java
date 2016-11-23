@@ -123,6 +123,7 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
         }
 
         try {
+
             Bitmap bitmap = null;
             if (data != null) {
                 // 从byte数组中读出bitmap
@@ -193,6 +194,7 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
      * 获取照片截取文件对象
      */
     private File getCropperPhotoFile() {
+        FileUtils.makeDir(path);
         String tmpName = name.substring(0, name.indexOf("."));
         LogUtils.i(TAG, "没有扩展名的照片文件名-->" + tmpName);
         return new File(path + File.separator + name);
