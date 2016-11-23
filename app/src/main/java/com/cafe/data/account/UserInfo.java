@@ -1,6 +1,5 @@
 package com.cafe.data.account;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -15,26 +14,22 @@ public class UserInfo implements Serializable {
 	/**
 	 * 用户id
 	 */
-	@Expose
 	@SerializedName("user_id")
 	public String userID;
 	/**
 	 * 用户名
 	 */
-	@Expose
 	@SerializedName("user_name")
 	public String userName;
 	/**
 	 * 员工工号
 	 */
-	@Expose
-	@SerializedName("work_number")
+	@SerializedName("job_number")
 	public String workNumber;
 	/**
 	 * 用户头像地址链接
 	 */
-	@Expose
-	@SerializedName("user_portrait")
+	@SerializedName("portrait")
 	public String userPortrait;
 
 
