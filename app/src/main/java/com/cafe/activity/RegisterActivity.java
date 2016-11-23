@@ -69,6 +69,8 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
 
     private void setupUI() {
+        supportToolbar(false);
+
         ImageView userImage = (ImageView) findViewById(R.id.user_name).findViewById(R.id.editor_icon);
         userImage.setImageResource(R.mipmap.icon_people);
         ImageView idImage = (ImageView) findViewById(R.id.user_id).findViewById(R.id.editor_icon);
