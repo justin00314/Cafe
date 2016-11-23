@@ -8,6 +8,7 @@ import com.cafe.contract.MeetingListContract;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingListResponse;
 import com.cafe.data.meeting.MeetingState;
+import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.model.meeting.MeetingListBiz;
 
 import org.justin.utils.common.ToastUtils;
@@ -149,18 +150,18 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	}
 
 	// TODO:构造会议列表测试数据
-	private List<MeetingInfo> getMeetingInfoList(){
-		List<MeetingInfo> meetingInfos = new ArrayList<>();
-		MeetingInfo info;
+	private List<MeetingUserInfo> getMeetingInfoList(){
+		List<MeetingUserInfo> meetingInfos = new ArrayList<>();
+		MeetingUserInfo info;
 		// 正在进行的
-		info = new MeetingInfo();
+		info = new MeetingUserInfo();
 		info.state = MeetingState.PROGRESS;
 		info.name = "市场部会议1";
 		info.startTime = "2016-11-10 08:10:00";
 		info.participatedFlag = false;
 		info.createdFlag = true;
 		meetingInfos.add(info);
-		info = new MeetingInfo();
+		info = new MeetingUserInfo();
 		info.state = MeetingState.PROGRESS;
 		info.name = "市场部会议2";
 		info.startTime = "2016-11-10 09:10:00";
@@ -168,21 +169,21 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		info.createdFlag = false;
 		meetingInfos.add(info);
 		// 预约的
-		info = new MeetingInfo();
+		info = new MeetingUserInfo();
 		info.state = MeetingState.APPOINTMENT;
 		info.name = "技术部会议1";
 		info.startTime = "2016-11-10 10:10:00";
 		info.participatedFlag = true;
 		info.createdFlag = false;
 		meetingInfos.add(info);
-		info = new MeetingInfo();
+		info = new MeetingUserInfo();
 		info.state = MeetingState.APPOINTMENT;
 		info.name = "技术部会议2";
 		info.startTime = "2016-11-10 11:11:00";
 		info.participatedFlag = true;
 		info.createdFlag = false;
 		meetingInfos.add(info);
-		info = new MeetingInfo();
+		info = new MeetingUserInfo();
 		info.state = MeetingState.APPOINTMENT;
 		info.name = "技术部会议3";
 		info.startTime = "2016-11-10 12:11:00";
@@ -190,28 +191,28 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		info.createdFlag = false;
 		meetingInfos.add(info);
 		// 历史的
-		info = new MeetingInfo();
+		info = new MeetingUserInfo();
 		info.state = MeetingState.HISTORY;
 		info.name = "人事部会议1";
 		info.startTime = "2016-11-09 12:11:00";
 		info.participatedFlag = true;
 		info.createdFlag = false;
 		meetingInfos.add(info);
-		info = new MeetingInfo();
+		info = new MeetingUserInfo();
 		info.state = MeetingState.HISTORY;
 		info.name = "人事部会议2";
 		info.startTime = "2016-11-09 10:11:00";
 		info.participatedFlag = false;
 		info.createdFlag = true;
 		meetingInfos.add(info);
-		info = new MeetingInfo();
+		info = new MeetingUserInfo();
 		info.state = MeetingState.HISTORY;
 		info.name = "人事部会议3";
 		info.startTime = "2016-11-09 09:11:00";
 		info.participatedFlag = true;
 		info.createdFlag = true;
 		meetingInfos.add(info);
-		info = new MeetingInfo();
+		info = new MeetingUserInfo();
 		info.state = MeetingState.HISTORY;
 		info.name = "人事部会议4";
 		info.startTime = "2016-11-09 08:11:00";

@@ -1,6 +1,9 @@
 package com.cafe.data.meeting;
 
 import com.cafe.data.account.UserInfo;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 /**
  * 查询会议列表请求实体类
@@ -9,4 +12,11 @@ import com.cafe.data.account.UserInfo;
  */
 
 public class MeetingListRequest extends UserInfo {
+
+	@SerializedName("filter_time")
+	public String filterTime;
+
+	@SerializedName("meeting_status_list")
+	public List<StatusInfo> statusInfoList;
+
 }

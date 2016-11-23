@@ -1,7 +1,6 @@
 package com.cafe.data.meeting;
 
 import com.cafe.data.base.ResponseData;
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -15,10 +14,17 @@ import java.util.List;
 public class MeetingListResponse extends ResponseData<MeetingListResponse.MeetingListResult> {
 
 
-	public class MeetingListResult{
+	public class MeetingListResult {
 
-		@Expose
+		/**
+		 * 过滤时间
+		 */
+		@SerializedName("filter_time")
+		public String filterTime;
+		/**
+		 * 用户会议列表
+		 */
 		@SerializedName("meeting_list")
-		public List<MeetingInfo> meetingInfos;
+		public List<MeetingUserInfo> meetingInfos;
 	}
 }

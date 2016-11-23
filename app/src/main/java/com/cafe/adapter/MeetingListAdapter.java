@@ -2,7 +2,7 @@ package com.cafe.adapter;
 
 import android.support.v7.widget.RecyclerView;
 
-import com.cafe.data.meeting.MeetingInfo;
+import com.cafe.data.meeting.MeetingUserInfo;
 
 import org.justin.utils.common.LogUtils;
 
@@ -22,7 +22,7 @@ public abstract class MeetingListAdapter<VH extends RecyclerView.ViewHolder>
 
 	private final static String TAG = MeetingListAdapter.class.getSimpleName();
 
-	private List<MeetingInfo> items = new ArrayList<>();
+	private List<MeetingUserInfo> items = new ArrayList<>();
 
 	/**
 	 * 构造方法
@@ -31,26 +31,26 @@ public abstract class MeetingListAdapter<VH extends RecyclerView.ViewHolder>
 		setHasStableIds(true);
 	}
 
-	public void add(MeetingInfo object) {
+	public void add(MeetingUserInfo object) {
 		items.add(object);
 		notifyDataSetChanged();
 	}
 
-	public void add(int index, MeetingInfo object) {
+	public void add(int index, MeetingUserInfo object) {
 		items.add(index, object);
 		// 只有调用这个方法动画才能生效
 		notifyItemInserted(index);
 //		notifyDataSetChanged();
 	}
 
-	public void addAll(Collection<? extends MeetingInfo> collection) {
+	public void addAll(Collection<? extends MeetingUserInfo> collection) {
 		if (collection != null) {
 			items.addAll(collection);
 			notifyDataSetChanged();
 		}
 	}
 
-	public void addAll(MeetingInfo... items) {
+	public void addAll(MeetingUserInfo... items) {
 		addAll(Arrays.asList(items));
 	}
 
@@ -60,7 +60,7 @@ public abstract class MeetingListAdapter<VH extends RecyclerView.ViewHolder>
 		notifyDataSetChanged();
 	}
 
-	public void remove(MeetingInfo object) {
+	public void remove(MeetingUserInfo object) {
 		items.remove(object);
 		notifyDataSetChanged();
 	}
@@ -70,7 +70,7 @@ public abstract class MeetingListAdapter<VH extends RecyclerView.ViewHolder>
 		notifyItemRemoved(position);
 	}
 
-	public MeetingInfo getItem(int position) {
+	public MeetingUserInfo getItem(int position) {
 		return items.get(position);
 	}
 

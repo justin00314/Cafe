@@ -3,7 +3,7 @@ package com.cafe.contract;
 import com.cafe.common.mvp.base.BaseModel;
 import com.cafe.common.mvp.base.BasePresenter;
 import com.cafe.common.mvp.base.BaseView;
-import com.cafe.data.meeting.MeetingInfo;
+import com.cafe.data.meeting.MeetingUserInfo;
 import com.loopj.android.http.ResponseHandlerInterface;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public interface MeetingListContract {
 	 */
 	interface View extends BaseView {
 
-		void loadMeetingList(List<MeetingInfo> meetingInfoList);
+		void loadMeetingList(List<MeetingUserInfo> meetingInfoList);
 
 		/**
 		 * 设置用户信息显示

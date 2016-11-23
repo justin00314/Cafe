@@ -13,6 +13,7 @@ import com.aiviews.textview.ImageTextButton;
 import com.cafe.R;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingState;
+import com.cafe.data.meeting.MeetingUserInfo;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import org.justin.utils.common.LogUtils;
@@ -97,7 +98,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	@Override
 	public void onBindViewHolder(ItemViewHolder holder, int position) {
 		LogUtils.i(TAG, "--onBindViewHolder--");
-		MeetingInfo meetingInfo = getItem(position);
+		MeetingUserInfo meetingInfo = getItem(position);
 		// 设置会议名称
 		holder.nameTv.setText(meetingInfo.name);
 		// 设置会议开始时间
@@ -151,7 +152,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	 *
 	 * @param meetingInfo MeetingInfo
 	 */
-	private Drawable getTypeDrawable(MeetingInfo meetingInfo) {
+	private Drawable getTypeDrawable(MeetingUserInfo meetingInfo) {
 		switch (meetingInfo.state) {
 			case MeetingState.HISTORY:
 				if (meetingInfo.createdFlag) {
@@ -175,7 +176,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	/**
 	 * 设置操作区域
 	 */
-	private void setOperationArea(MeetingInfo meetingInfo, ItemViewHolder holder) {
+	private void setOperationArea(MeetingUserInfo meetingInfo, ItemViewHolder holder) {
 		switch (meetingInfo.state) {
 			// 历史会议没有操作区域
 			case MeetingState.HISTORY:
