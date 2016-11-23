@@ -3,7 +3,11 @@ package com.cafe.presenter;
 import android.content.Context;
 
 import com.cafe.common.mvp.MVPPresenter;
+import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.RegisterContract;
+import com.cafe.data.account.RegisterRequest;
+import com.cafe.data.base.ResultResponse;
+import com.cafe.model.register.BDKRegisterBiz;
 
 import org.justin.media.CameraManager;
 
@@ -21,8 +25,8 @@ public class RegisterPresenter extends MVPPresenter<RegisterContract.View, Regis
     }
 
     @Override
-    public void register() {
-
+    public void register(RegisterRequest request, String headFilePath, JsonHttpResponseHandler<ResultResponse> handler) {
+        getModel().register(request, headFilePath, handler);
     }
 
     @Override
@@ -63,6 +67,6 @@ public class RegisterPresenter extends MVPPresenter<RegisterContract.View, Regis
 
     @Override
     public RegisterContract.Model initModel() {
-        return null;
+        return new BDKRegisterBiz(mContext);
     }
 }

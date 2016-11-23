@@ -193,12 +193,16 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
     }
 
     private String getPhotoFileName() {
-        return "test" + "." + FileUtils.ExtensionName.JPG;
+        return "registerHead" + "." + FileUtils.ExtensionName.JPG;
     }
 
     private String getPhotoPath() {
         File photoDir = FileUtils.getDiskCacheDir(getActivity(), "headers");
         return photoDir.getPath();
+    }
+
+    private String getPhotoFullName() {
+        return getPhotoPath() + File.separator + getPhotoFileName();
     }
 
     private SavingHeadPhotoTask.ClipRect getHeadRect() {
@@ -301,7 +305,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
         }
     }
 
-    private class SavePhotoCallback implements PhotoSavedListener {
+    private class SavePhotoCallback implements SavingHeadPhotoTask.HeadPhotoSavedListener {
         @Override
         public void savedBefore() {
             showLoadingProgress();
@@ -315,14 +319,16 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
         }
 
         @Override
-        public void savedSuccess(File photo, File cropperPhoto) {
+        public void savedSuccess(File photo) {
             dismissLoading();
             LogUtils.i(TAG, "拍照成功，照片路径-->" + photo.getPath());
-            String cropPath = null;
-            if (cropperPhoto != null && FileUtils.isExist(cropperPhoto.getPath())) {
-                cropPath = cropperPhoto.getPath();
+
+            if (photo != null && photo.exists()) {
+                LogUtils.i(TAG, "拍照成功，照片截图路径-->" + photo.getPath());
+
+          //      getPresenter().register();
             }
-            LogUtils.i(TAG, "拍照成功，照片截图路径-->" + cropPath);
+
         }
     }
 }
