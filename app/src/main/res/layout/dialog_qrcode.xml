@@ -18,54 +18,53 @@
 		android:layout_marginTop="10dp"
 		android:text="@string/dialog_qrcode_title"/>
 
-	<ImageView
-		android:id="@+id/qrcode_iv"
-		android:layout_width="100dp"
-		android:layout_height="100dp"
+	<LinearLayout
+		android:id="@+id/meeting_info_ll"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		android:layout_below="@+id/qrcode_title_tv"
 		android:layout_centerHorizontal="true"
-		android:layout_marginBottom="10dp"
-		tools:ignore="contentDescription"/>
+		android:orientation="vertical">
 
-	<!--主题-->
-	<com.aiviews.textview.TitleTextView
-		android:id="@+id/qrcode_theme_ttv"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/qrcode_iv"
-		android:layout_centerHorizontal="true"
-		android:layout_marginBottom="10dp"/>
-	<!--ID号-->
-	<com.aiviews.textview.TitleTextView
-		android:id="@+id/qrcode_id_ttv"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/qrcode_theme_ttv"
-		android:layout_centerHorizontal="true"
-		android:layout_marginBottom="10dp"/>
-	<!--时间-->
-	<com.aiviews.textview.TitleTextView
-		android:id="@+id/qrcode_time_ttv"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/qrcode_id_ttv"
-		android:layout_centerHorizontal="true"
-		android:layout_marginBottom="10dp"/>
-	<!--地点-->
-	<com.aiviews.textview.TitleTextView
-		android:id="@+id/qrcode_location_ttv"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/qrcode_time_ttv"
-		android:layout_centerHorizontal="true"
-		android:layout_marginBottom="10dp"/>
+		<ImageView
+			android:id="@+id/qrcode_iv"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="10dp"
+			tools:ignore="contentDescription"/>
+
+		<!--主题-->
+		<com.aiviews.textview.TitleTextView
+			android:id="@+id/qrcode_theme_ttv"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="10dp"/>
+		<!--ID号-->
+		<com.aiviews.textview.TitleTextView
+			android:id="@+id/qrcode_id_ttv"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="10dp"/>
+		<!--时间-->
+		<com.aiviews.textview.TitleTextView
+			android:id="@+id/qrcode_time_ttv"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="10dp"/>
+		<!--地点-->
+		<com.aiviews.textview.TitleTextView
+			android:id="@+id/qrcode_location_ttv"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="10dp"/>
+	</LinearLayout>
 
 	<com.rey.material.widget.Button
 		android:id="@+id/qrcode_ensure_btn"
 		style="@style/TextLittle"
 		android:layout_width="match_parent"
-		android:layout_height="60dp"
-		android:layout_below="@+id/qrcode_location_ttv"
+		android:layout_height="50dp"
+		android:layout_below="@+id/meeting_info_ll"
 		android:background="@mipmap/ensure_btn_bg"
 		android:text="@string/ensure"
 		android:textColor="@android:color/white"

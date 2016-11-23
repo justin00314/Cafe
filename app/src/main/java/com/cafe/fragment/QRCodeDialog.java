@@ -106,14 +106,13 @@ public class QRCodeDialog extends DialogFragment {
 		titleTv.setText(getString(R.string.dialog_qrcode_title));
 		themeTtv.setTitleText(getString(R.string.dialog_qrcode_theme));
 		themeTtv.setContentText(info.name);
-
-//		idTtv.setText(String.format(getString(R.string.dialog_qrcode_id),
-//				info.id + ""));
-//		timeTtv.setText(String.format(getString(R.string.dialog_qrcode_time),
-//				info.startTime));
-//		locationTtv.setText(String.format(getString(R.string.dialog_qrcode_location),
-//				info.meetingRoomName));
-		int w = DisplayUtils.dpToPxInt(getActivity(), 300);
+		idTtv.setTitleText(getString(R.string.dialog_qrcode_id));
+		idTtv.setContentText(info.id + "");
+		timeTtv.setTitleText(getString(R.string.dialog_qrcode_time));
+		timeTtv.setContentText(info.startTime);
+		locationTtv.setTitleText(getString(R.string.dialog_qrcode_location));
+		locationTtv.setContentText(info.meetingRoomName);
+		int w = DisplayUtils.getScreenWidth(getActivity()) / 2;
 		qrcodeBitmap = CodeUtils.createImage(info.id + "", w, w, null);
 		qrcodeIv.setImageBitmap(qrcodeBitmap);
 	}
