@@ -3,6 +3,7 @@ package com.cafe.contract;
 import com.cafe.common.mvp.base.BaseModel;
 import com.cafe.common.mvp.base.BaseView;
 import com.cafe.common.mvp.base.IMVPPresent;
+import com.cafe.data.account.LoginRequest;
 
 /**
  * Created by Rocky on 2016/11/11.
@@ -28,6 +29,6 @@ public interface LoginContract {
      * Model接口方法，一般是数据操作方法,不一定存在Model
      */
     interface Model extends BaseModel {
-        void login();
+        void login(LoginRequest request);
     }
 }
