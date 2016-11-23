@@ -18,9 +18,11 @@ public abstract class MVPPresenter<V extends BaseView, M extends BaseModel> impl
 	public Reference<V> mViewRef;
 
 	public Reference<M> mModelRef;
+	public M mode;
 
 	public MVPPresenter() {
-		mModelRef = new WeakReference<>(initModel());
+	//	mModelRef = new WeakReference<>(initModel());
+		mode = initModel();
 	}
 
 	/**
@@ -46,8 +48,9 @@ public abstract class MVPPresenter<V extends BaseView, M extends BaseModel> impl
 	}
 
 	public M getModel() {
-		if (mModelRef == null) return null;
-		return mModelRef.get();
+		return  mode;
+//		if (mModelRef == null) return null;
+//		return mModelRef.get();
 	}
 
 }

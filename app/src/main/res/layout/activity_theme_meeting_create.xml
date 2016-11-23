@@ -19,8 +19,7 @@
             android:orientation="vertical"
             android:paddingStart="26dp"
             android:paddingEnd="4dp"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            tools:context="com.ai2020lab.cafe.com.cafe.activity.ThemeMeetingCreateActivity">
+            android:paddingTop="@dimen/activity_vertical_margin">
 
             <include
                 android:id="@+id/theme"
