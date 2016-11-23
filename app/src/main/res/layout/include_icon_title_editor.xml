@@ -28,9 +28,4 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <!--<EditText-->
-        <!--android:id="@+id/editor_content"-->
-        <!--style="@style/BaseEdit"-->
-        <!--android:layout_below="@id/editor_title"-->
-        <!--android:layout_toRightOf="@id/editor_icon" />-->
 </RelativeLayout>
