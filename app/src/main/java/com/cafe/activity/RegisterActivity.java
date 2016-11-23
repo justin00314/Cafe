@@ -54,6 +54,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
     private HeadOnlyCameraPreview mPreview;
     private File photoFile;
+    private boolean canTakePhoto;
 
 
     @Override
@@ -173,16 +174,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
             Snackbar.make(findViewById(R.id.container_layout), getString(R.string.prompt_need_photo),
                     Snackbar.LENGTH_SHORT).show();
         } else {
-            getPresenter().register(null, photoFile.getPath(), new JsonHttpResponseHandler<ResultResponse>() {
-                @Override
-                public void onHandleSuccess(int statusCode, Header[] headers, ResultResponse jsonObj) {
-                    if (jsonObj.data.result) {
-
-                    } else {
-
-                    }
-                }
-            });
+            getPresenter().register(null, photoFile.getPath());
         }
     }
 
