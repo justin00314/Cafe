@@ -26,7 +26,7 @@ public interface RegisterContract {
      * Presenter接口方法，一般是Activity中的业务逻辑方法
      */
     interface Presenter<V extends RegisterContract.View, M extends RegisterContract.Model> extends IMVPPresent<V, M> {
-        void register(RegisterRequest request, String headFilePath, JsonHttpResponseHandler<ResultResponse> handler);
+        void register(RegisterRequest request, String headFilePath);
         void loadCamera();
     }
 
