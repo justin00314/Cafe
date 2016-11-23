@@ -171,11 +171,26 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 			}
 		});
 		// 退出会议
-
+		meetingListRvAdapter.setOnClickQuitListener(new MeetingListRvAdapter.OnClickItemListener() {
+			@Override
+			public void onClick(MeetingUserInfo info) {
+				getPresenter().quitMeeting(info);
+			}
+		});
 		// 解散会议
-
-		// 解散会议
-
+		meetingListRvAdapter.setOnClickDismissListener(new MeetingListRvAdapter.OnClickItemListener() {
+			@Override
+			public void onClick(MeetingUserInfo info) {
+				getPresenter().dismissMeeting(info);
+			}
+		});
+		// 取消会议
+		meetingListRvAdapter.setOnClickCancelListener(new MeetingListRvAdapter.OnClickItemListener() {
+			@Override
+			public void onClick(MeetingUserInfo info) {
+				getPresenter().cancelMeeting(info);
+			}
+		});
 
 	}
 
@@ -243,7 +258,6 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 
 	/**
 	 * 显示二维码对话框
-	 * @param meetingInfo
 	 */
 	@Override
 	public void showQRcodeDialog(MeetingUserInfo meetingInfo) {

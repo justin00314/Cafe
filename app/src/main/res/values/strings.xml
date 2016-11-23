@@ -20,10 +20,10 @@
 
 
 	<string name="dialog_qrcode_title">会议二维码</string>
-	<string name="dialog_qrcode_theme" formatted="false">主题：%s</string>
-	<string name="dialog_qrcode_id" formatted="false">ID号：%s</string>
-	<string name="dialog_qrcode_time" formatted="false">时间：%s</string>
-	<string name="dialog_qrcode_location" formatted="false">地点：%s</string>
+	<string name="dialog_qrcode_theme">主题：</string>
+	<string name="dialog_qrcode_id">ID号：</string>
+	<string name="dialog_qrcode_time">时间：</string>
+	<string name="dialog_qrcode_location">地点：</string>
 
 	<string name="prompt_shake_phone">找几个同学一起摇一摇手机试试</string>
 	<string name="prompt_loading">加载中，请稍后…</string>

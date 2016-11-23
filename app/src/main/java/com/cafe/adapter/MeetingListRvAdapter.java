@@ -303,6 +303,14 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 				});
 				break;
 		}
+		// 显示二维码按钮点击
+		holder.QRCodeIb.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (onClickQRCodeListener != null)
+					onClickQRCodeListener.onClick(meetingInfo);
+			}
+		});
 
 	}
 

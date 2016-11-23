@@ -82,7 +82,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	}
 
 	// 处理数据返回成功的情况
-	private void handleSuccess(MeetingListResponse jsonObj){
+	private void handleSuccess(MeetingListResponse jsonObj) {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
@@ -123,8 +123,10 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	 * 显示会议二维码
 	 */
 	@Override
-	public void showQRCode(MeetingUserInfo meetingInfo) {
-
+	public void showQRCode(MeetingUserInfo info) {
+		MeetingListContract.View view = getView();
+		if (view == null) return;
+		view.showQRcodeDialog(info);
 	}
 
 	/**
@@ -167,7 +169,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			@Override
 			public void run() {
 				MeetingListContract.View view = getView();
-				if(view == null) return;
+				if (view == null) return;
 				view.dismissLoadingProgress();
 				view.loadMeetingList(getMeetingInfoList());
 			}
@@ -175,7 +177,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	}
 
 	// TODO:构造会议列表测试数据
-	private List<MeetingUserInfo> getMeetingInfoList(){
+	private List<MeetingUserInfo> getMeetingInfoList() {
 		List<MeetingUserInfo> meetingInfos = new ArrayList<>();
 		MeetingUserInfo info;
 		// 正在进行的
@@ -185,6 +187,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		info.startTime = "2016-11-10 08:10:00";
 		info.participatedFlag = false;
 		info.createdFlag = true;
+		info.meetingRoomName = "市场部会议室1";
 		meetingInfos.add(info);
 		info = new MeetingUserInfo();
 		info.state = MeetingState.PROGRESS;
@@ -192,6 +195,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		info.startTime = "2016-11-10 09:10:00";
 		info.participatedFlag = true;
 		info.createdFlag = false;
+		info.meetingRoomName = "市场部会议室2";
 		meetingInfos.add(info);
 		// 预约的
 		info = new MeetingUserInfo();
@@ -200,6 +204,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		info.startTime = "2016-11-10 10:10:00";
 		info.participatedFlag = true;
 		info.createdFlag = false;
+		info.meetingRoomName = "技术部会议室1";
 		meetingInfos.add(info);
 		info = new MeetingUserInfo();
 		info.state = MeetingState.APPOINTMENT;
@@ -207,6 +212,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		info.startTime = "2016-11-10 11:11:00";
 		info.participatedFlag = true;
 		info.createdFlag = false;
+		info.meetingRoomName = "技术部会议室2";
 		meetingInfos.add(info);
 		info = new MeetingUserInfo();
 		info.state = MeetingState.APPOINTMENT;
@@ -214,6 +220,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		info.startTime = "2016-11-10 12:11:00";
 		info.participatedFlag = true;
 		info.createdFlag = false;
+		info.meetingRoomName = "技术部会议室3";
 		meetingInfos.add(info);
 		// 历史的
 		info = new MeetingUserInfo();

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aiviews.dialog.BaseDialog;
+import com.aiviews.textview.TitleTextView;
 import com.cafe.R;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingUserInfo;
@@ -34,10 +35,10 @@ public class QRCodeDialog extends DialogFragment {
 
 	private TextView titleTv;
 	private ImageView qrcodeIv;
-	private TextView themeTv;
-	private TextView idTv;
-	private TextView timeTv;
-	private TextView locationTv;
+	private TitleTextView themeTtv;
+	private TitleTextView idTtv;
+	private TitleTextView timeTtv;
+	private TitleTextView locationTtv;
 	private Button ensureBtn;
 
 	private Bitmap qrcodeBitmap;
@@ -59,7 +60,7 @@ public class QRCodeDialog extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		LogUtils.i(TAG, "onCreateDialog");
+		LogUtils.i(TAG, "--onCreateDialog--");
 		View contentView = ViewUtils.makeView(getActivity(), R.layout.dialog_qrcode);
 		BaseDialog dialog = createDialog(contentView);
 		assignViews(contentView);
@@ -71,9 +72,10 @@ public class QRCodeDialog extends DialogFragment {
 	 * 创建Dialog
 	 */
 	private BaseDialog createDialog(View contentView) {
+		LogUtils.i(TAG, "--显示二维码对话框--");
 		BaseDialog.Builder builder = new BaseDialog.Builder(getActivity(), contentView);
-		builder.setWidth(DisplayUtils.getScreenWidth(getActivity()));
-		builder.setHeight(DisplayUtils.getScreenHeight(getActivity()));
+//		builder.setWidth(DisplayUtils.getScreenWidth(getActivity()));
+//		builder.setHeight(DisplayUtils.getScreenHeight(getActivity()));
 		builder.setGravity(Gravity.CENTER);
 		builder.setStyle(R.style.BaseAlertDialog);
 		if (loadAnim)
@@ -86,10 +88,10 @@ public class QRCodeDialog extends DialogFragment {
 	private void assignViews(View contentView) {
 		titleTv = (TextView) contentView.findViewById(R.id.qrcode_title_tv);
 		qrcodeIv = (ImageView) contentView.findViewById(R.id.qrcode_iv);
-		themeTv = (TextView) contentView.findViewById(R.id.qrcode_theme_tv);
-		idTv = (TextView) contentView.findViewById(R.id.qrcode_id_tv);
-		timeTv = (TextView) contentView.findViewById(R.id.qrcode_time_tv);
-		locationTv = (TextView) contentView.findViewById(R.id.qrcode_location_tv);
+		themeTtv = (TitleTextView) contentView.findViewById(R.id.qrcode_theme_ttv);
+		idTtv = (TitleTextView) contentView.findViewById(R.id.qrcode_id_ttv);
+		timeTtv = (TitleTextView) contentView.findViewById(R.id.qrcode_time_ttv);
+		locationTtv = (TitleTextView) contentView.findViewById(R.id.qrcode_location_ttv);
 		ensureBtn = (Button) contentView.findViewById(R.id.qrcode_ensure_btn);
 		ensureBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -102,16 +104,17 @@ public class QRCodeDialog extends DialogFragment {
 
 	private void setMeetingInfo() {
 		titleTv.setText(getString(R.string.dialog_qrcode_title));
-		themeTv.setText(String.format(getString(R.string.dialog_qrcode_theme),
-				info.name));
-		idTv.setText(String.format(getString(R.string.dialog_qrcode_id),
-				info.id + ""));
-		timeTv.setText(String.format(getString(R.string.dialog_qrcode_time),
-				info.startTime));
-		locationTv.setText(String.format(getString(R.string.dialog_qrcode_location),
-				info.meetingRoomId));
-		qrcodeBitmap = CodeUtils.createImage(info.id + "", qrcodeIv.getWidth(),
-				qrcodeIv.getHeight(), null);
+		themeTtv.setTitleText(getString(R.string.dialog_qrcode_theme));
+		themeTtv.setContentText(info.name);
+
+//		idTtv.setText(String.format(getString(R.string.dialog_qrcode_id),
+//				info.id + ""));
+//		timeTtv.setText(String.format(getString(R.string.dialog_qrcode_time),
+//				info.startTime));
+//		locationTtv.setText(String.format(getString(R.string.dialog_qrcode_location),
+//				info.meetingRoomName));
+		int w = DisplayUtils.dpToPxInt(getActivity(), 300);
+		qrcodeBitmap = CodeUtils.createImage(info.id + "", w, w, null);
 		qrcodeIv.setImageBitmap(qrcodeBitmap);
 	}
 
