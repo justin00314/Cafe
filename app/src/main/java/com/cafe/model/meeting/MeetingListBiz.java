@@ -2,6 +2,7 @@ package com.cafe.model.meeting;
 
 import android.content.Context;
 
+import com.cafe.common.PreManager;
 import com.cafe.common.net.HttpManager;
 import com.cafe.common.net.UrlName;
 import com.cafe.contract.MeetingListContract;
@@ -28,8 +29,16 @@ public class MeetingListBiz implements MeetingListContract.Model {
 	@Override
 	public void loadMeetingList(ResponseHandlerInterface response) {
 		MeetingListRequest data = new MeetingListRequest();
-		data.userID = "1231";
+		data.filterTime = PreManager.getMeetingListFilterTime(context);
 		HttpManager.postJson(context, UrlName.MEETING_LIST.getUrl(), data,
 				response);
+	}
+
+	/**
+	 * 用户登出
+	 */
+	@Override
+	public void logout(ResponseHandlerInterface response) {
+
 	}
 }

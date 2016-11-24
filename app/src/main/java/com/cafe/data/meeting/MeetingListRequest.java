@@ -3,6 +3,7 @@ package com.cafe.data.meeting;
 import com.cafe.data.account.UserInfo;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  * 502953057@qq.com
  */
 
-public class MeetingListRequest extends UserInfo {
+public class MeetingListRequest implements Serializable {
 
 	@SerializedName("filter_time")
 	public String filterTime;

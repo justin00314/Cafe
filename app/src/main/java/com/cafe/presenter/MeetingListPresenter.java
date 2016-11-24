@@ -97,6 +97,10 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 
 	@Override
 	public void logout() {
+		getView().showLoadingProgress();
+		MeetingListContract.Model meetingListBiz = getModel();
+		if (meetingListBiz == null) return;
+
 		ToastUtils.getInstance().showToast(context, "登出系统");
 	}
 

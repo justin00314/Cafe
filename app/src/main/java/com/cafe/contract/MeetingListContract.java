@@ -121,6 +121,8 @@ public interface MeetingListContract {
 		 */
 		void loadMeetingList(ResponseHandlerInterface response);
 
+		void logout(ResponseHandlerInterface response);
+
 	}
 
 }
