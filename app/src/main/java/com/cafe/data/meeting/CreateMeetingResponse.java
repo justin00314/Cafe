@@ -9,13 +9,9 @@ import com.google.gson.annotations.SerializedName;
  * 502953057@qq.com
  */
 
-public class CreateMeetingResponse extends ResponseData<CreateMeetingResponse.CreateMeetingResult> {
+public class CreateMeetingResponse extends ResponseData<CreateMeetingResponse.Result> {
 
-	public class CreateMeetingResult {
-
-		@SerializedName("result")
-		public boolean result;
-
+	public class Result extends com.cafe.data.base.Result {
 		@SerializedName("meeting_id")
 		public int id;
 

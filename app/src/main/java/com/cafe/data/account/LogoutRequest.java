@@ -13,5 +13,5 @@ import java.io.Serializable;
 public class LogoutRequest implements Serializable {
 
 	@SerializedName("device_type")
-	public String deviceType;
+	public int deviceType;
 }

@@ -121,7 +121,34 @@ public interface MeetingListContract {
 		 */
 		void loadMeetingList(ResponseHandlerInterface response);
 
+		/**
+		 * 用户登出
+		 */
 		void logout(ResponseHandlerInterface response);
+
+		/**
+		 * 加入会议
+		 */
+		void joinMeeting(ResponseHandlerInterface response);
+
+		/**
+		 * 退出会议
+		 */
+		void quitMeeting(ResponseHandlerInterface response);
+		/**
+		 * 取消会议
+		 */
+		void cancelMeeting(ResponseHandlerInterface response);
+		/**
+		 * 解散会议
+		 */
+		void dismissMeeting(ResponseHandlerInterface response);
+
+		/**
+		 * 请求创建头脑风暴
+		 */
+		void requestBrainStorm(ResponseHandlerInterface response);
+
 
 	}
 

@@ -5,5 +5,5 @@ package com.cafe.data.meeting;
  * 502953057@qq.com
  */
 
-public class CancelMeetingRequest {
+public class CancelMeetingRequest extends MeetingInfo {
 }
