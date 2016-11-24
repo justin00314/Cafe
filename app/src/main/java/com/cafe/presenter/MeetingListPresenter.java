@@ -34,6 +34,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 
 	public MeetingListPresenter(Context context) {
 		this.context = context;
+		setModel();
 	}
 
 	@Override

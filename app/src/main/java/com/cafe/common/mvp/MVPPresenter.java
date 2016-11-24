@@ -22,6 +22,12 @@ public abstract class MVPPresenter<V extends BaseView, M extends BaseModel> impl
 
 	public MVPPresenter() {
 		//	mModelRef = new WeakReference<>(initModel());
+	}
+
+	/**
+	 * 子类必须调用这个方法才能初始化model
+	 */
+	protected void setModel(){
 		mode = initModel();
 	}
 
