@@ -30,6 +30,8 @@ public class LoginActivity extends MVPActivity<LoginContract.View,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        supportToolbar(false);
+
         ImageView userImage = (ImageView) findViewById(R.id.user_name).findViewById(R.id.editor_icon);
         userImage.setImageResource(R.mipmap.icon_people);
         ImageView passwordImage = (ImageView) findViewById(R.id.user_password).findViewById(R.id.editor_icon);

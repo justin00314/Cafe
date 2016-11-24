@@ -67,6 +67,7 @@ public class LoginPresenter extends MVPPresenter<LoginContract.View, LoginContra
 
                 if (jsonObj != null && jsonObj.data.token != null) {
                     registerResult[0] = true;
+                    getModel().processToken(jsonObj.data.token);
 
                 }
 

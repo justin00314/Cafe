@@ -2,6 +2,7 @@ package com.cafe.model.login;
 
 import android.content.Context;
 
+import com.cafe.common.PreManager;
 import com.cafe.common.net.HttpManager;
 import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.common.net.UrlName;
@@ -32,6 +33,6 @@ public class BDKLoginBiz implements LoginContract.Model {
 
     @Override
     public void processToken(String token) {
-        PreferencesUtils.setString(mContext, "KEY_TOKEN", token);
+        PreManager.setToken(mContext, token);
     }
 }
