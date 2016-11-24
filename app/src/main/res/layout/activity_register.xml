@@ -58,6 +58,7 @@
         android:background="@mipmap/bottom_layer_bg">
 
         <TextView
+            style="@style/TextLittle.White"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -65,8 +66,7 @@
             android:layout_marginBottom="20dp"
             android:clickable="true"
             android:onClick="register"
-            android:text="@string/register"
-            android:textColor="@android:color/white" />
+            android:text="@string/register" />
     </RelativeLayout>
 
     <com.dd.ShadowLayout

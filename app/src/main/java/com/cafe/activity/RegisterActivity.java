@@ -277,7 +277,9 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
     @Override
     public void registerDone(boolean success) {
-
+        if (!success) {
+            Snackbar.make(findViewById(R.id.container_layout), R.string.register_fail, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override

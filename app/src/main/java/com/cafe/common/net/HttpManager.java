@@ -97,6 +97,7 @@ public class HttpManager {
 		// 设置HTTP请求体
 		StringEntity entity = null;
 		try {
+			LogUtils.i(TAG, "request:" + json);
 			entity = new StringEntity(json, HTTP.UTF_8);
 		} catch (UnsupportedCharsetException e) {
 			LogUtils.e(TAG, "UnsupportedCharsetException", e);

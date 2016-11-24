@@ -96,7 +96,7 @@
 
         <!-- 测试Activity -->
         <activity
-            android:name="com.cafe.activity.MeetingListActivity"
+            android:name="com.cafe.activity.LoginActivity"
             android:configChanges="orientation|screenLayout|keyboardHidden|screenSize|navigation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
@@ -108,15 +108,31 @@
             </intent-filter>
         </activity>
 
-        <!-- <activity android:name=".activity.LoginActivity"></activity -->
+         <activity android:name=".activity.RegisterActivity"
+             android:configChanges="orientation|screenLayout|keyboardHidden|screenSize|navigation"
+             android:screenOrientation="portrait"
+             android:theme="@style/AppTheme.NoActionBar"
+             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
+        <activity android:name=".activity.MeetingListActivity"
+            android:configChanges="orientation|screenLayout|keyboardHidden|screenSize|navigation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+         <activity android:name=".activity.ThemeMeetingCreateActivity"
+             android:configChanges="orientation|screenLayout|keyboardHidden|screenSize|navigation"
+             android:screenOrientation="portrait"
+             android:theme="@style/AppTheme.NoActionBar"
+             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
+        <activity android:name=".activity.SearchMeetingActivity"
+            android:configChanges="orientation|screenLayout|keyboardHidden|screenSize|navigation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
 
 
-        <!-- <activity android:name=".activity.RegisterActivity"></activity> -->
-
-
-        <!-- <activity android:name=".activity.ThemeMeetingCreateActivity"></activity> -->
-
-        <!--<activity android:name=".activity.SearchMeetingActivity"></activity>-->
 
 
         <!-- 后台采集数据服务 -->
