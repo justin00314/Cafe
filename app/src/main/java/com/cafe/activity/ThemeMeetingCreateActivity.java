@@ -21,6 +21,8 @@ import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicke
 import com.cafe.R;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.ThemeMeetingCreateContract;
+import com.cafe.data.meeting.CreateMeetingRequest;
+import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.fragment.SublimePickerFragment;
 import com.cafe.presenter.ThemeMeetingCreatePresenter;
 import com.rey.material.widget.Spinner;
@@ -38,7 +40,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
     private final int DATE_TYPE_START = 1;
     private final int DATE_TYPE_FINISH = 2;
 
-    private final String DATE_FORMAT = "yyyy-MM-dd HH:mm";
+    private final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     private TextView mStartDate;
     private TextView mFinishDate;
@@ -47,7 +49,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
     private Calendar mStartCalendar;
     private Calendar mFinishCalendar;
 
-    private Spinner mOrganizerSpinner;
+//    private Spinner mOrganizerSpinner;
     private Spinner mLocationSpinner;
 
     private int mDateType = DATE_TYPE_START;
@@ -89,11 +91,19 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
 
     @Override
     public ThemeMeetingCreatePresenter initPresenter() {
-        return new ThemeMeetingCreatePresenter();
+        return new ThemeMeetingCreatePresenter(this);
     }
 
     public void submit(View v) {
-        getPresenter().submit();
+        CreateMeetingRequest request = new CreateMeetingRequest();
+        request.attendance = Integer.decode(mParticipantNumber.getText().toString()).intValue() ;
+        request.startTime = mStartDate.getText().toString();
+        request.endTime = mFinishDate.getText().toString();
+        request.type = MeetingInfo.TYPE_THEME;
+        request.meetingRoomId = "1";
+        request.name = mMeetingTheme.getText().toString();
+
+        getPresenter().createNewMeeting(request);
     }
 
 
@@ -121,8 +131,8 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
         mParticipantNumber = (EditText) findViewById(R.id.number).findViewById(R.id.editor_content);
         mParticipantNumber.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
-        mOrganizerSpinner =
-                (Spinner) findViewById(R.id.organizer).findViewById(R.id.spinner);
+//        mOrganizerSpinner =
+//                (Spinner) findViewById(R.id.organizer).findViewById(R.id.spinner);
 
         mLocationSpinner =
                 (Spinner) findViewById(R.id.place).findViewById(R.id.spinner);
@@ -164,7 +174,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
     }
 
     @Override
-    public void submitDone(boolean success) {
+    public void submitDone(boolean success, long meetingId) {
         if (success) {
             Snackbar.make(findViewById(R.id.coordinator_layout), getString(R.string.success),
                     Snackbar.LENGTH_SHORT).show();
@@ -175,22 +185,22 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
     }
 
     private void loadData() {
-        List<String> organizerData = new ArrayList<>();
-        organizerData.add("Justin");
-        organizerData.add("Lily");
-
-        OrganizerAdapter organizerAdapter = new OrganizerAdapter(this, organizerData);
-
-        mOrganizerSpinner.setAdapter(organizerAdapter);
-        organizerAdapter.notifyDataSetChanged();
-
-        mOrganizerSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(Spinner parent, View view, int position, long id) {
-                String oranizerName = (String) parent.getAdapter().getItem(position);
-                Toast.makeText(ThemeMeetingCreateActivity.this, oranizerName, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        List<String> organizerData = new ArrayList<>();
+//        organizerData.add("Justin");
+//        organizerData.add("Lily");
+//
+//        OrganizerAdapter organizerAdapter = new OrganizerAdapter(this, organizerData);
+//
+//        mOrganizerSpinner.setAdapter(organizerAdapter);
+//        organizerAdapter.notifyDataSetChanged();
+//
+//        mOrganizerSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(Spinner parent, View view, int position, long id) {
+//                String oranizerName = (String) parent.getAdapter().getItem(position);
+//                Toast.makeText(ThemeMeetingCreateActivity.this, oranizerName, Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
         List<String> locationData = new ArrayList<>();

@@ -35,12 +35,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
 
-            <include
+         <!--   <include
                 android:id="@+id/organizer"
                 layout="@layout/include_icon_title_spinner_organizer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
+                android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />-->
 
             <include
                 android:id="@+id/place"

@@ -11,7 +11,6 @@ import com.cafe.data.account.LoginRequest;
 import com.cafe.data.account.LoginResponse;
 
 import org.justin.utils.common.JsonUtils;
-import org.justin.utils.storage.PreferencesUtils;
 
 /**
  * Created by Rocky on 2016/11/24.
