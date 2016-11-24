@@ -1,7 +1,10 @@
 package com.cafe.presenter;
 
+import android.app.DialogFragment;
 import android.content.Context;
 
+import com.aiviews.dialog.AlertDialogInfo;
+import com.aiviews.dialog.OnClickDialogBtnListener;
 import com.cafe.R;
 import com.cafe.common.PreManager;
 import com.cafe.common.mvp.MVPPresenter;
@@ -103,7 +106,32 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	 */
 	@Override
 	public void logout() {
-		getView().showLoadingProgress();
+		final MeetingListContract.View view = getView();
+		if (view == null) return;
+		// 弹出对话框
+		AlertDialogInfo info = new AlertDialogInfo();
+		info.title = context.getString(R.string.dialog_title_logout);
+		info.content = context.getString(R.string.dialog_content_logout);
+		view.showAlertDialog(info, new OnClickDialogBtnListener<Void>() {
+			@Override
+			public void onClickEnsure(DialogFragment df, Void aVoid) {
+				doLogout(view);
+				df.dismiss();
+			}
+
+			@Override
+			public void onClickCancel(DialogFragment df) {
+				df.dismiss();
+			}
+		});
+
+	}
+
+	/**
+	 * 执行登出任务
+	 */
+	private void doLogout(MeetingListContract.View view){
+		view.showLoadingProgress();
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.logout(new JsonHttpResponseHandler<LogoutResponse>() {
@@ -129,7 +157,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 				ToastUtils.getInstance().showToast(context, R.string.prompt_logout_failure);
 			}
 		});
-
 	}
 
 	/**

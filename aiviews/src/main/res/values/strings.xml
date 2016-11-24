@@ -1,5 +1,7 @@
 <resources>
 	<string name="app_name">aiviews</string>
+	<string name="ensure">确定</string>
+	<string name="cancel">取消</string>
 
 	<string name="prompt_check_network">世界上最遥远的距离就是没网。检查设置</string>
 </resources>

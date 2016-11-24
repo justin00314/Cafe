@@ -15,7 +15,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.aiviews.dialog.AlertDialog;
+import com.aiviews.dialog.AlertDialogInfo;
 import com.aiviews.dialog.LoadingDialog;
+import com.aiviews.dialog.OnClickDialogBtnListener;
 import com.aiviews.popupview.PromptView;
 import com.aiviews.toolbar.ToolbarActivity;
 import com.cafe.R;
@@ -39,7 +42,9 @@ public class AIBaseActivity extends ToolbarActivity {
 	/**
 	 * 加载对话框TAG
 	 */
-	private final static String TAG_DIALOG_LOADING = "tag_dialog_ai_loading";
+	private final static String TAG_DIALOG_LOADING = "tag_dialog_loading";
+
+	private final static String TAG_DIALOG_ALERT = "tag_dialog_alert";
 
 	private LoadingDialog loadingDialog;
 
@@ -103,6 +108,21 @@ public class AIBaseActivity extends ToolbarActivity {
 			loadingDialog.dismiss();
 			loadingDialog = null;
 		}
+	}
+
+	/**
+	 * 显示警告对话框
+	 */
+	public void showAlertDialogFg(AlertDialogInfo info, OnClickDialogBtnListener listener) {
+		AlertDialog alertDialog = AlertDialog.newInstance(info.title, info.content,
+				info.ensureText, info.cancelText);
+		Fragment fragment = getFragmentManager().findFragmentByTag(TAG_DIALOG_ALERT);
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		if (fragment != null)
+			ft.remove(fragment);
+		ft.addToBackStack(null);// 加入回退栈
+		alertDialog.show(ft, TAG_DIALOG_ALERT);
+		alertDialog.setOnClickDialogBtnListener(listener);
 	}
 
 	/**

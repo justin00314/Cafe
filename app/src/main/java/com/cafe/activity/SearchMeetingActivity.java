@@ -59,7 +59,7 @@ public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.Vie
 
     }
 
-    public static  class SearchMeetingListAdapter extends RecyclerView.Adapter<SearchMeetingListAdapter.ItemViewHolder> {
+	public static  class SearchMeetingListAdapter extends RecyclerView.Adapter<SearchMeetingListAdapter.ItemViewHolder> {
 
         private final List<MeetingInfo> mmMeetings;
 
@@ -106,17 +106,13 @@ public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.Vie
                 place = (TextView) view.findViewById(R.id.place).findViewById(R.id.content);
 
                 TextView themeTitle = (TextView) view.findViewById(R.id.theme).findViewById(R.id.label);
-                themeTitle.setText(String.format(context.getString(R.string.dialog_qrcode_theme),
-                        ""));
+                themeTitle.setText(context.getString(R.string.dialog_qrcode_theme));
                 TextView idTitle = (TextView) view.findViewById(R.id.id).findViewById(R.id.label);
-                idTitle.setText(String.format(context.getString(R.string.dialog_qrcode_id),
-                        ""));
+                idTitle.setText(context.getString(R.string.dialog_qrcode_id));
                 TextView dateTitle = (TextView) view.findViewById(R.id.date).findViewById(R.id.label);
-                dateTitle.setText(String.format(context.getString(R.string.dialog_qrcode_time),
-                        ""));
+                dateTitle.setText(context.getString(R.string.dialog_qrcode_time));
                 TextView placeTitle = (TextView) view.findViewById(R.id.place).findViewById(R.id.label);
-                placeTitle.setText(String.format(context.getString(R.string.dialog_qrcode_location),
-                        ""));
+                placeTitle.setText(context.getString(R.string.dialog_qrcode_location));
 
                 View joinBtn = view.findViewById(R.id.join);
                 joinBtn.setOnClickListener(new View.OnClickListener() {

@@ -290,7 +290,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
 
     }
 
-    private class OrganizerAdapter extends BaseAdapter {
+	private class OrganizerAdapter extends BaseAdapter {
 
         private List<String> mmData;
         private Context mmContext;

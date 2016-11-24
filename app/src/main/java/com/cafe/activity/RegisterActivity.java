@@ -12,29 +12,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.cafe.R;
 import com.cafe.common.camera.HeadOnlyCameraPreview;
 import com.cafe.common.camera.SavingHeadPhotoTask;
 import com.cafe.common.mvp.MVPActivity;
-import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.RegisterContract;
 import com.cafe.data.account.RegisterRequest;
-import com.cafe.data.base.ResultResponse;
 import com.cafe.presenter.RegisterPresenter;
 
 import org.justin.media.CameraManager;
-import org.justin.media.interfaces.PhotoSavedListener;
 import org.justin.media.interfaces.PhotoTakenCallback;
 import org.justin.utils.common.LogUtils;
-import org.justin.utils.common.ToastUtils;
 import org.justin.utils.storage.FileUtils;
 
 import java.io.File;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -306,7 +300,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
     }
 
-    private class SurfaceCallback implements SurfaceHolder.Callback {
+	private class SurfaceCallback implements SurfaceHolder.Callback {
         @Override
         public void surfaceCreated(SurfaceHolder surfaceHolder) {
             CameraManager.getInstance().startPreview(surfaceHolder);

@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.aiviews.dialog.AlertDialogInfo;
+import com.aiviews.dialog.OnClickDialogBtnListener;
 import com.cafe.R;
 import com.cafe.common.DiskCacheManager;
 import com.cafe.common.DiskCacheMaxSize;
@@ -119,4 +121,6 @@ public class TestActivity extends MVPActivity<TestContract.View,
 	public void dismissLoadingProgress() {
 
 	}
+
+
 }

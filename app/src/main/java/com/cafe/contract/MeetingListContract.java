@@ -38,6 +38,7 @@ public interface MeetingListContract {
 		 */
 		void showQRcodeDialog(MeetingUserInfo meetingInfo);
 
+
 		/**
 		 * 显示操作会议对话框
 		 */

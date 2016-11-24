@@ -90,4 +90,6 @@ public class LoginActivity extends MVPActivity<LoginContract.View,
 
         return validate;
     }
+
+
 }

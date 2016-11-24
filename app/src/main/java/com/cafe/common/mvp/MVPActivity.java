@@ -2,6 +2,8 @@ package com.cafe.common.mvp;
 
 import android.os.Bundle;
 
+import com.aiviews.dialog.AlertDialogInfo;
+import com.aiviews.dialog.OnClickDialogBtnListener;
 import com.cafe.R;
 import com.cafe.base.AIBaseActivity;
 import com.cafe.common.mvp.base.BaseView;
@@ -61,4 +63,9 @@ public abstract class MVPActivity<V extends BaseView, P extends IMVPPresent>
 		dismissLoading();
 	}
 
+	@Override
+	public void showAlertDialog(AlertDialogInfo info, OnClickDialogBtnListener<Void> listener) {
+		showAlertDialogFg(info, listener);
+	}
+	
 }

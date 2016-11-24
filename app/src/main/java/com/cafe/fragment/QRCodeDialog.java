@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.aiviews.dialog.BaseDialog;
 import com.aiviews.textview.TitleTextView;
 import com.cafe.R;
-import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.rey.material.widget.Button;
 import com.uuzuche.lib_zxing.activity.CodeUtils;

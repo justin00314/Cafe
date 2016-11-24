@@ -1,4 +1,4 @@
-package com.cafe.fragment;
+package com.aiviews.dialog;
 
 import android.app.DialogFragment;
 
