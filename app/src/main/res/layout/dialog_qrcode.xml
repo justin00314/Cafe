@@ -66,7 +66,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="50dp"
 		android:layout_below="@+id/meeting_info_ll"
-		android:background="@mipmap/ensure_btn_bg"
+		android:background="@mipmap/dialog_btn_bg"
 		android:text="@string/ensure"
 		android:textColor="@android:color/white"
 		app:rd_rippleType="wave"
