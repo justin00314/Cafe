@@ -1,8 +1,8 @@
 package com.cafe.activity;
 
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -16,16 +16,14 @@ import android.view.animation.BounceInterpolator;
 import android.widget.TextView;
 
 import com.aiviews.imageview.RoundImageView;
-
+import com.aiviews.toolbar.ToolbarActivity;
 import com.cafe.R;
 import com.cafe.adapter.MeetingListRvAdapter;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.MeetingListContract;
-import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.fragment.QRCodeDialog;
 import com.cafe.presenter.MeetingListPresenter;
-import com.aiviews.toolbar.ToolbarActivity;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.justin.utils.common.LogUtils;
@@ -284,6 +282,14 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	@Override
 	public void skipToMeetingDetailActivity() {
 
+	}
+
+	/**
+	 * 跳转到登录界面
+	 */
+	@Override
+	public void skipToLoginActivity() {
+		startActivity(new Intent(this, LoginActivity.class));
 	}
 
 

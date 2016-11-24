@@ -9,8 +9,12 @@ import com.cafe.common.net.UrlName;
 import com.cafe.contract.MeetingListContract;
 import com.cafe.data.account.DeviceType;
 import com.cafe.data.account.LogoutRequest;
+import com.cafe.data.meeting.CancelMeetingRequest;
+import com.cafe.data.meeting.DismissMeetingRequest;
 import com.cafe.data.meeting.JoinMeetingRequest;
+import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingListRequest;
+import com.cafe.data.meeting.QuitMeetingRequest;
 import com.loopj.android.http.ResponseHandlerInterface;
 
 /**
@@ -53,33 +57,44 @@ public class MeetingListBiz implements MeetingListContract.Model {
 	 * 加入会议
 	 */
 	@Override
-	public void joinMeeting(ResponseHandlerInterface response) {
+	public void joinMeeting(MeetingInfo info, ResponseHandlerInterface response) {
 		JoinMeetingRequest data = new JoinMeetingRequest();
-
+		data.id = info.id;
+		HttpManager.postJson(context, UrlName.MEETING_JOIN.getUrl(), data,
+				response);
 	}
 
 	/**
 	 * 退出会议
 	 */
 	@Override
-	public void quitMeeting(ResponseHandlerInterface response) {
-
+	public void quitMeeting(MeetingInfo info, ResponseHandlerInterface response) {
+		QuitMeetingRequest data = new QuitMeetingRequest();
+		data.id = info.id;
+		HttpManager.postJson(context, UrlName.MEETING_QUIT.getUrl(), data,
+				response);
 	}
 
 	/**
 	 * 取消会议
 	 */
 	@Override
-	public void cancelMeeting(ResponseHandlerInterface response) {
-
+	public void cancelMeeting(MeetingInfo info, ResponseHandlerInterface response) {
+		CancelMeetingRequest data = new CancelMeetingRequest();
+		data.id = info.id;
+		HttpManager.postJson(context, UrlName.MEETING_CANCEL.getUrl(), data,
+				response);
 	}
 
 	/**
 	 * 解散会议
 	 */
 	@Override
-	public void dismissMeeting(ResponseHandlerInterface response) {
-
+	public void dismissMeeting(MeetingInfo info, ResponseHandlerInterface response) {
+		DismissMeetingRequest data = new DismissMeetingRequest();
+		data.id = info.id;
+		HttpManager.postJson(context, UrlName.MEETING_DISMISS.getUrl(), data,
+				response);
 	}
 
 	/**

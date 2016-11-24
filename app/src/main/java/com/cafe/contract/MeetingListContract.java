@@ -3,6 +3,7 @@ package com.cafe.contract;
 import com.cafe.common.mvp.base.BaseModel;
 import com.cafe.common.mvp.base.BasePresenter;
 import com.cafe.common.mvp.base.BaseView;
+import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.loopj.android.http.ResponseHandlerInterface;
 
@@ -43,6 +44,11 @@ public interface MeetingListContract {
 		void showOperatingMeetingDialog();
 
 		void skipToMeetingDetailActivity();
+
+		/**
+		 * 跳转到登录界面
+		 */
+		void skipToLoginActivity();
 
 	}
 
@@ -129,20 +135,20 @@ public interface MeetingListContract {
 		/**
 		 * 加入会议
 		 */
-		void joinMeeting(ResponseHandlerInterface response);
+		void joinMeeting(MeetingInfo info, ResponseHandlerInterface response);
 
 		/**
 		 * 退出会议
 		 */
-		void quitMeeting(ResponseHandlerInterface response);
+		void quitMeeting(MeetingInfo info, ResponseHandlerInterface response);
 		/**
 		 * 取消会议
 		 */
-		void cancelMeeting(ResponseHandlerInterface response);
+		void cancelMeeting(MeetingInfo info, ResponseHandlerInterface response);
 		/**
 		 * 解散会议
 		 */
-		void dismissMeeting(ResponseHandlerInterface response);
+		void dismissMeeting(MeetingInfo info, ResponseHandlerInterface response);
 
 		/**
 		 * 请求创建头脑风暴
