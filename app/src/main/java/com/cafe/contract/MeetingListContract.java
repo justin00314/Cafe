@@ -45,6 +45,11 @@ public interface MeetingListContract {
 
 		void skipToMeetingDetailActivity();
 
+		/**
+		 * 跳转到登录界面
+		 */
+		void skipToLoginActivity();
+
 	}
 
 	/**
@@ -125,7 +130,7 @@ public interface MeetingListContract {
 		/**
 		 * 用户登出
 		 */
-		void logout(MeetingInfo info, ResponseHandlerInterface response);
+		void logout(ResponseHandlerInterface response);
 
 		/**
 		 * 加入会议

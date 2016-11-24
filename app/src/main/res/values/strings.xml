@@ -10,6 +10,11 @@
 	<string name="test_stop_service">停止采集，上传数据服务</string>
 	<string name="audio_capture">会议进行中…</string>
 
+	<string name="prompt_no_network">没有网络，请重试</string>
+	<string name="prompt_logout_failure">登出失败，请重试</string>
+	<string name="prompt_loading_failure">加载失败，请重试</string>
+	<string name="prompt_logout_success">用户登出成功</string>
+
 
 	<string name="user_name">用户名</string>
 	<string name="password">密码</string>

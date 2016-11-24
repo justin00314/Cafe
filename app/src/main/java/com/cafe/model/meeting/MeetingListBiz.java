@@ -46,7 +46,7 @@ public class MeetingListBiz implements MeetingListContract.Model {
 	 * 用户登出
 	 */
 	@Override
-	public void logout(MeetingInfo info, ResponseHandlerInterface response) {
+	public void logout(ResponseHandlerInterface response) {
 		LogoutRequest data = new LogoutRequest();
 		data.deviceType = DeviceType.MOBILE;
 		HttpManager.postJson(context, UrlName.USER_LOGOUT.getUrl(), data,

@@ -2,9 +2,12 @@ package com.cafe.presenter;
 
 import android.content.Context;
 
+import com.cafe.R;
+import com.cafe.common.PreManager;
 import com.cafe.common.mvp.MVPPresenter;
 import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.MeetingListContract;
+import com.cafe.data.account.LogoutResponse;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingListResponse;
 import com.cafe.data.meeting.MeetingState;
@@ -83,25 +86,64 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	}
 
 	// 处理数据返回成功的情况
-	private void handleSuccess(MeetingListResponse jsonObj) {
+	private void handleSuccess(MeetingListResponse response) {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		if (jsonObj.data.meetingInfos == null || jsonObj.data.meetingInfos.size() == 0) {
+		if (response.data.meetingInfos == null || response.data.meetingInfos.size() == 0) {
 			// TODO:会议列表数据为空，显示提示
 			return;
 		}
 		// 界面加载列表
-		view.loadMeetingList(jsonObj.data.meetingInfos);
+		view.loadMeetingList(response.data.meetingInfos);
 	}
 
+	/**
+	 * 登出系统
+	 */
 	@Override
 	public void logout() {
 		getView().showLoadingProgress();
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
+		meetingListBiz.logout(new JsonHttpResponseHandler<LogoutResponse>() {
+			@Override
+			public void onHandleSuccess(int statusCode, Header[] headers, LogoutResponse jsonObj) {
+				// 处理登出成功
+				handleSuccess();
 
-		ToastUtils.getInstance().showToast(context, "登出系统");
+			}
+			@Override
+			public void onCancel() {
+				MeetingListContract.View view = getView();
+				if (view == null) return;
+				view.dismissLoadingProgress();
+				ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
+			}
+
+			@Override
+			public void onHandleFailure(String errorMsg) {
+				MeetingListContract.View view = getView();
+				if (view == null) return;
+				view.dismissLoadingProgress();
+				ToastUtils.getInstance().showToast(context, R.string.prompt_logout_failure);
+			}
+		});
+
+	}
+
+	/**
+	 * 处理登出成功
+	 */
+	private void handleSuccess(){
+		// 清除token
+		PreManager.setToken(context, "");
+		MeetingListContract.View view = getView();
+		if (view == null) return;
+		view.dismissLoadingProgress();
+		ToastUtils.getInstance().showToast(context, R.string.prompt_logout_success);
+		// 跳转到登录界面
+		view.skipToLoginActivity();
 	}
 
 	@Override
