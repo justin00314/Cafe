@@ -313,7 +313,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	/**
 	 * 执行加入会议任务
 	 */
-	private void doQuit(MeetingUserInfo meetingInfo, MeetingListContract.View view) {
+	private void doQuit(final MeetingUserInfo meetingInfo, MeetingListContract.View view) {
 		view.showLoadingProgress();
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
@@ -321,7 +321,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			@Override
 			public void onHandleSuccess(int statusCode, Header[] headers, QuitMeetingResponse jsonObj) {
 				// 处理退出会议成功
-				handleSuccess(jsonObj);
+				handleSuccess(meetingInfo, jsonObj);
 			}
 
 			@Override
@@ -345,14 +345,16 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	/**
 	 * 处理解散会议成功
 	 */
-	private void handleSuccess(QuitMeetingResponse response) {
+	private void handleSuccess(MeetingUserInfo info, QuitMeetingResponse response) {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		if (response.data != null && response.data.result)
+		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_quit_success);
-		else
+			view.refreshAfterQuit(info);
+		} else {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_quit_failure);
+		}
 	}
 
 	/**
@@ -455,15 +457,16 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	/**
 	 * 执行加入会议任务
 	 */
-	private void doJoin(MeetingUserInfo meetingInfo, MeetingListContract.View view) {
+	private void doJoin(final MeetingUserInfo meetingInfo, MeetingListContract.View view) {
 		view.showLoadingProgress();
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.joinMeeting(meetingInfo, new JsonHttpResponseHandler<JoinMeetingResponse>() {
 			@Override
-			public void onHandleSuccess(int statusCode, Header[] headers, JoinMeetingResponse jsonObj) {
+			public void onHandleSuccess(int statusCode, Header[] headers,
+			                            JoinMeetingResponse jsonObj) {
 				// 处理加入会议成功
-				handleSuccess(jsonObj);
+				handleSuccess(meetingInfo, jsonObj);
 			}
 
 			@Override
@@ -487,14 +490,17 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	/**
 	 * 处理加入会议成功
 	 */
-	private void handleSuccess(JoinMeetingResponse response) {
+	private void handleSuccess(MeetingUserInfo info, JoinMeetingResponse response) {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		if (response.data != null && response.data.result)
+		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_join_success);
-		else
+			view.refreshAfterJoin(info);
+
+		} else {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_join_failure);
+		}
 		// TODO:跳转到会议详情界面
 //		view.skipToLoginActivity();
 	}
@@ -528,7 +534,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	/**
 	 * 执行取消预约会议任务
 	 */
-	private void doCancel(MeetingUserInfo meetingInfo, MeetingListContract.View view) {
+	private void doCancel(final MeetingUserInfo meetingInfo, MeetingListContract.View view) {
 		view.showLoadingProgress();
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
@@ -536,7 +542,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			@Override
 			public void onHandleSuccess(int statusCode, Header[] headers, CancelMeetingResponse jsonObj) {
 				// 处理取消预约会议成功
-				handleSuccess(jsonObj);
+				handleSuccess(meetingInfo, jsonObj);
 			}
 
 			@Override
@@ -560,14 +566,16 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	/**
 	 * 处理加入会议成功
 	 */
-	private void handleSuccess(CancelMeetingResponse response) {
+	private void handleSuccess(MeetingUserInfo info, CancelMeetingResponse response) {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		if (response.data != null && response.data.result)
+		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_cancel_success);
-		else
+			view.refreshAfterCancel(info);
+		}else {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_cancel_failure);
+		}
 	}
 
 
