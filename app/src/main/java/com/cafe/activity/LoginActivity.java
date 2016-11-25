@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cafe.R;
 import com.cafe.common.mvp.MVPActivity;
@@ -41,6 +45,18 @@ public class LoginActivity extends MVPActivity<LoginContract.View,
 
         mPassword = (EditText) findViewById(R.id.user_password).findViewById(R.id.editor_content);
         mPassword.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
+        mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                    login(null);
+                    return true;
+                }
+
+                return false;
+            }
+        });
 
         TextInputLayout userName = (TextInputLayout) findViewById(R.id.user_name).findViewById(R.id.editor_layout);
         userName.setHint(getString(R.string.user_name));
@@ -60,7 +76,7 @@ public class LoginActivity extends MVPActivity<LoginContract.View,
             request.userName = mUserName.getText().toString();
             getPresenter().login(request);
         } else {
-            Snackbar.make(findViewById(R.id.container_layout), R.string.name_password_not_empty, Snackbar.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.name_password_not_empty, Toast.LENGTH_SHORT).show();
         }
     }
 

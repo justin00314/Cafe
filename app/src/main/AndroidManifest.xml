@@ -100,7 +100,7 @@
 			android:configChanges="orientation|screenLayout|keyboardHidden|screenSize|navigation"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar"
-			android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+			android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 

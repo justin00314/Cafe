@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_alignParentBottom="true"
-                android:paddingBottom="10dp">
+                android:paddingBottom="15dp">
 
                 <TextView
                     style="@style/TextLittle.White"
