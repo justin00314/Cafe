@@ -144,7 +144,8 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
         ImageButton dateButton = (ImageButton) findViewById(R.id.start_date).findViewById(R.id.button);
         dateButton.setImageResource(R.mipmap.icon_calendar);
 
-        dateButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.start_date).setClickable(true);
+        findViewById(R.id.start_date).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mDateType = DATE_TYPE_START;
@@ -159,7 +160,8 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
         ImageButton finishDateButton = (ImageButton) findViewById(R.id.finish_date).findViewById(R.id.button);
         finishDateButton.setImageResource(R.mipmap.icon_calendar);
 
-        finishDateButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.finish_date).setClickable(true);
+        findViewById(R.id.finish_date).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mStartCalendar == null) {
