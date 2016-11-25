@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/login_bg"
     android:orientation="vertical"
-    android:id="@+id/container_layout">
+    android:id="@+id/container_layout"
+    android:gravity="center_horizontal">
 
 
     <ImageView
@@ -14,91 +15,109 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        tools:ignore="ContentDescription" />
+        android:layout_marginTop="60dp"
+        tools:ignore="ContentDescription"
+        android:src="@mipmap/logo"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/edit_container"
-        android:layout_alignStart="@+id/edit_container"
-        android:layout_alignEnd="@+id/edit_container"
-        android:layout_alignTop="@+id/edit_container"
-        android:layout_marginBottom="-50dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="-10dp"
         android:layout_marginTop="40dp"
-        android:background="@mipmap/bottom_layer_bg">
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp">
 
-        <LinearLayout
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/login_anchor"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="40dp"
+            android:background="@mipmap/bottom_layer_bg">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    style="@style/TextLittle.White"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:onClick="login"
+                    android:text="@string/login"
+                    android:layout_weight="1"
+                    android:gravity="center" />
+
+                <TextView
+                    style="@style/TextLittle.White"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:onClick="register"
+                    android:text="@string/register"
+                    android:layout_weight="1"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <com.dd.ShadowLayout
+            android:id="@+id/edit_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_alignParentBottom="true"
-            android:paddingBottom="20dp">
+            android:layout_marginEnd="20dp"
+            android:background="@android:color/black"
+            app:sl_cornerRadius="3dp"
+            app:sl_dx="5dp"
+            app:sl_dy="5dp"
+            app:sl_shadowColor="@color/shadow"
+            app:sl_shadowRadius="10dp">
 
-            <TextView
-                style="@style/TextLittle.White"
-                android:layout_width="0dp"
+            <LinearLayout
+
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:onClick="login"
-                android:text="@string/login"
-                android:layout_weight="1"
-                android:gravity="center" />
+                android:layout_below="@id/log"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <TextView
-                style="@style/TextLittle.White"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:onClick="register"
-                android:text="@string/register"
-                android:layout_weight="1"
-                android:gravity="center"/>
+                <include
+                    android:id="@+id/user_name"
+                    layout="@layout/include_title_icon_editor" />
 
-        </LinearLayout>
 
+                <View
+                    style="@style/SeperatorLine"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="15dp" />
+
+                <include
+                    android:id="@+id/user_password"
+                    layout="@layout/include_title_icon_editor" />
+            </LinearLayout>
+        </com.dd.ShadowLayout>
+
+        <TextView
+            style="@style/TextLittle.White"
+            android:id="@+id/login_anchor"
+            android:layout_below="@id/edit_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:paddingBottom="10dp"
+            android:textColor="@null"/>
 
     </RelativeLayout>
 
-    <com.dd.ShadowLayout
-        android:id="@+id/edit_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/black"
-        app:sl_cornerRadius="3dp"
-        app:sl_dx="5dp"
-        app:sl_dy="5dp"
-        app:sl_shadowColor="@color/shadow"
-        app:sl_shadowRadius="10dp">
-
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/log"
-            android:background="@android:color/white"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <include
-                android:id="@+id/user_name"
-                layout="@layout/include_title_icon_editor" />
 
 
-            <View
-                style="@style/SeperatorLine"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp" />
 
-            <include
-                android:id="@+id/user_password"
-                layout="@layout/include_title_icon_editor" />
-        </LinearLayout>
-    </com.dd.ShadowLayout>
 
-</RelativeLayout>
+</LinearLayout>
