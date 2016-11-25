@@ -54,7 +54,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		return new MeetingListBiz(context);
 	}
 
-
 	/**
 	 * 获取用户信息
 	 */
@@ -69,7 +68,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			public void onHandleSuccess(int statusCode, Header[] headers, LogUserResponse jsonObj) {
 				// 处理获取用户信息成功
 				handleSuccess(jsonObj);
-
 			}
 
 			@Override
@@ -95,10 +93,9 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	private void handleSuccess(LogUserResponse response) {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
-		if(response.data == null) return;
+		if (response.data == null) return;
 		view.setUserInfo(response.data);
 	}
-
 
 	/**
 	 * 加载会议列表
@@ -192,7 +189,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			public void onHandleSuccess(int statusCode, Header[] headers, LogoutResponse jsonObj) {
 				// 处理登出成功
 				handleSuccess();
-
 			}
 
 			@Override
@@ -227,9 +223,14 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		view.skipToLoginActivity();
 	}
 
+	/**
+	 * 跳转到搜索界面
+	 */
 	@Override
 	public void search() {
-		ToastUtils.getInstance().showToast(context, "搜索");
+		MeetingListContract.View view = getView();
+		if (view == null) return;
+		view.skipToSearchActivity();
 	}
 
 	@Override
@@ -245,6 +246,21 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.skipToCreateMeetingActivity();
+	}
+
+	/**
+	 * 处理创建主题会议返回
+	 */
+	@Override
+	public void handleCreateTheme() {
+
+	}
+
+	/**
+	 * 处理扫描二维码返回：加入会议
+	 */
+	@Override
+	public void handleScanQRCode() {
 
 	}
 
@@ -333,7 +349,10 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		ToastUtils.getInstance().showToast(context, R.string.prompt_quit_success);
+		if (response.data != null && response.data.result)
+			ToastUtils.getInstance().showToast(context, R.string.prompt_quit_success);
+		else
+			ToastUtils.getInstance().showToast(context, R.string.prompt_quit_failure);
 	}
 
 	/**
@@ -401,7 +420,10 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		ToastUtils.getInstance().showToast(context, R.string.prompt_dismiss_success);
+		if (response.data != null && response.data.result)
+			ToastUtils.getInstance().showToast(context, R.string.prompt_dismiss_success);
+		else
+			ToastUtils.getInstance().showToast(context, R.string.prompt_dismiss_failure);
 	}
 
 	/**
@@ -469,7 +491,10 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		ToastUtils.getInstance().showToast(context, R.string.prompt_join_success);
+		if (response.data != null && response.data.result)
+			ToastUtils.getInstance().showToast(context, R.string.prompt_join_success);
+		else
+			ToastUtils.getInstance().showToast(context, R.string.prompt_join_failure);
 		// TODO:跳转到会议详情界面
 //		view.skipToLoginActivity();
 	}
@@ -539,7 +564,10 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		ToastUtils.getInstance().showToast(context, R.string.prompt_cancel_success);
+		if (response.data != null && response.data.result)
+			ToastUtils.getInstance().showToast(context, R.string.prompt_cancel_success);
+		else
+			ToastUtils.getInstance().showToast(context, R.string.prompt_cancel_failure);
 	}
 
 

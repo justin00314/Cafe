@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aiviews.R;
+import com.aiviews.rippleview.RippleView;
 
 import org.justin.utils.common.ResourcesUtils;
 
@@ -18,7 +19,7 @@ import org.justin.utils.common.ResourcesUtils;
  * 502953057@qq.com
  */
 
-public class ImageTextButton extends LinearLayout {
+public class ImageTextButton extends RippleView {
 
 
 	private ImageView titleIv;
@@ -40,6 +41,9 @@ public class ImageTextButton extends LinearLayout {
 		LayoutInflater.from(context).inflate(R.layout.image_text_button, this, true);
 		titleIv = (ImageView) findViewById(R.id.image_text_iv);
 		contentTv = (TextView) findViewById(R.id.image_text_tv);
+		setClickable(true);
+		setFocusable(true);
+		setEnabled(true);
 	}
 
 	/**

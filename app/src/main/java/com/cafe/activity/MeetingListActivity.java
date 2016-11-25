@@ -97,8 +97,8 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	protected void onResume() {
 		super.onResume();
 		// TODO:简单处理：每次进入界面都重新加载会议列表
-//		getPresenter().loadMeetingList();
-		getPresenter().loadMeetingListTest();
+		getPresenter().loadMeetingList();
+//		getPresenter().loadMeetingListTest();
 	}
 
 	@Override
@@ -113,6 +113,13 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 				getPresenter().createBrainStorm();
 				break;
 		}
+
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
 
 	}
 

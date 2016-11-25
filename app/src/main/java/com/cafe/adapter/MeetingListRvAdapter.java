@@ -229,6 +229,8 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 				holder.BottomLineIv.setVisibility(View.VISIBLE);
 				// 自己是创建人的情况
 				if (meetingInfo.createdFlag) {
+//					LogUtils.i(TAG, "自己是创建人-->" + meetingInfo.createdFlag);
+					holder.operation1Ibt.setVisibility(View.VISIBLE);
 					holder.operation2Ibt.setVisibility(View.VISIBLE);
 					holder.operation2Ibt.setImage(opDismissDrawable);
 					holder.operation2Ibt.setText(opDismiss);
@@ -236,12 +238,11 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 					holder.operation2Ibt.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View view) {
-							LogUtils.i(TAG, "--点击了解散会议--");
 							if (onClickDismissListener != null)
 								onClickDismissListener.onClick(meetingInfo);
 						}
 					});
-					holder.operation1Ibt.setVisibility(View.VISIBLE);
+
 					// 参与了的就显示为退出会议
 					if (meetingInfo.participatedFlag) {
 						holder.operation1Ibt.setImage(opQuitDrawable);
@@ -313,23 +314,22 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 					onClickQRCodeListener.onClick(meetingInfo);
 			}
 		});
-		// TODO:
-		holder.operation1Ibt.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				LogUtils.i(TAG, "--点击按钮1--");
-				if (onClickCancelListener != null)
-					onClickCancelListener.onClick(meetingInfo);
-			}
-		});
-		holder.operation2Ibt.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				LogUtils.i(TAG, "--点击按钮2--");
-				if (onClickCancelListener != null)
-					onClickCancelListener.onClick(meetingInfo);
-			}
-		});
+//		holder.operation1Ibt.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View view) {
+//				LogUtils.i(TAG, "--点击按钮1--");
+//				if (onClickCancelListener != null)
+//					onClickCancelListener.onClick(meetingInfo);
+//			}
+//		});
+//		holder.operation2Ibt.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View view) {
+//				LogUtils.i(TAG, "--点击按钮2--");
+//				if (onClickCancelListener != null)
+//					onClickCancelListener.onClick(meetingInfo);
+//			}
+//		});
 
 	}
 

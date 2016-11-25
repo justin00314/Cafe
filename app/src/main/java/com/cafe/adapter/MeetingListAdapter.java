@@ -70,6 +70,21 @@ public abstract class MeetingListAdapter<VH extends RecyclerView.ViewHolder>
 		notifyItemRemoved(position);
 	}
 
+	/**
+	 * 根据对象的ID找到在列表中的index
+	 */
+	public int getIndex(MeetingUserInfo info) {
+		if (items != null) {
+			int size = items.size();
+			for (int i = 0; i < size; i++) {
+				MeetingUserInfo meetingInfo = items.get(i);
+				if (meetingInfo.id == info.id)
+					return i;
+			}
+		}
+		return -1;
+	}
+
 	public MeetingUserInfo getItem(int position) {
 		return items.get(position);
 	}

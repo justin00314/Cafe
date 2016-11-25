@@ -70,7 +70,7 @@ public class MeetingInfo implements Serializable {
 	 * 会议状态
 	 */
 	@Expose
-	@SerializedName("meeting_state")
+	@SerializedName("meeting_status")
 	public int state;
 
 

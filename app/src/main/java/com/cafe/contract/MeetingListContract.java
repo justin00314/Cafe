@@ -102,6 +102,16 @@ public interface MeetingListContract {
 		void createTheme();
 
 		/**
+		 * 处理创建主题会议返回
+		 */
+		void handleCreateTheme();
+
+		/**
+		 * 处理扫描二维码返回
+		 */
+		void handleScanQRCode();
+
+		/**
 		 * 创建头脑风暴会议
 		 */
 		void createBrainStorm();
