@@ -211,6 +211,10 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	 * 设置操作区域
 	 */
 	private void setOperationArea(final MeetingUserInfo meetingInfo, ItemViewHolder holder) {
+		holder.operation1Ibt.setImage(null);
+		holder.operation1Ibt.setText("");
+		holder.operation2Ibt.setImage(null);
+		holder.operation2Ibt.setText("");
 		switch (meetingInfo.state) {
 			// 历史会议没有操作区域
 			case MeetingState.HISTORY:
@@ -227,10 +231,10 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 				holder.topLineIv.setVisibility(View.VISIBLE);
 				holder.RightLineIv.setVisibility(View.VISIBLE);
 				holder.BottomLineIv.setVisibility(View.VISIBLE);
+				holder.operation1Ibt.setVisibility(View.VISIBLE);
 				// 自己是创建人的情况
 				if (meetingInfo.createdFlag) {
 //					LogUtils.i(TAG, "自己是创建人-->" + meetingInfo.createdFlag);
-					holder.operation1Ibt.setVisibility(View.VISIBLE);
 					holder.operation2Ibt.setVisibility(View.VISIBLE);
 					holder.operation2Ibt.setImage(opDismissDrawable);
 					holder.operation2Ibt.setText(opDismiss);
@@ -274,7 +278,6 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 				// 不是创建人的情况，这种情况下一定是已经加入了会议才显示
 				else {
 					holder.operation2Ibt.setVisibility(View.GONE);
-					holder.operation1Ibt.setVisibility(View.VISIBLE);
 					holder.operation1Ibt.setImage(opQuitDrawable);
 					holder.operation1Ibt.setText(opQuit);
 					// 退出会议点击事件
@@ -314,22 +317,6 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 					onClickQRCodeListener.onClick(meetingInfo);
 			}
 		});
-//		holder.operation1Ibt.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View view) {
-//				LogUtils.i(TAG, "--点击按钮1--");
-//				if (onClickCancelListener != null)
-//					onClickCancelListener.onClick(meetingInfo);
-//			}
-//		});
-//		holder.operation2Ibt.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View view) {
-//				LogUtils.i(TAG, "--点击按钮2--");
-//				if (onClickCancelListener != null)
-//					onClickCancelListener.onClick(meetingInfo);
-//			}
-//		});
 
 	}
 

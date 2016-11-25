@@ -14,8 +14,12 @@ import com.cafe.data.meeting.DismissMeetingRequest;
 import com.cafe.data.meeting.JoinMeetingRequest;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingListRequest;
+import com.cafe.data.meeting.MeetingState;
 import com.cafe.data.meeting.QuitMeetingRequest;
+import com.cafe.data.meeting.StatusInfo;
 import com.loopj.android.http.ResponseHandlerInterface;
+
+import java.util.ArrayList;
 
 /**
  * 会议列表界面Model实现类
@@ -47,6 +51,14 @@ public class MeetingListBiz implements MeetingListContract.Model {
 	public void loadMeetingList(ResponseHandlerInterface response) {
 		MeetingListRequest data = new MeetingListRequest();
 		data.filterTime = PreManager.getMeetingListFilterTime(context);
+		data.statusInfoList = new ArrayList<>();
+		// 只查询状态为1,2,3的
+		StatusInfo status = new StatusInfo(MeetingState.PROGRESS);
+		data.statusInfoList.add(status);
+		status = new StatusInfo(MeetingState.APPOINTMENT);
+		data.statusInfoList.add(status);
+		status = new StatusInfo(MeetingState.HISTORY);
+		data.statusInfoList.add(status);
 		HttpManager.postJson(context, UrlName.MEETING_LIST.getUrl(), data,
 				response);
 	}

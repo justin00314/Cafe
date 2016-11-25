@@ -89,7 +89,7 @@ public class LoginActivity extends MVPActivity<LoginContract.View,
     @Override
     public void loginDone(boolean success) {
         if (success) {
-            Intent intent = new Intent(this, ThemeMeetingCreateActivity.class);
+            Intent intent = new Intent(this, MeetingListActivity.class);
             startActivity(intent);
         } else {
             Snackbar.make(findViewById(R.id.container_layout), R.string.login_fail, Snackbar.LENGTH_SHORT).show();

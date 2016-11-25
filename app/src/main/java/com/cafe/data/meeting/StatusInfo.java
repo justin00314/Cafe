@@ -11,4 +11,10 @@ public class StatusInfo {
 
 	@SerializedName("status")
 	public int status;
+
+	public StatusInfo(){}
+
+	public StatusInfo(int status){
+		this.status = status;
+	}
 }

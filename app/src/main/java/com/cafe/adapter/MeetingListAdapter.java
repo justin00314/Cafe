@@ -73,12 +73,12 @@ public abstract class MeetingListAdapter<VH extends RecyclerView.ViewHolder>
 	/**
 	 * 根据对象的ID找到在列表中的index
 	 */
-	public int getIndex(MeetingUserInfo info) {
+	public int getIndex(int meetingId) {
 		if (items != null) {
 			int size = items.size();
 			for (int i = 0; i < size; i++) {
 				MeetingUserInfo meetingInfo = items.get(i);
-				if (meetingInfo.id == info.id)
+				if (meetingInfo.id == meetingId)
 					return i;
 			}
 		}

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.aiviews.R;
 import com.aiviews.rippleview.RippleView;
 
+import org.justin.utils.common.LogUtils;
 import org.justin.utils.common.ResourcesUtils;
 
 
@@ -21,6 +22,7 @@ import org.justin.utils.common.ResourcesUtils;
 
 public class ImageTextButton extends RippleView {
 
+	private final static String TAG = ImageTextButton.class.getSimpleName();
 
 	private ImageView titleIv;
 
@@ -41,9 +43,9 @@ public class ImageTextButton extends RippleView {
 		LayoutInflater.from(context).inflate(R.layout.image_text_button, this, true);
 		titleIv = (ImageView) findViewById(R.id.image_text_iv);
 		contentTv = (TextView) findViewById(R.id.image_text_tv);
-		setClickable(true);
-		setFocusable(true);
-		setEnabled(true);
+//		setClickable(true);
+//		setFocusable(true);
+//		setEnabled(true);
 	}
 
 	/**
@@ -81,14 +83,16 @@ public class ImageTextButton extends RippleView {
 	public void setImage(int drawableResID) {
 		Drawable drawable = ResourcesUtils.getDrawable(drawableResID);
 		if (drawable == null) {
-			throw new IllegalArgumentException("toolbar背景Drawable资源文件找不到");
+			LogUtils.i(TAG, "Drawable资源文件找不到");
+			return;
 		}
 		titleIv.setImageDrawable(drawable);
 	}
 
 	public void setImage(Drawable drawable) {
 		if (drawable == null) {
-			throw new IllegalArgumentException("toolbar背景Drawable资源文件找不到");
+			LogUtils.i(TAG, "Drawable资源文件找不到");
+			return;
 		}
 		titleIv.setImageDrawable(drawable);
 	}

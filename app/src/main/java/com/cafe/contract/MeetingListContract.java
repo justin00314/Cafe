@@ -22,6 +22,26 @@ public interface MeetingListContract {
 	 */
 	interface View extends BaseView {
 
+		/**
+		 * 加入成功之后刷新
+		 */
+		void refreshAfterJoin(MeetingUserInfo info);
+
+		/**
+		 * 退出成功之后刷新
+		 */
+		void refreshAfterQuit(MeetingUserInfo info);
+
+		/**
+		 * 取消成功之后刷新
+		 */
+		void refreshAfterCancel(MeetingUserInfo info);
+
+		/**
+		 * 解散成功之后刷新
+		 */
+		void refreshAfterDismiss(MeetingUserInfo info);
+
 		void loadMeetingList(List<MeetingUserInfo> meetingInfoList);
 
 		/**

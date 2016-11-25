@@ -164,6 +164,9 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		// 加入item动画效果
 		SlideInDownAnimator animator = new SlideInDownAnimator();
 		animator.setAddDuration(500);
+//		DefaultAnimator animator = new DefaultAnimator();
+//		animator.setAddDuration(500);
+
 		animator.setInterpolator(new BounceInterpolator());
 		meetingListRv.setItemAnimator(animator);
 		// 点击显示二维码
@@ -229,6 +232,48 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 				getPresenter().scanQRCode();
 			}
 		});
+	}
+
+	/**
+	 * 加入成功之后刷新
+	 */
+	@Override
+	public void refreshAfterJoin(MeetingUserInfo info) {
+		int position = meetingListRvAdapter.getIndex(info.id);
+		MeetingUserInfo meetingInfo = meetingListRvAdapter.getItem(position);
+		if (!meetingInfo.participatedFlag) {
+			meetingInfo.participatedFlag = true;
+			meetingListRvAdapter.notifyItemChanged(position);
+		}
+	}
+
+	/**
+	 * 退出成功之后刷新
+	 */
+	@Override
+	public void refreshAfterQuit(MeetingUserInfo info) {
+		int position = meetingListRvAdapter.getIndex(info.id);
+		MeetingUserInfo meetingInfo = meetingListRvAdapter.getItem(position);
+		if (meetingInfo.participatedFlag) {
+			meetingInfo.participatedFlag = false;
+			meetingListRvAdapter.notifyItemChanged(position);
+		}
+	}
+
+	/**
+	 * 取消成功之后刷新
+	 */
+	@Override
+	public void refreshAfterCancel(MeetingUserInfo info) {
+		meetingListRvAdapter.remove(meetingListRvAdapter.getIndex(info.id));
+	}
+
+	/**
+	 * 解散成功之后刷新
+	 */
+	@Override
+	public void refreshAfterDismiss(MeetingUserInfo info) {
+
 	}
 
 	/**
