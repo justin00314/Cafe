@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/login_bg"
-    android:orientation="vertical"
-    android:id="@+id/container_layout"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
 
     <ImageView
@@ -16,15 +16,15 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
-        tools:ignore="ContentDescription"
-        android:src="@mipmap/logo"/>
+        android:src="@mipmap/logo"
+        tools:ignore="ContentDescription" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp">
+        android:layout_marginTop="40dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -38,29 +38,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
                 android:paddingBottom="15dp">
 
                 <TextView
                     style="@style/TextLittle.White"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:onClick="login"
-                    android:text="@string/login"
                     android:layout_weight="1"
-                    android:gravity="center" />
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:onClick="login"
+                    android:text="@string/login" />
 
                 <TextView
                     style="@style/TextLittle.White"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:onClick="register"
-                    android:text="@string/register"
                     android:layout_weight="1"
-                    android:gravity="center"/>
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:onClick="register"
+                    android:text="@string/register" />
 
             </LinearLayout>
 
@@ -105,19 +105,16 @@
         </com.dd.ShadowLayout>
 
         <TextView
-            style="@style/TextLittle.White"
             android:id="@+id/login_anchor"
-            android:layout_below="@id/edit_container"
+            style="@style/TextLittle.White"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/login"
+            android:layout_below="@id/edit_container"
             android:paddingBottom="10dp"
-            android:textColor="@null"/>
+            android:text="@string/login"
+            android:textColor="@null" />
 
     </RelativeLayout>
-
-
-
 
 
 </LinearLayout>

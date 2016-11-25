@@ -1,119 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@mipmap/login_bg"
-    android:gravity="center_horizontal">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/camera_preview"
+    <FrameLayout
+        android:id="@+id/container_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="260dp"
-        android:layout_marginRight="100dp"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="40dp">
+        android:background="@mipmap/login_bg"
+        android:gravity="center_horizontal">
 
-        <View
-            android:id="@+id/head_rect"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="30dp" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/head_rect"
-            android:background="@null"
-            android:src="@mipmap/icon_camera"
-            android:onClick="takePhoto"
-            tools:ignore="ContentDescription" />
-
-    </RelativeLayout>
-
-    <!--<FrameLayout-->
-        <!--android:id="@+id/camera_preview"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginBottom="260dp"-->
-        <!--android:layout_marginRight="100dp"-->
-        <!--android:layout_marginLeft="100dp"-->
-        <!--android:layout_marginTop="40dp"/>-->
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/edit_container"
-        android:layout_alignStart="@+id/edit_container"
-        android:layout_alignEnd="@+id/edit_container"
-        android:layout_alignTop="@+id/edit_container"
-        android:layout_marginBottom="-50dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="-10dp"
-        android:layout_marginTop="40dp"
-        android:background="@mipmap/bottom_layer_bg">
-
-        <TextView
-            style="@style/TextLittle.White"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:clickable="true"
-            android:onClick="register"
-            android:text="@string/register" />
-    </RelativeLayout>
-
-    <com.dd.ShadowLayout
-        android:id="@+id/edit_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="90dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="50dp"
-        android:background="@android:color/black"
-        app:sl_cornerRadius="3dp"
-        app:sl_dx="5dp"
-        app:sl_dy="5dp"
-        app:sl_shadowColor="@color/shadow"
-        app:sl_shadowRadius="10dp">
-
-        <LinearLayout
-
+        <RelativeLayout
+            android:id="@+id/camera_preview_container"
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/camera_preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/head_rect"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/head_rect"
+                android:background="@null"
+                android:onClick="takePhoto"
+                android:src="@mipmap/icon_camera"
+                tools:ignore="ContentDescription" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/edit_district"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/log"
-            android:background="@android:color/white"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp">
 
-            <include
-                android:id="@+id/user_name"
-                layout="@layout/include_title_icon_editor" />
+            <TextView
+                android:id="@+id/app_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name_big"
+                android:textColor="@color/app_name"
+                android:textSize="40dp"
+                android:gravity="center_horizontal" />
 
-            <include layout="@layout/include_edit_separator" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/login_anchor"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="40dp"
+                android:layout_below="@id/app_name"
+                android:background="@mipmap/bottom_layer_bg">
 
-            <include
-                android:id="@+id/user_id"
-                layout="@layout/include_title_icon_editor" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentBottom="true"
+                    android:paddingBottom="15dp">
 
-            <include layout="@layout/include_edit_separator" />
+                    <TextView
+                        style="@style/TextLittle.White"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="register"
+                        android:text="@string/register"
+                        android:layout_weight="1"
+                        android:gravity="center"/>
 
-            <include
-                android:id="@+id/user_password"
-                layout="@layout/include_title_icon_editor" />
+                </LinearLayout>
 
-            <include layout="@layout/include_edit_separator" />
 
-            <include
-                android:id="@+id/user_repassword"
-                layout="@layout/include_title_icon_editor" />
-        </LinearLayout>
-    </com.dd.ShadowLayout>
-</RelativeLayout>
+            </RelativeLayout>
+
+            <com.dd.ShadowLayout
+                android:id="@+id/edit_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_below="@id/app_name"
+                android:background="@android:color/black"
+                app:sl_cornerRadius="3dp"
+                app:sl_dx="5dp"
+                app:sl_dy="5dp"
+                app:sl_shadowColor="@color/shadow"
+                app:sl_shadowRadius="10dp">
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/log"
+                    android:background="@android:color/white"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <include
+                        android:id="@+id/user_name"
+                        layout="@layout/include_title_icon_editor" />
+
+                    <include layout="@layout/include_edit_separator" />
+
+                    <include
+                        android:id="@+id/user_id"
+                        layout="@layout/include_title_icon_editor" />
+
+                    <include layout="@layout/include_edit_separator" />
+
+                    <include
+                        android:id="@+id/user_password"
+                        layout="@layout/include_title_icon_editor" />
+
+                    <include layout="@layout/include_edit_separator" />
+
+                    <include
+                        android:id="@+id/user_repassword"
+                        layout="@layout/include_title_icon_editor" />
+                </LinearLayout>
+            </com.dd.ShadowLayout>
+
+            <TextView
+                style="@style/TextLittle.White"
+                android:id="@+id/login_anchor"
+                android:layout_below="@id/edit_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/login"
+                android:paddingBottom="10dp"
+                android:textColor="@null"/>
+
+        </RelativeLayout>
+
+    </FrameLayout>
+</ScrollView>

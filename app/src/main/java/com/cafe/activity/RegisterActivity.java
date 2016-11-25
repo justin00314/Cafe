@@ -11,7 +11,9 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.cafe.R;
 import com.cafe.common.camera.HeadOnlyCameraPreview;
@@ -25,6 +27,7 @@ import org.justin.media.CameraManager;
 import org.justin.media.interfaces.PhotoTakenCallback;
 import org.justin.utils.common.LogUtils;
 import org.justin.utils.storage.FileUtils;
+import org.justin.utils.system.DisplayUtils;
 
 import java.io.File;
 import java.util.List;
@@ -51,6 +54,10 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 	private File photoFile;
 	private boolean canTakePhoto;
 
+	private float mHeadRadius;
+	private float mHeadX, mHeadY;
+	private int mPreviewViewTopMargin;
+	private int mPreviewViewLeftMargin;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +65,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 		setContentView(R.layout.activity_register);
 
 		setupUI();
-
+		setupLayout();
 	}
 
 
@@ -89,6 +96,67 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 		userId.setHint(getString(R.string.user_id));
 		TextInputLayout repasswordText = (TextInputLayout) findViewById(R.id.user_repassword).findViewById(R.id.editor_layout);
 		repasswordText.setHint(getString(R.string.confirm_password));
+	}
+
+	private void setupLayout() {
+
+		setupCameraLayout();
+		setupEditDistrictLayout();
+	}
+
+	private void setupCameraLayout() {
+		ViewGroup preview = (ViewGroup) findViewById(R.id.camera_preview_container);
+
+		int screenHeight = DisplayUtils.getScreenHeight(this);
+		int screenWidth = DisplayUtils.getScreenWidth(this);
+
+		float previewRatio = 3f / 4f; // width:height
+		float screenRatio = (float) screenWidth / (float) screenHeight;
+
+		int previewHeight = screenHeight;
+		int previewWidth = (int) (screenWidth * 0.7);
+
+		FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) preview.getLayoutParams();
+
+		if (screenRatio < previewRatio) {
+			previewHeight = (int) (previewWidth / previewRatio);
+		} else {
+			previewWidth = (int) (previewHeight * previewRatio);
+		}
+
+		int marginTop = (int) DisplayUtils.dpToPx(this, 50);
+		layoutParams.topMargin = marginTop;
+		mPreviewViewTopMargin = marginTop;
+
+		int marginLeft = (screenWidth - previewWidth) / 2;
+		layoutParams.leftMargin = marginLeft;
+		mPreviewViewLeftMargin = marginLeft;
+
+		layoutParams.width = previewWidth;
+		layoutParams.height = previewHeight;
+
+		preview.setLayoutParams(layoutParams);
+
+		mHeadRadius = (float) (previewWidth / 3);
+		mHeadX = previewWidth / 2;
+		mHeadY = mHeadRadius;
+
+		View headRect = preview.findViewById(R.id.head_rect);
+		RelativeLayout.LayoutParams headLayout = (RelativeLayout.LayoutParams) headRect.getLayoutParams();
+		headLayout.width = (int) mHeadRadius * 2;
+		headLayout.height = (int) mHeadRadius * 2;
+		headRect.setLayoutParams(headLayout);
+	}
+
+	private void setupEditDistrictLayout() {
+		int screenHeight = DisplayUtils.getScreenHeight(this);
+		int screenWidth = DisplayUtils.getScreenWidth(this);
+
+		ViewGroup editDistrict = (ViewGroup) findViewById(R.id.edit_district);
+		FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) editDistrict.getLayoutParams();
+
+		layoutParams.topMargin = (int) (mHeadY + mHeadRadius + mPreviewViewTopMargin);
+		editDistrict.setLayoutParams(layoutParams);
 	}
 
 	@Override
@@ -257,9 +325,9 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 		CameraManager.getInstance().stopPreview();
 		CameraManager.getInstance().closeDriver();
 
-//		ViewGroup preview = (ViewGroup) findViewById(R.id.camera_preview);
-//		if (preview != null && mPreview != null)
-//			preview.removeView(mPreview);
+		ViewGroup preview = (ViewGroup) findViewById(R.id.camera_preview_container).findViewById(R.id.camera_preview);
+		if (preview != null && mPreview != null)
+			preview.removeView(mPreview);
 
 		canTakePhoto = false;
 	}
@@ -282,10 +350,14 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 		if (mPreview == null) {
 			mPreview = new HeadOnlyCameraPreview(this);
 
+			mPreview.headRadius = mHeadRadius;
+			mPreview.headX = mHeadX;
+			mPreview.headY = mHeadY;
+
 			mPreview.getHolder().addCallback(new SurfaceCallback());
 		}
 
-		ViewGroup preview = (ViewGroup) findViewById(R.id.camera_preview);
+		ViewGroup preview = (ViewGroup) findViewById(R.id.camera_preview).findViewById(R.id.camera_preview);
 		preview.addView(mPreview);
 	}
 
