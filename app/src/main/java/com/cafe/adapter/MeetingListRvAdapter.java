@@ -236,6 +236,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 					holder.operation2Ibt.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View view) {
+							LogUtils.i(TAG, "--点击了解散会议--");
 							if (onClickDismissListener != null)
 								onClickDismissListener.onClick(meetingInfo);
 						}
@@ -262,6 +263,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 						holder.operation1Ibt.setOnClickListener(new View.OnClickListener() {
 							@Override
 							public void onClick(View view) {
+								LogUtils.i(TAG, "--点击了加入会议--");
 								if (onClickAddListener != null)
 									onClickAddListener.onClick(meetingInfo);
 							}
@@ -309,6 +311,23 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 			public void onClick(View view) {
 				if (onClickQRCodeListener != null)
 					onClickQRCodeListener.onClick(meetingInfo);
+			}
+		});
+		// TODO:
+		holder.operation1Ibt.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				LogUtils.i(TAG, "--点击按钮1--");
+				if (onClickCancelListener != null)
+					onClickCancelListener.onClick(meetingInfo);
+			}
+		});
+		holder.operation2Ibt.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				LogUtils.i(TAG, "--点击按钮2--");
+				if (onClickCancelListener != null)
+					onClickCancelListener.onClick(meetingInfo);
 			}
 		});
 
