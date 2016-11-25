@@ -3,6 +3,7 @@ package com.cafe.common.net;
 import android.content.Context;
 
 import com.cafe.common.PreManager;
+import com.cafe.data.account.LogUserRequest;
 import com.cafe.data.base.RequestData;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
@@ -61,6 +62,7 @@ public class HttpManager {
 		LogUtils.i(TAG, "----POST发送JSON数据----");
 		HashMap<String, String> headerParams = new HashMap<>();
 		// header中带上access-token信息
+		LogUtils.i(TAG, "token-->" + PreManager.getToken(context));
 		headerParams.put(ACCESS_TOKEN, PreManager.getToken(context));
 		// 设置HTTP请求体
 		StringEntity entity = null;

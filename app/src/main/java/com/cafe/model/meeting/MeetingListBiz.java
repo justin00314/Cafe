@@ -1,13 +1,13 @@
 package com.cafe.model.meeting;
 
 import android.content.Context;
-import android.graphics.Paint;
 
 import com.cafe.common.PreManager;
 import com.cafe.common.net.HttpManager;
 import com.cafe.common.net.UrlName;
 import com.cafe.contract.MeetingListContract;
 import com.cafe.data.account.DeviceType;
+import com.cafe.data.account.LogUserRequest;
 import com.cafe.data.account.LogoutRequest;
 import com.cafe.data.meeting.CancelMeetingRequest;
 import com.cafe.data.meeting.DismissMeetingRequest;
@@ -27,8 +27,17 @@ public class MeetingListBiz implements MeetingListContract.Model {
 
 	private Context context;
 
-	public MeetingListBiz(Context context){
+	public MeetingListBiz(Context context) {
 		this.context = context;
+	}
+
+	/**
+	 * 获取登录人用户信息
+	 */
+	@Override
+	public void getUserInfo(ResponseHandlerInterface response) {
+		LogUserRequest data = new LogUserRequest();
+		HttpManager.postJson(context, UrlName.USER_INFO.getUrl(), data, response);
 	}
 
 	/**

@@ -14,9 +14,25 @@
 	<string name="prompt_logout_failure">登出失败，请重试</string>
 	<string name="prompt_loading_failure">加载失败，请重试</string>
 	<string name="prompt_logout_success">用户登出成功</string>
+	<string name="prompt_join_failure">加入会议失败，请重试</string>
+	<string name="prompt_quit_failure">退出会议失败，请重试</string>
+	<string name="prompt_cancel_failure">取消会议预约失败，请重试</string>
+	<string name="prompt_dismiss_failure">解散会议失败，请重试</string>
+	<string name="prompt_join_success">加入会议成功</string>
+	<string name="prompt_quit_success">退出会议成功</string>
+	<string name="prompt_cancel_success">取消会议预约成功</string>
+	<string name="prompt_dismiss_success">解散会议成功</string>
 
 	<string name="dialog_title_logout">用户登出</string>
 	<string name="dialog_content_logout">是否登出系统并退到登录界面？</string>
+	<string name="dialog_title_join">加入会议</string>
+	<string name="dialog_content_join" formatted="false">是否要加入会议 %s？</string>
+	<string name="dialog_title_quit">退出会议</string>
+	<string name="dialog_content_quit" formatted="false">是否要退出会议 %s？</string>
+	<string name="dialog_title_cancel">取消会议</string>
+	<string name="dialog_content_cancel" formatted="false">是否要取消会议 %s？</string>
+	<string name="dialog_title_dismiss">解散会议</string>
+	<string name="dialog_content_dismiss" formatted="false">是否要解散会议 %s？</string>
 
 
 	<string name="user_name">用户名</string>

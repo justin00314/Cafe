@@ -3,6 +3,7 @@ package com.cafe.contract;
 import com.cafe.common.mvp.base.BaseModel;
 import com.cafe.common.mvp.base.BasePresenter;
 import com.cafe.common.mvp.base.BaseView;
+import com.cafe.data.account.UserInfo;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.loopj.android.http.ResponseHandlerInterface;
@@ -26,7 +27,7 @@ public interface MeetingListContract {
 		/**
 		 * 设置用户信息显示
 		 */
-		void setUserInfo();
+		void setUserInfo(UserInfo userInfo);
 
 		/**
 		 * 提示创建头脑风暴会议
@@ -39,11 +40,6 @@ public interface MeetingListContract {
 		void showQRcodeDialog(MeetingUserInfo meetingInfo);
 
 
-		/**
-		 * 显示操作会议对话框
-		 */
-		void showOperatingMeetingDialog();
-
 		void skipToMeetingDetailActivity();
 
 		/**
@@ -51,6 +47,20 @@ public interface MeetingListContract {
 		 */
 		void skipToLoginActivity();
 
+		/**
+		 * 跳转到搜索界面
+		 */
+		void skipToSearchActivity();
+
+		/**
+		 * 跳转到二维码扫描界面
+		 */
+		void skipToScanQRCodeActivity();
+
+		/**
+		 * 跳转到创建主题会议界面
+		 */
+		void skipToCreateMeetingActivity();
 	}
 
 	/**
@@ -65,6 +75,11 @@ public interface MeetingListContract {
 		 * 加载会议列表
 		 */
 		void loadMeetingList();
+
+		/**
+		 * 获取当前登录用户信息
+		 */
+		void getUserInfo();
 
 		/**
 		 * 登出
@@ -123,6 +138,11 @@ public interface MeetingListContract {
 	 * Model接口方法，一般是数据操作方法,不一定存在Model
 	 */
 	interface Model extends BaseModel {
+
+		/**
+		 * 获取当前登录人用户信息
+		 */
+		void getUserInfo(ResponseHandlerInterface response);
 		/**
 		 * 加载会议列表网络数据
 		 */

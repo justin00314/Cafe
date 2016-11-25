@@ -16,15 +16,19 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.TextView;
 
+import com.aiviews.anim.AnimationImageLoadingListener;
 import com.aiviews.imageview.RoundImageView;
 import com.aiviews.toolbar.ToolbarActivity;
 import com.cafe.R;
 import com.cafe.adapter.MeetingListRvAdapter;
+import com.cafe.common.ImageLoaderManager;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.MeetingListContract;
+import com.cafe.data.account.UserInfo;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.fragment.QRCodeDialog;
 import com.cafe.presenter.MeetingListPresenter;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.justin.utils.common.LogUtils;
@@ -84,8 +88,9 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		setContentView(R.layout.activity_meeting_list);
 		setToolbar();
 		initViews();
-		setUserInfo();
 		setMeetingListRv();
+		// 获取用户信息
+		getPresenter().getUserInfo();
 	}
 
 	@Override
@@ -101,11 +106,11 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		switch (view.getId()) {
 			case R.id.theme_meeting_fab:
 				// 创建主题会议
-
+				getPresenter().createTheme();
 				break;
 			case R.id.brain_storm_fab:
 				// 提示摇一摇手机创建头脑风暴
-				promptShakePhone();
+				getPresenter().createBrainStorm();
 				break;
 		}
 
@@ -115,7 +120,6 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	public MeetingListPresenter initPresenter() {
 		return new MeetingListPresenter(this);
 	}
-
 
 	/**
 	 * 初始化界面元素
@@ -166,6 +170,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		meetingListRvAdapter.setOnClickAddListener(new MeetingListRvAdapter.OnClickItemListener() {
 			@Override
 			public void onClick(MeetingUserInfo info) {
+				LogUtils.i(TAG, "--点击加入会议--");
 				getPresenter().joinMeeting(info);
 			}
 		});
@@ -173,6 +178,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		meetingListRvAdapter.setOnClickQuitListener(new MeetingListRvAdapter.OnClickItemListener() {
 			@Override
 			public void onClick(MeetingUserInfo info) {
+				LogUtils.i(TAG, "--点击退出会议--");
 				getPresenter().quitMeeting(info);
 			}
 		});
@@ -240,10 +246,13 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 * 设置用户信息显示
 	 */
 	@Override
-	public void setUserInfo() {
+	public void setUserInfo(UserInfo userInfo) {
 		userPortraitIv.setImageDrawable(ResourcesUtils.getDrawable(R.mipmap.user1));
-		userNameTv.setText("乔妈妈");
-		workNumberTv.setText("工号：27420");
+		//加载用户头像
+		ImageLoader.getInstance().displayImage(userInfo.userPortrait, userPortraitIv,
+				ImageLoaderManager.getImageOptions(this), new AnimationImageLoadingListener());
+		userNameTv.setText(userInfo.userName);
+		workNumberTv.setText(userInfo.workNumber);
 	}
 
 	/**
@@ -270,14 +279,6 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	}
 
 	/**
-	 * 显示会议操作对话框
-	 */
-	@Override
-	public void showOperatingMeetingDialog() {
-
-	}
-
-	/**
 	 * 跳转到会议详情界面
 	 */
 	@Override
@@ -290,8 +291,29 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 */
 	@Override
 	public void skipToLoginActivity() {
-		startActivity(new Intent(this, LoginActivity.class));
+		finish();
 	}
 
+	@Override
+	public void skipToSearchActivity() {
+		startActivity(new Intent(this, SearchMeetingActivity.class));
+	}
 
+	@Override
+	public void skipToScanQRCodeActivity() {
+//		startActivity(new Intent(this, SearchMeetingActivity.class));
+	}
+
+	@Override
+	public void skipToCreateMeetingActivity() {
+		startActivity(new Intent(this, ThemeMeetingCreateActivity.class));
+	}
+
+	// 监听返回键
+	@Override
+	public void onBackPressed() {
+		LogUtils.i(TAG, "--点击返回键--");
+		// 让应用回到桌面
+		moveTaskToBack(true);
+	}
 }
