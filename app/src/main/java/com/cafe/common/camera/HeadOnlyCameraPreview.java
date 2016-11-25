@@ -108,16 +108,11 @@ public class HeadOnlyCameraPreview extends SurfaceView implements SurfaceHolder.
         Path path = new Path();
         int count = canvas.save();
 
-        headX = getWidth() / 2;
-        headY = getHeight() / 3.5f;
-        headRadius = (float) (getWidth() / 3.5);
-        headRadius = Math.min(headRadius, headX);
-        headRadius = Math.min(headRadius, headY);
-
-
-//        headX = (getWidth() * (mRight + mLeft)) / 2;
-//        headY = (getHeight() * (mTop + mBottom)) / 2;
-//        headRadius =  Math.min(getWidth() * (mRight - mLeft), getHeight() * (mBottom - mTop));
+//        headX = getWidth() / 2;
+//        headY = getHeight() / 3.5f;
+//        headRadius = (float) (getWidth() / 3.5);
+//        headRadius = Math.min(headRadius, headX);
+//        headRadius = Math.min(headRadius, headY);
 
 
         path.addCircle(headX, headY, headRadius, Path.Direction.CW);
