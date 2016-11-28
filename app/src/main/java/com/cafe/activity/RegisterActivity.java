@@ -25,7 +25,10 @@ import com.cafe.common.camera.SavingHeadPhotoTask;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.LoginContract;
 import com.cafe.contract.RegisterContract;
+import com.cafe.data.account.LoginRequest;
 import com.cafe.data.account.RegisterRequest;
+import com.cafe.model.login.BDKLoginBiz;
+import com.cafe.presenter.LoginPresenter;
 import com.cafe.presenter.RegisterPresenter;
 
 import org.justin.media.CameraManager;
@@ -66,6 +69,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
     private ImageView mHeadImage;
 
     private TextInputValidater mTextValidater;
+    private LoginContract.Presenter mLoginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
         setupUI();
         setupLayout();
+        setupMVP();
     }
 
 
@@ -171,6 +176,12 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
         layoutParams.topMargin = (int) (mHeadY + mHeadRadius + mPreviewViewTopMargin);
         editDistrict.setLayoutParams(layoutParams);
+    }
+
+    private void setupMVP() {
+        mLoginPresenter = new LoginPresenter(this);
+        mLoginPresenter.setModel(new BDKLoginBiz(this));
+        mLoginPresenter.attachView(this);
     }
 
     @Override
@@ -316,10 +327,6 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
         return photoDir.getPath();
     }
 
-    private String getPhotoFullName() {
-        return getPhotoPath() + File.separator + getPhotoFileName();
-    }
-
     private SavingHeadPhotoTask.ClipRect getHeadRect() {
         final float x = mPreview.headX;
         final float y = mPreview.headY;
@@ -368,7 +375,13 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
     @Override
     public void registerDone(boolean success) {
         if (!success) {
+            dismissLoadingProgress();
             Snackbar.make(findViewById(R.id.container_layout), R.string.register_fail, Snackbar.LENGTH_SHORT).show();
+        } else {
+            LoginRequest request = new LoginRequest();
+            request.password = mPassword.getText().toString();
+            request.userName = mName.getText().toString();
+            mLoginPresenter.login(request);
         }
     }
 
@@ -404,7 +417,12 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
     @Override
     public void loginDone(boolean success) {
-
+        if (success) {
+            Intent intent = new Intent(this, MeetingListActivity.class);
+            startActivity(intent);
+        } else {
+            Snackbar.make(findViewById(R.id.container_layout), R.string.login_fail, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     private class SurfaceCallback implements SurfaceHolder.Callback {

@@ -26,7 +26,7 @@ public class LoginPresenter extends MVPPresenter<LoginContract.View, LoginContra
         super();
         mContext = context;
 
-        mode = initModel();
+        setModel(initModel());
     }
 
     @Override

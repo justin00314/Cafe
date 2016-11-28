@@ -65,8 +65,6 @@ public class RegisterPresenter extends MVPPresenter<RegisterContract.View, Regis
                     return;
                 }
 
-                getView().dismissLoadingProgress();
-
                 final boolean[] registerResult = {false};
 
                 if (jsonObj != null && jsonObj.data.result == true) {
