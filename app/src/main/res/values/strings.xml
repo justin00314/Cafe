@@ -84,5 +84,10 @@
 	<string name="login_fail">登录失败</string>
 	<string name="name_password_not_empty">用户名和密码不能为空</string>
 	<string name="app_name_big">CAFE</string>
+	<string name="name_not_empty">用户名不能为空</string>
+	<string name="password_not_empty">密码不能为空</string>
+	<string name="id_not_empty">工号不能为空</string>
+	<string name="confirm_password_not_empty">确认密码不能为空</string>
+	<string name="repassword_wrong">两次密码输入不一致</string>
 
 </resources>

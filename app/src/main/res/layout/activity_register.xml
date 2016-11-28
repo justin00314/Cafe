@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/head_rect"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
@@ -69,8 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_alignParentBottom="true"
-                    android:paddingBottom="15dp">
+                    android:layout_alignParentBottom="true">
 
                     <TextView
                         style="@style/TextLittle.White"
@@ -80,7 +79,8 @@
                         android:onClick="register"
                         android:text="@string/register"
                         android:layout_weight="1"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:paddingBottom="15dp"/>
 
                 </LinearLayout>
 
