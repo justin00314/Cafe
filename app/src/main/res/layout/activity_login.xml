@@ -39,14 +39,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:orientation="horizontal"
-                android:paddingBottom="15dp">
+                android:orientation="horizontal">
 
                 <TextView
                     style="@style/TextLittle.White"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingBottom="15dp"
                     android:clickable="true"
                     android:gravity="center"
                     android:onClick="login"
@@ -57,6 +57,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:paddingBottom="15dp"
                     android:clickable="true"
                     android:gravity="center"
                     android:onClick="register"

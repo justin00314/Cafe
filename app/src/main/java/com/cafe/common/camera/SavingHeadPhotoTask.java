@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -88,11 +89,11 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
     @Override
     protected File doInBackground(Void... params) {
         File photoFile = saveByteArrayWithOrientation(data, orientation);
-        if (FileUtils.isExist(photoFile.getPath())) {
-            if (isUpdateMedia)
-                // 同步更新到系统图库
-                updateToSystemMedia(context, photoFile);
-        }
+//        if (FileUtils.isExist(photoFile.getPath())) {
+//            if (isUpdateMedia)
+//                // 同步更新到系统图库
+//                updateToSystemMedia(context, photoFile);
+//        }
         return photoFile;
     }
 
@@ -115,7 +116,11 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
      * 指定旋转角度保存照片
      */
     private File saveByteArrayWithOrientation(byte[] data, int orientation) {
+   //     File photo = getPhotoFile();
         File cropPhoto = getCropperPhotoFile();
+        if (cropPhoto.exists()) {
+            cropPhoto.delete();
+        }
 
         LogUtils.i(TAG, "旋转角度-->" + orientation);
         if (cropPhoto == null) {
@@ -132,10 +137,13 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
 
             if (bitmap != null) {
 
-                // 旋转图片
-                if (orientation != 0 && bitmap.getWidth() > bitmap.getHeight()) {
+                if (bitmap.getHeight() < bitmap.getWidth()) {
                     bitmap = ImageUtils.getRotateBitmap(bitmap, orientation, true);
                 }
+
+                // front camera, 反转图片
+                bitmap = getReverseBitmap(bitmap, true);
+
                 // 保存图片
           //      ImageUtils.saveBitmapAsJpeg(bitmap, photo.getPath(), COMPRESS_QUALITY);
                 // 截取图片
@@ -168,9 +176,9 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
         }
 
         int left = (int) (bitmap.getWidth() * clipRect.left);
-        int top = (int) (bitmap.getWidth() * clipRect.top);
+        int top = (int) (bitmap.getHeight() * clipRect.top);
         int right = (int) (bitmap.getWidth() * clipRect.right);
-        int bottom = (int) (bitmap.getWidth() * clipRect.bottom);
+        int bottom = (int) (bitmap.getHeight() * clipRect.bottom);
 
         try {
             return Bitmap.createBitmap(bitmap, left, top,
@@ -197,8 +205,8 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
         FileUtils.makeDir(path);
         String tmpName = name.substring(0, name.indexOf("."));
         LogUtils.i(TAG, "没有扩展名的照片文件名-->" + tmpName);
-        return new File(path + File.separator + name);
-   //     return new File(path + File.separator + tmpName + "_crop." + FileUtils.ExtensionName.JPG);
+  //      return new File(path + File.separator + name);
+        return new File(path + File.separator + tmpName + "_crop." + FileUtils.ExtensionName.JPG);
     }
 
     /**
@@ -303,6 +311,15 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
         void savedFailure();
 
         void savedSuccess(File photoFile);
+    }
+
+    public static Bitmap getReverseBitmap(Bitmap b, boolean isFilter) {
+        Matrix matrix = new Matrix();
+
+        matrix.postScale(-1, 1); // 镜像水平翻转
+
+   //     matrix.postTranslate(b.getWidth() ,0);
+        return Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(), matrix, isFilter);
     }
 
 }
