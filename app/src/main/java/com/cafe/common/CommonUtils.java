@@ -30,6 +30,14 @@ public class CommonUtils {
 		return currentTimeStr;
 	}
 
+	public static String getCurrentTime() {
+		// 获取当前时间戳
+		long currentTime = new Date().getTime();
+		String currentTimeStr = TimeUtils.formatTimeStamp(currentTime, TimeUtils.Template.YMDHMS);
+		LogUtils.i(TAG, "当前时间为:" + currentTimeStr);
+		return currentTimeStr;
+	}
+
 
 	/**
 	 * 获取当前年份

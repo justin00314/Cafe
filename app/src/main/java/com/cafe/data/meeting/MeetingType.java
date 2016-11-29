@@ -10,11 +10,11 @@ public enum MeetingType {
 	/**
 	 * 头脑风暴
 	 */
-	BRAIN_STORM(1, "brainStorm"),
+	BRAIN_STORM(2, "brainStorm"),
 	/**
 	 *
 	 */
-	THEME(2, "theme");
+	THEME(1, "theme");
 
 	private int id;
 	private String name;

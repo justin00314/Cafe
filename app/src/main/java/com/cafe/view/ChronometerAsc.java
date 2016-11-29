@@ -74,13 +74,13 @@ public class ChronometerAsc extends RelativeLayout {
 	 */
 	private void startRotationAnim() {
 		if (animator == null)
-			animator = ObjectAnimator.ofFloat(showLoadingIv, "rotationZ", 0f, 360f);
-		animator.setDuration(500);
+			animator = ObjectAnimator.ofFloat(showLoadingIv, "rotation", 0f, 360f);
+		animator.setDuration(1000);
 		// 一直不停的转
 		animator.setRepeatCount(ObjectAnimator.INFINITE);
 		animator.setInterpolator(new LinearInterpolator());
-		showLoadingIv.setPivotX(showLoadingIv.getWidth() / 2);
-		showLoadingIv.setPivotY(showLoadingIv.getHeight() / 2);
+//		showLoadingIv.setPivotX(showLoadingIv.getWidth() / 2);
+//		showLoadingIv.setPivotY(showLoadingIv.getHeight() / 2);
 		animator.start();
 		isAnimStart = true;
 	}

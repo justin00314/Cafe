@@ -42,7 +42,7 @@ public enum UrlName {
 	// 停止插话
 	PROCEDURE_STOP_EPISODE("stopEpisode"),
 	// 查询当前说话人
-	PROCEDURE_TALKER("getTalkingUser"),
+	PROCEDURE_TALKER("querySpeakerForMeeting"),
 	// 查询会议过程详情列表(说话实时记录列表)
 	PROCEDURE_LIST("queryMeetingProcedure"),
 

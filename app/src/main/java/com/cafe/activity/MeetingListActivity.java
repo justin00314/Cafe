@@ -340,13 +340,21 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	}
 
 	/**
-	 * 跳转到会议详情界面
+	 * 跳转到主题会议详情界面
 	 */
 	@Override
-	public void skipToMeetingDetailActivity(MeetingUserInfo info) {
+	public void skipToThemeDetailActivity(MeetingUserInfo info) {
 		Intent intent = new Intent(this, ThemeDetailActivity.class);
 		intent.putExtra(IntentExtra.MEETING_USER_INFO, info);
 		startActivity(intent);
+	}
+
+	/**
+	 * 跳转到头脑风暴详情界面
+	 */
+	@Override
+	public void skipToBrainStormActivity(MeetingUserInfo info) {
+
 	}
 
 	/**

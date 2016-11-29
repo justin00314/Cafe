@@ -2,19 +2,24 @@ package com.cafe.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.aiviews.toolbar.ToolbarActivity;
 import com.cafe.R;
 import com.cafe.common.IntentExtra;
 import com.cafe.common.mvp.MVPActivity;
-import com.cafe.contract.MeetingDetailContract;
+import com.cafe.contract.ThemeDetailContract;
 import com.cafe.data.meeting.MeetingUserInfo;
-import com.cafe.presenter.MeetingDetailPresenter;
+import com.cafe.presenter.ThemeDetailPresenter;
 import com.cafe.view.ChronometerAsc;
 
+import org.justin.utils.common.LogUtils;
+import org.justin.utils.common.TimeUtils;
 import org.justin.utils.system.DisplayUtils;
 import org.justin.utils.thread.ThreadUtils;
+
+import java.util.Date;
 
 /**
  * 会议详情界面
@@ -22,8 +27,8 @@ import org.justin.utils.thread.ThreadUtils;
  * 502953057@qq.com
  */
 
-public class ThemeDetailActivity extends MVPActivity<MeetingDetailContract.View,
-		MeetingDetailPresenter> implements MeetingDetailContract.View, View.OnClickListener {
+public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
+		ThemeDetailPresenter> implements ThemeDetailContract.View, View.OnClickListener {
 
 	private final static String TAG = ThemeDetailActivity.class.getSimpleName();
 
@@ -33,14 +38,20 @@ public class ThemeDetailActivity extends MVPActivity<MeetingDetailContract.View,
 
 	private MeetingUserInfo meetingInfo;
 
+	/**
+	 * 界面入口
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_meeting_detail);
+		// 设置屏幕不休眠
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		setContentView(R.layout.activity_meeting_theme);
 		setToolbar();
 		initViews();
 //		setMeetingListRv();
-//		setMeetingInfo();
+		setMeetingInfo();
 		setMeetingCasc();
 
 
@@ -78,9 +89,11 @@ public class ThemeDetailActivity extends MVPActivity<MeetingDetailContract.View,
 		meetingInfo = (MeetingUserInfo) getIntent().getSerializableExtra(
 				IntentExtra.MEETING_USER_INFO);
 		meetingNameTv.setText(meetingInfo.name);
-		meetingStateTv.setText(meetingInfo.state);
 	}
 
+	/**
+	 * 设置会议正向计时
+	 */
 	private void setMeetingCasc() {
 		// 首先设置计时器的样式
 		int size = DisplayUtils.getScreenWidth(this);
@@ -89,17 +102,19 @@ public class ThemeDetailActivity extends MVPActivity<MeetingDetailContract.View,
 		ThreadUtils.runOnUIThread(new Runnable() {
 			@Override
 			public void run() {
-
 				startTime();
 			}
 		}, 500);
-
 
 	}
 
 	private void startTime() {
 		// TODO:根据当前时间和会议开始时间计算计时器的初始值
-		meetingTimeCasc.setCurrentTime(0);
+		long startTime = TimeUtils.dateToTimeStamp(meetingInfo.startTime, TimeUtils.Template.YMDHMS);
+		long currentTime = new Date().getTime() / 1000;
+		long base = currentTime - startTime;
+		LogUtils.i(TAG, "会议已经开始了-->" + base + " 秒");
+		meetingTimeCasc.setCurrentTime(base > 0 ? base : 0);
 		meetingTimeCasc.startTime();
 	}
 
@@ -109,12 +124,20 @@ public class ThemeDetailActivity extends MVPActivity<MeetingDetailContract.View,
 	}
 
 	@Override
-	public MeetingDetailPresenter initPresenter() {
-		return new MeetingDetailPresenter(this);
+	public ThemeDetailPresenter initPresenter() {
+		return new ThemeDetailPresenter(this);
 	}
 
+	/**
+	 * 展示插话倒计时，这个时候正计时隐藏,插话结束之后隐藏倒计时并显示正计时
+	 */
 	@Override
-	public void setMeetingInfo(MeetingUserInfo info) {
+	public void showEpisode(boolean flag) {
+		if (flag) {
+			meetingTimeCasc.setVisibility(View.GONE);
+		} else {
+			meetingTimeCasc.setVisibility(View.VISIBLE);
+		}
 
 	}
 }

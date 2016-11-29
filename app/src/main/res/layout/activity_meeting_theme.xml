@@ -20,24 +20,23 @@
 			tools:ignore="contentDescription"/>
 		<TextView
 			android:id="@+id/meeting_name_tv"
-			style="@style/TextLittle"
+			style="@style/TextNormal"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
 			android:layout_marginStart="10dp"
 			android:layout_toEndOf="@+id/meeting_info_logo"
-			android:textColor="@color/meeting_info_text"
-			tools:text="市场部会议"/>
+			android:textColor="@color/meeting_info_text"/>
 		<TextView
 			android:id="@+id/meeting_state_tv"
-			style="@style/TextLittle"
+			style="@style/TextNormal"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
 			android:layout_marginStart="10dp"
 			android:layout_toEndOf="@+id/meeting_name_tv"
 			android:textColor="@color/meeting_info_text"
-			tools:text="市场部会议"/>
+			android:text="@string/meeting_state_progress_"/>
 
 		<ImageView
 			android:id="@+id/shake_phone_iv"
@@ -49,22 +48,29 @@
 			tools:ignore="contentDescription"/>
 	</RelativeLayout>
 
-	<!--中间计时器区域-->
-	<com.cafe.view.ChronometerAsc
-		android:id="@+id/meeting_time_casc"
+	<RelativeLayout
+		android:id="@+id/meeting_time_rl"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/meeting_info_rl"
-		android:layout_centerHorizontal="true"
-		android:layout_margin="10dp"
-		android:visibility="visible"/>
+		android:layout_below="@+id/meeting_info_rl">
+
+		<!--中间计时器区域-->
+		<com.cafe.view.ChronometerAsc
+			android:id="@+id/meeting_time_casc"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_margin="10dp"
+			android:visibility="visible"/>
+	</RelativeLayout>
 
 	<!--底部会议过程列表-->
 	<android.support.v7.widget.RecyclerView
 		android:id="@+id/procedure_rv"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"/>
+		android:layout_alignParentBottom="true"
+		android:layout_below="@+id/meeting_time_rl"/>
 
 
 </RelativeLayout>

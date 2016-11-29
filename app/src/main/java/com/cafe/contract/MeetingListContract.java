@@ -60,9 +60,14 @@ public interface MeetingListContract {
 		void showQRcodeDialog(MeetingUserInfo meetingInfo);
 
 		/**
-		 * 跳转到会议详情界面
+		 * 跳转到主题会议详情界面
 		 */
-		void skipToMeetingDetailActivity(MeetingUserInfo info);
+		void skipToThemeDetailActivity(MeetingUserInfo info);
+
+		/**
+		 * 跳转到头脑风暴详情界面
+		 */
+		void skipToBrainStormActivity(MeetingUserInfo info);
 
 		/**
 		 * 跳转到登录界面

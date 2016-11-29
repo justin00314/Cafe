@@ -10,18 +10,16 @@ import com.cafe.common.PreManager;
 import com.cafe.common.mvp.MVPPresenter;
 import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.MeetingListContract;
-import com.cafe.data.account.LogUserRequest;
 import com.cafe.data.account.LogUserResponse;
 import com.cafe.data.account.LogoutResponse;
 import com.cafe.data.meeting.CancelMeetingResponse;
 import com.cafe.data.meeting.DismissMeetingResponse;
 import com.cafe.data.meeting.JoinMeetingResponse;
-import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingListResponse;
 import com.cafe.data.meeting.MeetingState;
+import com.cafe.data.meeting.MeetingType;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.data.meeting.QuitMeetingResponse;
-import com.cafe.data.meeting.StatusInfo;
 import com.cafe.model.meeting.MeetingListBiz;
 
 import org.justin.utils.common.ToastUtils;
@@ -539,12 +537,14 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	public void showMeetingProcedure(MeetingUserInfo meetingInfo) {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
-
 		if (meetingInfo.state != MeetingState.PROGRESS) {
-			//提示
+			// TODO: 提示只有正在进行的会议才能展示详情？
 			return;
 		}
-		view.skipToMeetingDetailActivity(meetingInfo);
+		if (meetingInfo.type == MeetingType.THEME.getId())
+			view.skipToThemeDetailActivity(meetingInfo);
+		else if(meetingInfo.type == MeetingType.BRAIN_STORM.getId())
+			view.skipToBrainStormActivity(meetingInfo);
 	}
 
 	/**
