@@ -116,7 +116,7 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
      * 指定旋转角度保存照片
      */
     private File saveByteArrayWithOrientation(byte[] data, int orientation) {
-   //     File photo = getPhotoFile();
+        File photo = getPhotoFile();
         File cropPhoto = getCropperPhotoFile();
         if (cropPhoto.exists()) {
             cropPhoto.delete();
@@ -137,15 +137,26 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
 
             if (bitmap != null) {
 
-                if (bitmap.getHeight() < bitmap.getWidth()) {
-                    bitmap = ImageUtils.getRotateBitmap(bitmap, orientation, true);
+
+
+//                if (bitmap.getHeight() < bitmap.getWidth()) {
+//                    bitmap = ImageUtils.getRotateBitmap(bitmap, orientation, true);
+
+                int rotation = orientation + 90;
+
+                if (orientation > 270) {
+                    rotation = orientation;
                 }
 
                 // front camera, 反转图片
                 bitmap = getReverseBitmap(bitmap, true);
 
+                bitmap = ImageUtils.getRotateBitmap(bitmap, rotation, true);
+
                 // 保存图片
-          //      ImageUtils.saveBitmapAsJpeg(bitmap, photo.getPath(), COMPRESS_QUALITY);
+                ImageUtils.saveBitmapAsJpeg(bitmap, photo.getPath(), COMPRESS_QUALITY);
+
+
                 // 截取图片
                 Bitmap cropBitmap = cropPhoto(bitmap);
                 if (cropBitmap != null && cropPhoto != null) {

@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.cafe.R;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.LoginContract;
-import com.cafe.contract.ThemeMeetingCreateContract;
 import com.cafe.data.account.LoginRequest;
 import com.cafe.presenter.LoginPresenter;
 
@@ -87,12 +86,12 @@ public class LoginActivity extends MVPActivity<LoginContract.View,
     }
 
     @Override
-    public void loginDone(boolean success) {
+    public void loginDone(boolean success, String errorMessage) {
         if (success) {
             Intent intent = new Intent(this, MeetingListActivity.class);
             startActivity(intent);
         } else {
-            Snackbar.make(findViewById(R.id.container_layout), R.string.login_fail, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.container_layout), errorMessage, Snackbar.LENGTH_SHORT).show();
         }
     }
 

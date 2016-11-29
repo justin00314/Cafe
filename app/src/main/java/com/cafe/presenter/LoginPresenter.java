@@ -9,7 +9,6 @@ import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.LoginContract;
 import com.cafe.data.account.LoginRequest;
 import com.cafe.data.account.LoginResponse;
-import com.cafe.data.base.ResultResponse;
 import com.cafe.model.login.BDKLoginBiz;
 
 import cz.msebera.android.httpclient.Header;
@@ -53,7 +52,7 @@ public class LoginPresenter extends MVPPresenter<LoginContract.View, LoginContra
             }
 
             @Override
-            public void onHandleFailure(String errorMsg) {
+            public void onHandleFailure(final String errorMsg) {
 
                 if (getView() != null) {
                     getView().dismissLoadingProgress();
@@ -61,7 +60,7 @@ public class LoginPresenter extends MVPPresenter<LoginContract.View, LoginContra
                     new Handler(mContext.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            getView().loginDone(false);
+                            getView().loginDone(false, errorMsg);
                         }
                     });
                 }
@@ -87,7 +86,7 @@ public class LoginPresenter extends MVPPresenter<LoginContract.View, LoginContra
                 new Handler(mContext.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        getView().loginDone(registerResult[0]);
+                        getView().loginDone(registerResult[0], "");
                     }
                 });
 

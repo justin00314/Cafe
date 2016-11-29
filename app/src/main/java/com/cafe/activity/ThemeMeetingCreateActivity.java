@@ -25,6 +25,7 @@ import com.cafe.data.meeting.CreateMeetingRequest;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingRoomInfo;
 import com.cafe.data.meeting.MeetingRoomListRequest;
+import com.cafe.data.meeting.MeetingType;
 import com.cafe.fragment.SublimePickerFragment;
 import com.cafe.presenter.ThemeMeetingCreatePresenter;
 import com.rey.material.widget.Spinner;
@@ -103,7 +104,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
             request.attendance = Integer.decode(mParticipantNumber.getText().toString()).intValue();
             request.startTime = mStartDate.getText().toString();
             request.endTime = mFinishDate.getText().toString();
-            request.type = MeetingInfo.TYPE_THEME;
+            request.type = MeetingType.THEME.getId();
 
             MeetingRoomInfo meetingRoom = (MeetingRoomInfo) mLocationSpinner.getSelectedItem();
             request.meetingRoomId = meetingRoom.id;
