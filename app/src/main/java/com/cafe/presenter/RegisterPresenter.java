@@ -2,7 +2,6 @@ package com.cafe.presenter;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 
 import com.cafe.R;
 import com.cafe.common.mvp.MVPPresenter;
@@ -13,8 +12,6 @@ import com.cafe.data.base.ResultResponse;
 import com.cafe.model.register.BDKRegisterBiz;
 
 import org.justin.media.CameraManager;
-
-import java.lang.ref.WeakReference;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -57,7 +54,7 @@ public class RegisterPresenter extends MVPPresenter<RegisterContract.View, Regis
             }
 
             @Override
-            public void onHandleFailure(String errorMsg) {
+            public void onHandleFailure(final String errorMsg) {
 
                 if (getView() != null) {
                     getView().dismissLoadingProgress();
@@ -65,7 +62,7 @@ public class RegisterPresenter extends MVPPresenter<RegisterContract.View, Regis
                     new Handler(mContext.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            getView().registerDone(false);
+                            getView().registerDone(false, errorMsg);
                         }
                     });
                 }
@@ -88,7 +85,7 @@ public class RegisterPresenter extends MVPPresenter<RegisterContract.View, Regis
                 new Handler(mContext.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        getView().registerDone(registerResult[0]);
+                        getView().registerDone(registerResult[0], "");
                     }
                 });
 

@@ -1,5 +1,6 @@
 package com.cafe.common.net;
 
+import com.cafe.data.base.ErrorMessageResponse;
 import com.cafe.data.base.ResponseData;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -55,8 +56,18 @@ public abstract class JsonHttpResponseHandler<T extends ResponseData> extends Te
 		}
 		if (StringUtils.parseInt(data.desc.result_code) != ResultCode.SUCCESS) {
 			LogUtils.i(TAG, "----返回数据desc.result_code不为success----");
+
+			String msg = "返回数据desc.result_code不为success";
+
+			ErrorMessageResponse error = JsonUtils.getInstance().deserializeToObj(responseString,
+					ErrorMessageResponse.class);
+
+			if (error != null && error.data.message != null) {
+				msg = error.data.message;
+			}
+
 //			ToastUtils.getInstance().showToast(context, context.getString(R.string.request_failure));
-			onHandleFailure("返回数据desc.result_code不为success");
+			onHandleFailure(msg);
 			return;
 		}
 		if (data.data == null) {
