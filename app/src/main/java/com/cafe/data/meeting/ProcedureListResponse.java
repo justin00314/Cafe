@@ -1,5 +1,6 @@
 package com.cafe.data.meeting;
 
+import com.cafe.data.base.ResponseData;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * 502953057@qq.com
  */
 
-public class ProcedureListResponse {
+public class ProcedureListResponse extends ResponseData<ProcedureListResponse.ProcedureListResult> {
 
 	public class ProcedureListResult {
 

@@ -165,8 +165,6 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		// 加入item动画效果
 		SlideInDownAnimator animator = new SlideInDownAnimator();
 		animator.setAddDuration(500);
-//		DefaultAnimator animator = new DefaultAnimator();
-//		animator.setAddDuration(500);
 
 		animator.setInterpolator(new BounceInterpolator());
 		meetingListRv.setItemAnimator(animator);

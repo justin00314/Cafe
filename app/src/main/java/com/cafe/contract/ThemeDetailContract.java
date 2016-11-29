@@ -3,8 +3,13 @@ package com.cafe.contract;
 import com.cafe.common.mvp.base.BaseModel;
 import com.cafe.common.mvp.base.BasePresenter;
 import com.cafe.common.mvp.base.BaseView;
+import com.cafe.data.account.UserInfo;
+import com.cafe.data.meeting.GetNowTalkerResponse;
 import com.cafe.data.meeting.MeetingUserInfo;
+import com.cafe.data.meeting.ProcedureInfo;
 import com.loopj.android.http.ResponseHandlerInterface;
+
+import java.util.List;
 
 /**
  * 主题会议详情接口协议类
@@ -16,10 +21,26 @@ public interface ThemeDetailContract {
 
 	interface View extends BaseView {
 
+
 		/**
-		 *  展示插话过程中的倒计时，这个时候正计时隐藏
+		 * 开始插话后刷新界面
 		 */
-		void showEpisode(boolean flag);
+		void refreshAfterStartEpisode();
+
+		/**
+		 * 结束插话后刷新界面
+		 */
+		void refreshAfterStopEpisode();
+
+		/**
+		 * 设置当前说话人
+		 */
+		void setNowTalker(GetNowTalkerResponse.GetNowTalkerResult result);
+
+		/**
+		 * 加载会议说话列表
+		 */
+		void loadProcedureList(List<ProcedureInfo> procedureInfos);
 
 	}
 
@@ -29,6 +50,7 @@ public interface ThemeDetailContract {
 		 * 获取当前说话人
 		 */
 		void getNowTalker(MeetingUserInfo info);
+
 		/**
 		 * 获取会议过程列表
 		 */

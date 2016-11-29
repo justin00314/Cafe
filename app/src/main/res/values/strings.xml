@@ -23,6 +23,16 @@
 	<string name="test_stop_service">停止采集，上传数据服务</string>
 	<string name="audio_capture">会议进行中…</string>
 
+	<string name="speak_normal">▪ 正常</string>
+	<string name="speak_over_time">▪ 超时</string>
+	<string name="speak_theme">发言</string>
+	<string name="speak_episode">插嘴</string>
+	<string name="speak_duration_ms" formatted="false">%d′%d″</string>
+	<string name="speak_duration_s" formatted="false">%d″</string>
+
+	<string name="prompt_talking">正在发言中…</string>
+	<string name="prompt_episode">正在插嘴中…</string>
+
 	<string name="prompt_no_network">没有网络，请重试</string>
 	<string name="prompt_logout_failure">登出失败，请重试</string>
 	<string name="prompt_loading_failure">加载失败，请重试</string>

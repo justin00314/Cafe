@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--会议过程列表listitem-->
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:paddingStart="16dp">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="5dp"
+		android:layout_marginTop="5dp"
+		android:orientation="horizontal">
+
+		<de.hdodenhof.circleimageview.CircleImageView
+			android:id="@+id/talker_portrait_civ"
+			android:layout_width="50dp"
+			android:layout_height="50dp"
+			android:src="@mipmap/talker_default"/>
+
+		<TextView
+			android:id="@+id/speaker_name_tv"
+			style="@style/TextNormal.Light"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="10dp"/>
+		<TextView
+			android:id="@+id/speak_type_tv"
+			style="@style/TextLittle.Light"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="10dp"/>
+
+		<TextView
+			android:id="@+id/speak_duration_tv"
+			style="@style/TextLittle.Light"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="30dp"/>
+
+		<TextView
+			android:id="@+id/speak_state_tv"
+			style="@style/TextLittle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="30dp"/>
+	</LinearLayout>
+
+	<ImageView
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:src="@color/procedure_divider"
+		tools:ignore="contentDescription"/>
+
+</LinearLayout>

@@ -10,7 +10,10 @@ import com.cafe.data.account.LogUserRequest;
 import com.cafe.data.meeting.GetNowTalkerRequest;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.data.meeting.ProcedureListRequest;
+import com.cafe.data.meeting.StartEpisodeRequest;
 import com.cafe.data.meeting.StartThemeRequest;
+import com.cafe.data.meeting.StopEpisodeRequest;
+import com.cafe.data.meeting.StopThemeRequest;
 import com.loopj.android.http.ResponseHandlerInterface;
 
 /**
@@ -52,16 +55,25 @@ public class ThemeDetailBiz implements ThemeDetailContract.Model {
 
 	@Override
 	public void stopTheme(MeetingUserInfo info, ResponseHandlerInterface response) {
-
+		StopThemeRequest data = new StopThemeRequest();
+		data.id = info.id;
+		data.time = CommonUtils.getCurrentTime();
+		HttpManager.postJson(context, UrlName.PROCEDURE_STOP_TOPIC.getUrl(), data, response);
 	}
 
 	@Override
 	public void startEpisode(MeetingUserInfo info, ResponseHandlerInterface response) {
-
+		StartEpisodeRequest data = new StartEpisodeRequest();
+		data.id = info.id;
+		data.time = CommonUtils.getCurrentTime();
+		HttpManager.postJson(context, UrlName.PROCEDURE_START_EPISODE.getUrl(), data, response);
 	}
 
 	@Override
 	public void stopEpisode(MeetingUserInfo info, ResponseHandlerInterface response) {
-
+		StopEpisodeRequest data = new StopEpisodeRequest();
+		data.id = info.id;
+		data.time = CommonUtils.getCurrentTime();
+		HttpManager.postJson(context, UrlName.PROCEDURE_STOP_EPISODE.getUrl(), data, response);
 	}
 }

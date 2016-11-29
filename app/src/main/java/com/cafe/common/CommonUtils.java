@@ -1,8 +1,13 @@
 package com.cafe.common;
 
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
+import com.cafe.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+
 import org.justin.utils.common.LogUtils;
+import org.justin.utils.common.ResourcesUtils;
 import org.justin.utils.common.StringUtils;
 import org.justin.utils.common.TimeUtils;
 
@@ -163,4 +168,19 @@ public class CommonUtils {
 	public static int roundInt(float num) {
 		return (int) (num + 0.5);
 	}
+
+
+	public static DisplayImageOptions getPortraitOptions(){
+		Drawable defaultDrawable = ResourcesUtils.getDrawable(R.mipmap.talker_default);
+		DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
+		builder.showImageOnLoading(defaultDrawable);
+		builder.showImageForEmptyUri(defaultDrawable);
+		builder.showImageOnFail(defaultDrawable);
+		// 设置是否缓存在内存中
+		builder.cacheInMemory(true);
+		// 设置是否缓存在磁盘中
+		builder.cacheOnDisk(true);
+		return builder.build();
+	}
+
 }
