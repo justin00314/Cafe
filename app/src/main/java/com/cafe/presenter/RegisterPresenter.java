@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
+import com.cafe.R;
 import com.cafe.common.mvp.MVPPresenter;
 import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.RegisterContract;
@@ -36,13 +37,25 @@ public class RegisterPresenter extends MVPPresenter<RegisterContract.View, Regis
 
     @Override
     public void register(RegisterRequest request, String headFilePath) {
-        getView().showLoadingProgress();
+        getView().showLoadingProgress(mContext.getString(R.string.submitting));
 
         RegisterContract.Model model = getModel();
 
 
 
         model.register(request, headFilePath, new JsonHttpResponseHandler<ResultResponse>() {
+
+            @Override
+            public void onCancel() {
+                super.onCancel();
+
+                if (getView() == null)
+                    return;
+
+                getView().dismissLoadingProgress();
+                getView().showNoNetworkPrompt();
+            }
+
             @Override
             public void onHandleFailure(String errorMsg) {
 
@@ -64,8 +77,6 @@ public class RegisterPresenter extends MVPPresenter<RegisterContract.View, Regis
                     // do nothing
                     return;
                 }
-
-                getView().dismissLoadingProgress();
 
                 final boolean[] registerResult = {false};
 

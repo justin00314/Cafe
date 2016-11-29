@@ -3,12 +3,19 @@ package com.cafe.presenter;
 import android.content.Context;
 import android.os.Handler;
 
+import com.cafe.R;
 import com.cafe.common.mvp.MVPPresenter;
 import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.ThemeMeetingCreateContract;
 import com.cafe.data.meeting.CreateMeetingRequest;
 import com.cafe.data.meeting.CreateMeetingResponse;
+import com.cafe.data.meeting.MeetingListResponse;
+import com.cafe.data.meeting.MeetingRoomInfo;
+import com.cafe.data.meeting.MeetingRoomListRequest;
+import com.cafe.data.meeting.MeetingRoomListResponse;
 import com.cafe.model.meeting.BDKMeetingCreateBiz;
+
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -35,9 +42,20 @@ public class ThemeMeetingCreatePresenter extends MVPPresenter<ThemeMeetingCreate
 
     @Override
     public void createNewMeeting(CreateMeetingRequest request) {
-        getView().showLoadingProgress();
+        getView().showLoadingProgress(mContext.getString(R.string.submitting));
 
         getModel().createNewMeeting(request, new JsonHttpResponseHandler<CreateMeetingResponse>() {
+            @Override
+            public void onCancel() {
+                super.onCancel();
+
+                if (getView() == null)
+                    return;
+
+                getView().dismissLoadingProgress();
+                getView().showNoNetworkPrompt();
+            }
+
             @Override
             public void onHandleSuccess(int statusCode, Header[] headers, final CreateMeetingResponse jsonObj) {
                 if (getView() == null) {
@@ -62,6 +80,64 @@ public class ThemeMeetingCreatePresenter extends MVPPresenter<ThemeMeetingCreate
                         getView().submitDone(registerResult[0], meetingId[0]);
                     }
                 });
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                if (getView() != null) {
+                    getView().dismissLoadingProgress();
+
+                    new Handler(mContext.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            getView().submitDone(false, 0);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    @Override
+    public void findMeetingRooms(MeetingRoomListRequest request) {
+        getModel().findMeetingRooms(request, new JsonHttpResponseHandler<MeetingRoomListResponse>() {
+
+            @Override
+            public void onCancel() {
+                super.onCancel();
+
+                if (getView() == null)
+                    return;
+
+                getView().dismissLoadingProgress();
+                getView().showNoNetworkPrompt();
+            }
+
+            @Override
+            public void onHandleSuccess(int statusCode, Header[] headers, final MeetingRoomListResponse jsonObj) {
+                if (getView() == null) {
+                    // do nothing
+                    return;
+                }
+
+                getView().dismissLoadingProgress();
+
+
+                if (jsonObj != null && jsonObj.data != null) {
+                    new Handler(mContext.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            getView().findedMeetingRooms(jsonObj.data.meetingRoomInfos);
+                        }
+                    });
+                } else {
+                    new Handler(mContext.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            getView().findedMeetingRooms(null);
+                        }
+                    });
+                }
             }
 
             @Override

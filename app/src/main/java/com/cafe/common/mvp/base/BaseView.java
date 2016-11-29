@@ -11,8 +11,9 @@ import com.aiviews.dialog.OnClickDialogBtnListener;
 public interface BaseView {
 	/**
 	 * 显示加载进度条
-	 */
-	void showLoadingProgress();
+	 * @param content 进度条内容，如果为null则显示默认内容
+     */
+	void showLoadingProgress(String content);
 
 	/**
 	 * 隐藏加载进度条
@@ -24,5 +25,5 @@ public interface BaseView {
 	 */
 	void showAlertDialog(AlertDialogInfo info, OnClickDialogBtnListener<Void> listener);
 
-
+	void showNoNetworkPrompt();
 }

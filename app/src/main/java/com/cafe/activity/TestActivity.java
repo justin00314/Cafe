@@ -113,7 +113,7 @@ public class TestActivity extends MVPActivity<TestContract.View,
 	}
 
 	@Override
-	public void showLoadingProgress() {
+	public void showLoadingProgress(String message) {
 
 	}
 

@@ -23,6 +23,8 @@ import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.ThemeMeetingCreateContract;
 import com.cafe.data.meeting.CreateMeetingRequest;
 import com.cafe.data.meeting.MeetingInfo;
+import com.cafe.data.meeting.MeetingRoomInfo;
+import com.cafe.data.meeting.MeetingRoomListRequest;
 import com.cafe.fragment.SublimePickerFragment;
 import com.cafe.presenter.ThemeMeetingCreatePresenter;
 import com.rey.material.widget.Spinner;
@@ -49,7 +51,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
     private Calendar mStartCalendar;
     private Calendar mFinishCalendar;
 
-//    private Spinner mOrganizerSpinner;
+    //    private Spinner mOrganizerSpinner;
     private Spinner mLocationSpinner;
 
     private int mDateType = DATE_TYPE_START;
@@ -95,15 +97,33 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
     }
 
     public void submit(View v) {
-        CreateMeetingRequest request = new CreateMeetingRequest();
-        request.attendance = Integer.decode(mParticipantNumber.getText().toString()).intValue() ;
-        request.startTime = mStartDate.getText().toString();
-        request.endTime = mFinishDate.getText().toString();
-        request.type = MeetingInfo.TYPE_THEME;
-        request.meetingRoomId = "1";
-        request.name = mMeetingTheme.getText().toString();
 
-        getPresenter().createNewMeeting(request);
+        if (validate()) {
+            CreateMeetingRequest request = new CreateMeetingRequest();
+            request.attendance = Integer.decode(mParticipantNumber.getText().toString()).intValue();
+            request.startTime = mStartDate.getText().toString();
+            request.endTime = mFinishDate.getText().toString();
+            request.type = MeetingInfo.TYPE_THEME;
+
+            MeetingRoomInfo meetingRoom = (MeetingRoomInfo) mLocationSpinner.getSelectedItem();
+            request.meetingRoomId = meetingRoom.id;
+            request.name = mMeetingTheme.getText().toString();
+
+            getPresenter().createNewMeeting(request);
+        }
+
+    }
+
+    private boolean validate() {
+        MeetingRoomInfo meetingRoom = (MeetingRoomInfo) mLocationSpinner.getSelectedItem();
+
+        if (meetingRoom == null) {
+            Snackbar.make(findViewById(R.id.coordinator_layout), getString(R.string.meetingroom_empty),
+                    Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
 
@@ -186,6 +206,16 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
         }
     }
 
+    @Override
+    public void findedMeetingRooms(List<MeetingRoomInfo> rooms) {
+        if (rooms != null && rooms.size() != 0) {
+            LocationAdapter locationAdapter = new LocationAdapter(this, rooms);
+
+            mLocationSpinner.setAdapter(locationAdapter);
+            locationAdapter.notifyDataSetChanged();
+        }
+    }
+
     private void loadData() {
 //        List<String> organizerData = new ArrayList<>();
 //        organizerData.add("Justin");
@@ -205,22 +235,14 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
 //        });
 
 
-        List<String> locationData = new ArrayList<>();
-        locationData.add("Chengdu");
-        locationData.add("Beijing");
-
-        LocationAdapter locationAdapter = new LocationAdapter(this, locationData);
-
-        mLocationSpinner.setAdapter(locationAdapter);
-        locationAdapter.notifyDataSetChanged();
-
-        mLocationSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(Spinner parent, View view, int position, long id) {
-                String locationName = (String) parent.getAdapter().getItem(position);
-                Toast.makeText(ThemeMeetingCreateActivity.this, locationName, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        List<String> locationData = new ArrayList<>();
+//        locationData.add("Chengdu");
+//        locationData.add("Beijing");
+//
+//        LocationAdapter locationAdapter = new LocationAdapter(this, locationData);
+//
+//        mLocationSpinner.setAdapter(locationAdapter);
+//        locationAdapter.notifyDataSetChanged();
     }
 
     private void showDateTimePicker() {
@@ -275,6 +297,13 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
         date.set(Calendar.HOUR_OF_DAY, hourOfDay);
         date.set(Calendar.MINUTE, minute);
 
+        if (mFinishCalendar != null) {
+            if (date.after(mFinishCalendar)) {
+                Toast.makeText(this, R.string.prompt_start_date_wrong, Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
         mStartCalendar = selectedDate.getFirstDate();
         mStartCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         mStartCalendar.set(Calendar.MINUTE, minute);
@@ -282,6 +311,8 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
         SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
         String datetime = fmt.format(mStartCalendar.getTime());
         mStartDate.setText(datetime);
+
+        findMeetingRooms();
     }
 
     private void handleFinishDateSelecte(SelectedDate selectedDate,
@@ -290,19 +321,30 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
         date.set(Calendar.HOUR_OF_DAY, hourOfDay);
         date.set(Calendar.MINUTE, minute);
 
-        if (date.after(mStartCalendar)) {
-            mFinishCalendar = date;
-            SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
-            String datetime = fmt.format(date.getTime());
-            mFinishDate.setText(datetime);
-        } else {
+        if (date.before(mStartCalendar)) {
             Toast.makeText(this, R.string.prompt_finish_date_wrong, Toast.LENGTH_LONG).show();
+            return;
         }
 
+        mFinishCalendar = date;
+        SimpleDateFormat fmt = new SimpleDateFormat(DATE_FORMAT);
+        String datetime = fmt.format(date.getTime());
+        mFinishDate.setText(datetime);
 
+        findMeetingRooms();
     }
 
-	private class OrganizerAdapter extends BaseAdapter {
+    private void findMeetingRooms() {
+        if (mStartCalendar != null && mFinishCalendar != null) {
+            MeetingRoomListRequest request = new MeetingRoomListRequest();
+            request.startTime = mStartDate.getText().toString();
+            request.endTime = mFinishDate.getText().toString();
+
+            getPresenter().findMeetingRooms(request);
+        }
+    }
+
+    private class OrganizerAdapter extends BaseAdapter {
 
         private List<String> mmData;
         private Context mmContext;
@@ -346,10 +388,10 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
 
     private class LocationAdapter extends BaseAdapter {
 
-        private List<String> mmData;
+        private List<MeetingRoomInfo> mmData;
         private Context mmContext;
 
-        public LocationAdapter(Context context, List<String> organizers) {
+        public LocationAdapter(Context context, List<MeetingRoomInfo> organizers) {
 
             mmContext = context;
 
@@ -379,7 +421,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
                     parent, false);
 
             TextView name = (TextView) convertView.findViewById(R.id.organizer_name);
-            name.setText(mmData.get(position));
+            name.setText(mmData.get(position).name);
 
             return convertView;
         }

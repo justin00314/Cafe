@@ -28,7 +28,7 @@ import cz.msebera.android.httpclient.protocol.HTTP;
 public class HttpManager {
 
 	public static final String RSA = "rsa";
-	private static final int TIME_OUT = 5 * 1000;
+	private static final int TIME_OUT = 15 * 1000;
 	private final static String TAG = HttpManager.class.getSimpleName();
 	public static String ACCESS_TOKEN = "access-token";
 	public static String USER_ID = "100000001872";

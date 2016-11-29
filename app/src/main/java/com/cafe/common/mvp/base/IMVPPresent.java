@@ -8,6 +8,8 @@ public interface IMVPPresent<V extends BaseView, M extends BaseModel> {
 
     M initModel();
 
+    void setModel(M model);
+
     /**
      * 初始化Presenter
      */
