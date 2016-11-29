@@ -9,7 +9,6 @@ import org.justin.utils.common.TimeUtils;
 import java.util.Date;
 
 /**
- *
  * 通用工具类
  * Created by Justin Z on 2016/11/2.
  * 502953057@qq.com
@@ -78,6 +77,76 @@ public class CommonUtils {
 		String day = currentTimeStr.substring(8, 10);
 //		LogUtils.i(TAG, "当前日期：" + day);
 		return StringUtils.parseInt(day);
+	}
+
+	/**
+	 * 获取秒的小时位，如果大于99则返回99
+	 *
+	 * @param time 秒
+	 * @return 返回秒的小时位
+	 */
+	public static int getHour(long time) {
+		int hour = (int) (time / 3600);
+		if (hour > 99) hour = 99;
+		return hour;
+	}
+
+	/**
+	 * 获取秒的分钟位
+	 *
+	 * @param time 秒
+	 * @return 返回秒的分钟位
+	 */
+	public static int getMinute(long time) {
+		int hourRemainder = (int) (time % 3600);
+		return hourRemainder / 60;
+	}
+
+	public static String getNumberString(int num){
+		String str = num + "";
+		switch(num){
+			case 0:
+				str = "00";
+				break;
+			case 1:
+				str = "01";
+				break;
+			case 2:
+				str = "02";
+				break;
+			case 3:
+				str = "03";
+				break;
+			case 4:
+				str = "04";
+				break;
+			case 5:
+				str = "05";
+				break;
+			case 6:
+				str = "06";
+				break;
+			case 7:
+				str = "07";
+				break;
+			case 8:
+				str = "08";
+				break;
+			case 9:
+				str = "09";
+				break;
+		}
+		return str;
+	}
+
+	/**
+	 * 获取秒的秒位
+	 *
+	 * @param time 秒
+	 * @return 返回秒的秒位
+	 */
+	public static int getSecond(long time) {
+		return (int) (time % 60);
 	}
 
 	/**

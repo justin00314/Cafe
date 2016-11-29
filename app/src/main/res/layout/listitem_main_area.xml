@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--会议列表item主区域-->
 <RelativeLayout
+	android:id="@+id/main_area_rl"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"

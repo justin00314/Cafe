@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aiviews.textview.ImageTextButton;
@@ -86,6 +87,10 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 		stateProgress = context.getString(R.string.meeting_state_progress);
 		stateAppointment = context.getString(R.string.meeting_state_appointment);
 		stateHistory = context.getString(R.string.meeting_state_history);
+	}
+
+	public void setOnClickItemListener(OnClickItemListener onClickItemListener){
+		this.onClickItemListener = onClickItemListener;
 	}
 
 	/**
@@ -317,7 +322,13 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 					onClickQRCodeListener.onClick(meetingInfo);
 			}
 		});
-
+		holder.mainAreaRl.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(onClickItemListener != null)
+					onClickItemListener.onClick(meetingInfo);
+			}
+		});
 	}
 
 
@@ -326,6 +337,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	 */
 	static class ItemViewHolder extends RecyclerView.ViewHolder {
 		// 主区域
+		RelativeLayout mainAreaRl;
 		ImageView typeIv;
 		TextView nameTv;
 		TextView startTimeTv;
@@ -340,6 +352,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 
 		ItemViewHolder(View view) {
 			super(view);
+			mainAreaRl = (RelativeLayout) view.findViewById(R.id.main_area);
 			typeIv = (ImageView) view.findViewById(R.id.type_iv);
 			nameTv = (TextView) view.findViewById(R.id.name_tv);
 			startTimeTv = (TextView) view.findViewById(R.id.start_time_tv);

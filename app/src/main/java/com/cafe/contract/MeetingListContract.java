@@ -59,8 +59,10 @@ public interface MeetingListContract {
 		 */
 		void showQRcodeDialog(MeetingUserInfo meetingInfo);
 
-
-		void skipToMeetingDetailActivity();
+		/**
+		 * 跳转到会议详情界面
+		 */
+		void skipToMeetingDetailActivity(MeetingUserInfo info);
 
 		/**
 		 * 跳转到登录界面
@@ -81,6 +83,7 @@ public interface MeetingListContract {
 		 * 跳转到创建主题会议界面
 		 */
 		void skipToCreateMeetingActivity();
+
 	}
 
 	/**
@@ -160,6 +163,11 @@ public interface MeetingListContract {
 		 * 取消会议预约
 		 */
 		void cancelMeeting(MeetingUserInfo meetingInfo);
+
+		/**
+		 * 展示会议过程详情
+		 */
+		void showMeetingProcedure(MeetingUserInfo meetingInfo);
 
 
 	}

@@ -21,6 +21,7 @@ import com.cafe.data.meeting.MeetingListResponse;
 import com.cafe.data.meeting.MeetingState;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.data.meeting.QuitMeetingResponse;
+import com.cafe.data.meeting.StatusInfo;
 import com.cafe.model.meeting.MeetingListBiz;
 
 import org.justin.utils.common.ToastUtils;
@@ -532,6 +533,21 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	}
 
 	/**
+	 * 展示会议过程详情
+	 */
+	@Override
+	public void showMeetingProcedure(MeetingUserInfo meetingInfo) {
+		MeetingListContract.View view = getView();
+		if (view == null) return;
+
+		if (meetingInfo.state != MeetingState.PROGRESS) {
+			//提示
+			return;
+		}
+		view.skipToMeetingDetailActivity(meetingInfo);
+	}
+
+	/**
 	 * 执行取消预约会议任务
 	 */
 	private void doCancel(final MeetingUserInfo meetingInfo, MeetingListContract.View view) {
@@ -573,7 +589,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_cancel_success);
 			view.refreshAfterCancel(info);
-		}else {
+		} else {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_cancel_failure);
 		}
 	}

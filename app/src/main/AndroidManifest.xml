@@ -120,6 +120,12 @@
 		          android:theme="@style/AppTheme.NoActionBar"
 		          android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
 
+		<activity android:name=".activity.ThemeDetailActivity"
+		          android:configChanges="orientation|screenLayout|keyboardHidden|screenSize|navigation"
+		          android:screenOrientation="portrait"
+		          android:theme="@style/AppTheme.NoActionBar"
+		          android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
 		<activity android:name=".activity.ThemeMeetingCreateActivity"
 		          android:configChanges="orientation|screenLayout|keyboardHidden|screenSize|navigation"
 		          android:screenOrientation="portrait"

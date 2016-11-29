@@ -7,7 +7,7 @@ package com.cafe.common;
  */
 public interface IntentExtra {
 
-	String PIG_INFO = "com.ai2020lab.pigadopted.model.pig.PigInfo";
+	String MEETING_USER_INFO = "com.cafe.data.meeting.MeetingUserInfo";
 
 
 

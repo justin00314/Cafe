@@ -30,6 +30,10 @@
 	</style>
 
 	<!--这里定义字体样式，根据不同的项目自行配置-->
+	<!--超大号字体-->
+	<style name="TextLarge1" parent="TextAppearance.AppCompat.Display1">
+		<item name="android:textColor">@color/aiview_text_normal</item>
+	</style>
 	<!--大号字体-->
 	<style name="TextLarge" parent="TextAppearance.AppCompat.Title">
 		<item name="android:textColor">@color/aiview_text_normal</item>

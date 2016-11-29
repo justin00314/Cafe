@@ -22,6 +22,7 @@ import com.aiviews.toolbar.ToolbarActivity;
 import com.cafe.R;
 import com.cafe.adapter.MeetingListRvAdapter;
 import com.cafe.common.ImageLoaderManager;
+import com.cafe.common.IntentExtra;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.MeetingListContract;
 import com.cafe.data.account.UserInfo;
@@ -169,6 +170,14 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 
 		animator.setInterpolator(new BounceInterpolator());
 		meetingListRv.setItemAnimator(animator);
+		// 点击显示详情
+		meetingListRvAdapter.setOnClickItemListener(new MeetingListRvAdapter.OnClickItemListener() {
+
+			@Override
+			public void onClick(MeetingUserInfo info) {
+				getPresenter().showMeetingProcedure(info);
+			}
+		});
 		// 点击显示二维码
 		meetingListRvAdapter.setOnClickQRCodeListener(new MeetingListRvAdapter.OnClickItemListener() {
 			@Override
@@ -334,8 +343,10 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 * 跳转到会议详情界面
 	 */
 	@Override
-	public void skipToMeetingDetailActivity() {
-
+	public void skipToMeetingDetailActivity(MeetingUserInfo info) {
+		Intent intent = new Intent(this, ThemeDetailActivity.class);
+		intent.putExtra(IntentExtra.MEETING_USER_INFO, info);
+		startActivity(intent);
 	}
 
 	/**
