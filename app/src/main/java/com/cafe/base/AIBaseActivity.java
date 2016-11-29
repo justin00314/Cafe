@@ -90,13 +90,17 @@ public class AIBaseActivity extends ToolbarActivity {
 	 * @param content 加载提示
 	 */
 	public void showLoading(String content) {
-		loadingDialog = LoadingDialog.newInstance(content);
-		Fragment fragment = getFragmentManager().findFragmentByTag(TAG_DIALOG_LOADING);
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		if (fragment != null)
-			ft.remove(fragment);
-		ft.addToBackStack(null);// 加入回退栈
-		loadingDialog.show(ft, TAG_DIALOG_LOADING);
+		if (loadingDialog == null) {
+			loadingDialog = LoadingDialog.newInstance(content);
+			Fragment fragment = getFragmentManager().findFragmentByTag(TAG_DIALOG_LOADING);
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			if (fragment != null)
+				ft.remove(fragment);
+			ft.addToBackStack(null);// 加入回退栈
+			loadingDialog.show(ft, TAG_DIALOG_LOADING);
+		} else {
+			loadingDialog.setMessage(content);
+		}
 	}
 
 	/**

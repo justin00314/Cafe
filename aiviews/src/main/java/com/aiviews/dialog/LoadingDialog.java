@@ -79,6 +79,11 @@ public class LoadingDialog extends DialogFragment {
 		return dialog;
 	}
 
+	public void setMessage(String message) {
+		msg = message;
+		loadingTv.setText(msg);
+	}
+
 	/**
 	 * 创建Dialog
 	 */

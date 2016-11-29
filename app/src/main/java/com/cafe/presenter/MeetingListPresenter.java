@@ -104,7 +104,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	public void loadMeetingList() {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
-		view.showLoadingProgress();
+		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.loadMeetingList(new JsonHttpResponseHandler<MeetingListResponse>() {
@@ -181,7 +181,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	 * 执行登出任务
 	 */
 	private void doLogout(MeetingListContract.View view) {
-		view.showLoadingProgress();
+		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.logout(new JsonHttpResponseHandler<LogoutResponse>() {
@@ -314,7 +314,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	 * 执行加入会议任务
 	 */
 	private void doQuit(final MeetingUserInfo meetingInfo, MeetingListContract.View view) {
-		view.showLoadingProgress();
+		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.quitMeeting(meetingInfo, new JsonHttpResponseHandler<QuitMeetingResponse>() {
@@ -387,7 +387,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	 * 执行加入会议任务
 	 */
 	private void doDismiss(MeetingUserInfo meetingInfo, MeetingListContract.View view) {
-		view.showLoadingProgress();
+		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.dismissMeeting(meetingInfo, new JsonHttpResponseHandler<DismissMeetingResponse>() {
@@ -458,7 +458,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	 * 执行加入会议任务
 	 */
 	private void doJoin(final MeetingUserInfo meetingInfo, MeetingListContract.View view) {
-		view.showLoadingProgress();
+		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.joinMeeting(meetingInfo, new JsonHttpResponseHandler<JoinMeetingResponse>() {
@@ -535,7 +535,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	 * 执行取消预约会议任务
 	 */
 	private void doCancel(final MeetingUserInfo meetingInfo, MeetingListContract.View view) {
-		view.showLoadingProgress();
+		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.cancelMeeting(meetingInfo, new JsonHttpResponseHandler<CancelMeetingResponse>() {
@@ -585,7 +585,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	// 测试会议列表
 	@Override
 	public void loadMeetingListTest() {
-		getView().showLoadingProgress();
+		getView().showLoadingProgress(null);
 		ThreadUtils.runOnUIThread(new Runnable() {
 			@Override
 			public void run() {

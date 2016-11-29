@@ -9,6 +9,9 @@ import com.cafe.base.AIBaseActivity;
 import com.cafe.common.mvp.base.BaseView;
 import com.cafe.common.mvp.base.IMVPPresent;
 
+import org.justin.utils.common.ToastUtils;
+import org.justin.utils.system.NetworkUtils;
+
 /**
  * Created by Justin Z on 2016/10/14.
  * 502953057@qq.com
@@ -54,8 +57,13 @@ public abstract class MVPActivity<V extends BaseView, P extends IMVPPresent>
 	}
 
 	@Override
-	public void showLoadingProgress() {
-		showLoading(getString(R.string.prompt_loading));
+	public void showLoadingProgress(String content) {
+		if (content == null) {
+			showLoading(getString(R.string.prompt_loading));
+		} else {
+			showLoading(content);
+		}
+
 	}
 
 	@Override
@@ -67,5 +75,9 @@ public abstract class MVPActivity<V extends BaseView, P extends IMVPPresent>
 	public void showAlertDialog(AlertDialogInfo info, OnClickDialogBtnListener<Void> listener) {
 		showAlertDialogFg(info, listener);
 	}
-	
+
+	@Override
+	public void showNoNetworkPrompt() {
+		ToastUtils.getInstance().showToast(this, R.string.prompt_no_network);
+	}
 }

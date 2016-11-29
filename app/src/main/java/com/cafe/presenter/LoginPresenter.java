@@ -3,6 +3,7 @@ package com.cafe.presenter;
 import android.content.Context;
 import android.os.Handler;
 
+import com.cafe.R;
 import com.cafe.common.mvp.MVPPresenter;
 import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.LoginContract;
@@ -36,9 +37,21 @@ public class LoginPresenter extends MVPPresenter<LoginContract.View, LoginContra
 
     @Override
     public void login(LoginRequest request) {
-        getView().showLoadingProgress();
+        getView().showLoadingProgress(mContext.getString(R.string.submitting));
 
         getModel().login(request, new JsonHttpResponseHandler<LoginResponse>() {
+
+            @Override
+            public void onCancel() {
+                super.onCancel();
+
+                if (getView() == null)
+                    return;
+
+                getView().dismissLoadingProgress();
+                getView().showNoNetworkPrompt();
+            }
+
             @Override
             public void onHandleFailure(String errorMsg) {
 

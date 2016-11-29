@@ -36,7 +36,7 @@ public class CreateMeetingRequest implements Serializable {
      * 会议室id
      */
     @SerializedName("meeting_room_id")
-    public String meetingRoomId;
+    public int meetingRoomId;
     /**
      * 参会人数
      */

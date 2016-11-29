@@ -460,7 +460,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
     private class SavePhotoCallback implements SavingHeadPhotoTask.HeadPhotoSavedListener {
         @Override
         public void savedBefore() {
-            showLoadingProgress();
+            showLoadingProgress(null);
         }
 
         @Override
