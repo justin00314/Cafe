@@ -373,10 +373,10 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
 
     @Override
-    public void registerDone(boolean success) {
+    public void registerDone(boolean success, String errorMessage) {
         if (!success) {
             dismissLoadingProgress();
-            Snackbar.make(findViewById(R.id.container_layout), R.string.register_fail, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.container_layout), errorMessage, Snackbar.LENGTH_SHORT).show();
         } else {
             LoginRequest request = new LoginRequest();
             request.password = mPassword.getText().toString();
@@ -416,7 +416,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
     }
 
     @Override
-    public void loginDone(boolean success) {
+    public void loginDone(boolean success, String errorMessage) {
         if (success) {
             Intent intent = new Intent(this, MeetingListActivity.class);
             startActivity(intent);

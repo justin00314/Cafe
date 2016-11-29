@@ -19,7 +19,7 @@ public interface LoginContract {
      * View的接口方法，由Activity去实现
      */
     interface View extends BaseView {
-        void loginDone(boolean success);
+        void loginDone(boolean success, String errorMessage);
     }
 
     /**

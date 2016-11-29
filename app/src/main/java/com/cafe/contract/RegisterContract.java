@@ -17,7 +17,7 @@ public interface RegisterContract {
      * View的接口方法，由Activity去实现
      */
     interface View extends BaseView {
-        void registerDone(boolean success);
+        void registerDone(boolean success, String errorMessage);
         void initCameraSurface();
         void loadCameraFail();
     }
