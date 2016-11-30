@@ -80,6 +80,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	private RecyclerView procedureListRv;
 
 	private ProcedureListRvAdapter procedureListRvAdapter;
+	private LinearLayoutManager layoutManager;
 
 	private MeetingUserInfo meetingInfo;
 
@@ -159,9 +160,10 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	 */
 	private void setProcedureListRv() {
 		procedureListRvAdapter = new ProcedureListRvAdapter(this);
-		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+		layoutManager = new LinearLayoutManager(this);
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		procedureListRv.setLayoutManager(layoutManager);
+		procedureListRv.setAdapter(procedureListRvAdapter);
 		// 加入item动画效果
 		SlideInDownAnimator animator = new SlideInDownAnimator();
 		animator.setAddDuration(500);
@@ -299,6 +301,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			// 将数据插入
 			LogUtils.i(TAG, "说话详情数据插入-->" + procedureInfos.get(i).userName);
 			procedureListRvAdapter.add(i, procedureInfos.get(i));
+			layoutManager.scrollToPosition(0);
 		}
 	}
 }
