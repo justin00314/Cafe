@@ -11,10 +11,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cafe.R;
+import com.cafe.common.TextInputValidater;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.MeetingSearchContract;
 import com.cafe.data.meeting.MeetingInfo;
-import com.cafe.presenter.MeetingSearchMockPresenter;
+import com.cafe.data.meeting.MeetingUserInfo;
+import com.cafe.presenter.MeetingSearchPresenter;
 
 import org.justin.utils.common.ViewUtils;
 
@@ -25,6 +27,7 @@ public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.Vie
 
     private RecyclerView mMeetintsRv;
     private EditText mMeetintId;
+    private TextInputValidater mTextValidater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,18 +39,34 @@ public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.Vie
 
     @Override
     public MeetingSearchContract.Presenter initPresenter() {
-        return new MeetingSearchMockPresenter();
+        return new MeetingSearchPresenter(this);
     }
 
 
 
     @Override
-    public void showSearchResults(List<MeetingInfo> meetings) {
-        mMeetintsRv.setAdapter(new SearchMeetingListAdapter(meetings));
+    public void showSearchResults(boolean result, List<MeetingInfo> meetings) {
+        if (result) {
+            if (meetings != null && meetings.size() > 0) {
+                for (MeetingInfo meeting: meetings) {
+                    meeting.id = Integer.parseInt(mMeetintId.getText().toString()) ;
+                }
+                mMeetintsRv.setAdapter(new SearchMeetingListAdapter(meetings));
+            } else {
+                Toast.makeText(this, R.string.query_no_meeting, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, R.string.query_fail, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void search(View v) {
-        getPresenter().search("");
+        if (validate()) {
+            String idStr = mMeetintId.getText().toString();
+            getPresenter().search(Integer.parseInt(idStr));
+        }
+
     }
 
     private void setupUI() {
@@ -57,6 +76,26 @@ public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.Vie
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mMeetintsRv.setLayoutManager(layoutManager);
 
+        mMeetintId = (EditText) findViewById(R.id.editor_id);
+
+        mTextValidater = new TextInputValidater();
+        mTextValidater.putValidateItem(mMeetintId, getString(R.string.prompt_need_meeting_id));
+    }
+
+    private boolean validate() {
+        if (mTextValidater.validate()) {
+            String idStr = mMeetintId.getText().toString();
+
+            try {
+                Integer.parseInt(idStr);
+                return true;
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, R.string.prompt_meeting_id_wrong, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+
+        return false;
     }
 
 	public static  class SearchMeetingListAdapter extends RecyclerView.Adapter<SearchMeetingListAdapter.ItemViewHolder> {
@@ -83,9 +122,9 @@ public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.Vie
             MeetingInfo meeting = mmMeetings.get(position);
 
             holder.themeName.setText(meeting.name);
-            holder.id.setText(meeting.id);
+            holder.id.setText("" + meeting.id);
             holder.date.setText(meeting.startTime);
-            holder.place.setText(meeting.meetingRoomId + "");
+            holder.place.setText(meeting.meetingRoomName);
         }
 
         class ItemViewHolder extends RecyclerView.ViewHolder {

@@ -3,6 +3,7 @@ package com.cafe.presenter;
 import com.cafe.common.mvp.MVPPresenter;
 import com.cafe.contract.MeetingSearchContract;
 import com.cafe.data.meeting.MeetingInfo;
+import com.cafe.data.meeting.MeetingUserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.Random;
 public class MeetingSearchMockPresenter extends MVPPresenter<MeetingSearchContract.View, MeetingSearchContract.Model>
         implements MeetingSearchContract.Presenter<MeetingSearchContract.View, MeetingSearchContract.Model> {
     @Override
-    public void search(String meetingId) {
+    public void search(int meetingId) {
         List<MeetingInfo> meetings = new ArrayList<>();
 
         for (int i = 0; i < 3; i++) {
@@ -28,7 +29,7 @@ public class MeetingSearchMockPresenter extends MVPPresenter<MeetingSearchContra
             meetings.add(meeting);
         }
 
-        getView().showSearchResults(meetings);
+        getView().showSearchResults(true, meetings);
     }
 
     @Override
