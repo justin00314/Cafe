@@ -1,20 +1,25 @@
 package com.cafe.activity;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aiviews.anim.AnimationImageLoadingListener;
 import com.aiviews.imageview.RoundImageView;
@@ -31,6 +36,8 @@ import com.cafe.fragment.QRCodeDialog;
 import com.cafe.presenter.MeetingListPresenter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import org.justin.utils.common.LogUtils;
 import org.justin.utils.common.ResourcesUtils;
@@ -39,6 +46,9 @@ import org.justin.utils.system.DisplayUtils;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * 会议列表界面
@@ -47,9 +57,12 @@ import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
  */
 
 public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
-		MeetingListPresenter> implements MeetingListContract.View, View.OnClickListener {
+		MeetingListPresenter> implements MeetingListContract.View, View.OnClickListener, EasyPermissions.PermissionCallbacks {
 
 	private final static String TAG = MeetingListActivity.class.getSimpleName();
+	private static final int PERMISSION_CAMERA_REQUEST_CODE = 999;
+	private static final int REQUEST_QR_CODE = 111;
+	private static final int REQUEST_CREATE_MEETING_CODE = 888;
 
 	/**
 	 * 显示会议二维码对话框TAG
@@ -92,6 +105,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		setMeetingListRv();
 		// 获取用户信息
 		getPresenter().getUserInfo();
+		checkCameraPermission();
 	}
 
 	@Override
@@ -121,12 +135,89 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
+		if (requestCode == PERMISSION_CAMERA_REQUEST_CODE) {
+			if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
+					PackageManager.PERMISSION_GRANTED) {
+			//	getPresenter().loadCamera();
+			}
+		} else if (requestCode == REQUEST_QR_CODE) {
+
+			if (null != data) {
+				Bundle bundle = data.getExtras();
+				if (bundle == null) {
+					return;
+				}
+				if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+					String result = bundle.getString(CodeUtils.RESULT_STRING);
+
+					//// TODO: 2016/11/30 scan QR success
+
+				} else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+
+					//// TODO: 2016/11/30 SCAN QR fail
+				//	Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
+				}
+			}
+		}  else if (requestCode == REQUEST_CREATE_MEETING_CODE) {
+			if (resultCode == Activity.RESULT_OK) {
+				//// TODO: 2016/11/30 create meeting success
+			}
+		}
+
+
 
 	}
 
 	@Override
 	public MeetingListPresenter initPresenter() {
 		return new MeetingListPresenter(this);
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+		// Forward results to EasyPermissions
+		EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+	}
+
+	@AfterPermissionGranted(PERMISSION_CAMERA_REQUEST_CODE)
+	private void methodRequiresTwoPermission() {
+		String[] perms = {Manifest.permission.CAMERA};
+		if (EasyPermissions.hasPermissions(this, perms)) {
+
+		}
+	}
+
+	@Override
+	public void onPermissionsDenied(int requestCode, List<String> perms) {
+
+		// (Optional) Check whether the user denied any permissions and checked "NEVER ASK AGAIN."
+		// This will display a dialog directing them to enable the permission in app settings.
+		if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+			new AppSettingsDialog.Builder(this, getString(R.string.rationale_ask_again))
+					.setTitle(getString(R.string.title_settings_dialog))
+					.setPositiveButton(getString(R.string.ensure))
+					.setNegativeButton(getString(R.string.cancel), null)
+					.setRequestCode(PERMISSION_CAMERA_REQUEST_CODE)
+					.build()
+					.show();
+		}
+	}
+
+	@Override
+	public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+	}
+
+	private void checkCameraPermission() {
+		// 没有授权的情况下询问用户是否授权
+		if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
+				PackageManager.PERMISSION_GRANTED) {
+			String[] perms = {Manifest.permission.CAMERA};
+			EasyPermissions.requestPermissions(this, getString(R.string.camera_rationale),
+					PERMISSION_CAMERA_REQUEST_CODE, perms);
+		}
 	}
 
 	/**
@@ -370,12 +461,14 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 
 	@Override
 	public void skipToScanQRCodeActivity() {
-//		startActivity(new Intent(this, SearchMeetingActivity.class));
+		Intent intent = new Intent(this, CaptureActivity.class);
+
+		startActivityForResult(intent, REQUEST_QR_CODE);
 	}
 
 	@Override
 	public void skipToCreateMeetingActivity() {
-		startActivity(new Intent(this, ThemeMeetingCreateActivity.class));
+		startActivityForResult(new Intent(this, ThemeMeetingCreateActivity.class), REQUEST_CREATE_MEETING_CODE);
 	}
 
 	// 监听返回键

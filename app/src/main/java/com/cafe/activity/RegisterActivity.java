@@ -210,10 +210,10 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
     @AfterPermissionGranted(PERMISSION_CAMERA_REQUEST_CODE)
     private void methodRequiresTwoPermission() {
         String[] perms = {Manifest.permission.CAMERA};
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            getPresenter().loadCamera();
-        }
+    if (EasyPermissions.hasPermissions(this, perms)) {
+        getPresenter().loadCamera();
     }
+}
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
