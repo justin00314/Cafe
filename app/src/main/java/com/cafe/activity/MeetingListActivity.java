@@ -8,6 +8,8 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -19,7 +21,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aiviews.anim.AnimationImageLoadingListener;
 import com.aiviews.imageview.RoundImageView;
@@ -42,9 +43,13 @@ import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import org.justin.utils.common.LogUtils;
 import org.justin.utils.common.ResourcesUtils;
+import org.justin.utils.common.ToastUtils;
 import org.justin.utils.system.DisplayUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -65,11 +70,14 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	private static final int REQUEST_QR_CODE = 111;
 	private static final int REQUEST_CREATE_MEETING_CODE = 888;
 
+	private final static int MSG_GET_MEETING_LIST = 0x0020;
+
+	private final static long GET_MEETING_LIST_PERIOD = 1000 * 5;
+
 	/**
 	 * 显示会议二维码对话框TAG
 	 */
 	private final static String TAG_DIALOG_QRCODE = "tag_dialog_qrcode";
-
 
 	private CoordinatorLayout meetingListCl;
 	/**
@@ -85,16 +93,14 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 */
 	private TextView workNumberTv;
 	/**
-	 * 创建主题会议FAB
+	 * 会议列表RecyclerView
 	 */
-	private FloatingActionButton createThemeMeetingFab;
-	/**
-	 * 创建头脑风暴FAB
-	 */
-	private FloatingActionButton createBrainStormFab;
-
 	private RecyclerView meetingListRv;
 	private MeetingListRvAdapter meetingListRvAdapter;
+
+	// TODO:定时任务，轮询会议列表
+	private Timer timer;
+	private TimerTask timerTask;
 
 
 	@Override
@@ -106,15 +112,52 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		setMeetingListRv();
 		// 获取用户信息
 		getPresenter().getUserInfo();
+		// 轮询会议列表
+		getMeetingList();
 		checkCameraPermission();
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-		// TODO:简单处理：每次进入界面都重新加载会议列表
-		getPresenter().loadMeetingList();
-//		getPresenter().loadMeetingListTest();
+	public void onDestroy() {
+		super.onDestroy();
+		if (timerTask != null)
+			timerTask.cancel();
+		if (timer != null)
+			timer.cancel();
+	}
+
+	private void getMeetingList(){
+		final RefreshHandler handler = new RefreshHandler(this);
+		timer = new Timer();
+		timerTask = new TimerTask() {
+			@Override
+			public void run() {
+				handler.obtainMessage(MSG_GET_MEETING_LIST).sendToTarget();
+			}
+		};
+		timer.schedule(timerTask, 500, GET_MEETING_LIST_PERIOD);
+
+	}
+
+	private static class RefreshHandler extends Handler {
+
+		private WeakReference<MeetingListActivity> reference;
+
+		RefreshHandler(MeetingListActivity activity) {
+			reference = new WeakReference<>(activity);
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			MeetingListActivity activity = reference.get();
+			if (activity == null) return;
+			switch (msg.what) {
+				case MSG_GET_MEETING_LIST:
+					activity.getPresenter().loadMeetingList();
+					break;
+			}
+
+		}
 	}
 
 	@Override
@@ -150,18 +193,20 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 				}
 				if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
 					String result = bundle.getString(CodeUtils.RESULT_STRING);
-
+					LogUtils.i(TAG, "扫描二维码成功-->" + result);
+					getPresenter().joinMeetingByQRCode(result);
 					//// TODO: 2016/11/30 scan QR success
 
 				} else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
-
+					ToastUtils.getInstance().showToast(this, R.string.prompt_scan_qrcode_failure);
 					//// TODO: 2016/11/30 SCAN QR fail
-					//	Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
 				}
 			}
 		} else if (requestCode == REQUEST_CREATE_MEETING_CODE) {
 			if (resultCode == Activity.RESULT_OK) {
 				//// TODO: 2016/11/30 create meeting success
+				LogUtils.i(TAG, "创建会议成功,重新加载列表-->");
+				getPresenter().loadMeetingList();
 			}
 		}
 
@@ -233,8 +278,8 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		userPortraitIv = (RoundImageView) findViewById(R.id.user_portrait_iv);
 		userNameTv = (TextView) findViewById(R.id.user_name_tv);
 		workNumberTv = (TextView) findViewById(R.id.work_number_tv);
-		createThemeMeetingFab = (FloatingActionButton) findViewById(R.id.theme_meeting_fab);
-		createBrainStormFab = (FloatingActionButton) findViewById(R.id.brain_storm_fab);
+		FloatingActionButton createThemeMeetingFab = (FloatingActionButton) findViewById(R.id.theme_meeting_fab);
+		FloatingActionButton createBrainStormFab = (FloatingActionButton) findViewById(R.id.brain_storm_fab);
 		createThemeMeetingFab.setOnClickListener(this);
 		createBrainStormFab.setOnClickListener(this);
 		meetingListRv = (RecyclerView) findViewById(R.id.meeting_list_rv);

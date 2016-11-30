@@ -19,6 +19,8 @@ import com.cafe.data.meeting.QuitMeetingRequest;
 import com.cafe.data.meeting.StatusInfo;
 import com.loopj.android.http.ResponseHandlerInterface;
 
+import org.justin.utils.common.LogUtils;
+
 import java.util.ArrayList;
 
 /**
@@ -29,10 +31,22 @@ import java.util.ArrayList;
 
 public class MeetingListBiz implements MeetingListContract.Model {
 
+	private final static String TAG = MeetingListBiz.class.getSimpleName();
+
 	private Context context;
 
 	public MeetingListBiz(Context context) {
 		this.context = context;
+	}
+
+	/**
+	 * 获取会议详情
+	 */
+	@Override
+	public void getMeetingDetail(int meetingId, ResponseHandlerInterface response) {
+		MeetingInfo info = new MeetingInfo();
+		info.id = meetingId;
+		HttpManager.postJson(context, UrlName.MEETING_INFO.getUrl(), info, response);
 	}
 
 	/**

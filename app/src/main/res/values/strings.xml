@@ -36,6 +36,10 @@
 	<string name="prompt_talking">正在发言中…</string>
 	<string name="prompt_episode">正在插嘴中…</string>
 
+	<string name="prompt_query_meeting_detail">正在查询会议信息，请稍后…</string>
+	<string name="prompt_query_meeting_detail_failure">查询会议信息失败，请重试</string>
+	<string name="prompt_joining">正在加入会议，请稍后…</string>
+	<string name="prompt_scan_qrcode_failure">解析二维码失败，请重试！</string>
 	<string name="prompt_no_network">没有网络，请重试</string>
 	<string name="prompt_logout_failure">登出失败，请重试</string>
 	<string name="prompt_loading_failure">加载失败，请重试</string>

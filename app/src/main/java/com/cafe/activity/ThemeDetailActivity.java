@@ -53,8 +53,8 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 
 	private final static String TAG = ThemeDetailActivity.class.getSimpleName();
 
-	private final static int MSG_GET_SPEAKER = 0x010;
-	private final static int MSG_GET_PROCEDURE = 0x020;
+	private final static int MSG_GET_SPEAKER = 0x0010;
+	private final static int MSG_GET_PROCEDURE = 0x0020;
 
 	/**
 	 * 每5秒轮询一次会议过程和当前说话人

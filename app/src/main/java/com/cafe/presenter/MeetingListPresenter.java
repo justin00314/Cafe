@@ -15,13 +15,18 @@ import com.cafe.data.account.LogoutResponse;
 import com.cafe.data.meeting.CancelMeetingResponse;
 import com.cafe.data.meeting.DismissMeetingResponse;
 import com.cafe.data.meeting.JoinMeetingResponse;
+import com.cafe.data.meeting.JoinType;
+import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingListResponse;
 import com.cafe.data.meeting.MeetingState;
 import com.cafe.data.meeting.MeetingType;
 import com.cafe.data.meeting.MeetingUserInfo;
+import com.cafe.data.meeting.QueryMeetingResponse;
+import com.cafe.data.meeting.QueryMeetingUserResponse;
 import com.cafe.data.meeting.QuitMeetingResponse;
 import com.cafe.model.meeting.MeetingListBiz;
 
+import org.justin.utils.common.LogUtils;
 import org.justin.utils.common.ToastUtils;
 import org.justin.utils.thread.ThreadUtils;
 
@@ -431,6 +436,50 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		}
 	}
 
+	// TODO:通过扫描二维码加入会议
+	@Override
+	public void joinMeetingByQRCode(String result) {
+		final MeetingListContract.View view = getView();
+		if (view == null) return;
+		view.showLoadingProgress(context.getString(R.string.prompt_query_meeting_detail));
+		MeetingListContract.Model meetingListBiz = getModel();
+		if (meetingListBiz == null) return;
+		int meetingId = -1;
+		try{
+			meetingId = Integer.parseInt(result);
+		} catch(Exception e){
+			LogUtils.e(TAG, "Exception", e);
+		}
+		meetingListBiz.getMeetingDetail(meetingId, new JsonHttpResponseHandler<QueryMeetingUserResponse>() {
+			@Override
+			public void onHandleSuccess(int statusCode, Header[] headers,
+			                            QueryMeetingUserResponse jsonObj) {
+				// TODO:包一个接口来查询一下用户会议详情，返回是否本人创建
+				MeetingListContract.View view = getView();
+				if (view == null) return;
+				view.dismissLoadingProgress();
+				doJoin(jsonObj.data, view);
+			}
+
+			@Override
+			public void onCancel() {
+				MeetingListContract.View view = getView();
+				if (view == null) return;
+				view.dismissLoadingProgress();
+				ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
+			}
+
+			@Override
+			public void onHandleFailure(String errorMsg) {
+				MeetingListContract.View view = getView();
+				if (view == null) return;
+				view.dismissLoadingProgress();
+				ToastUtils.getInstance().showToast(context,
+						R.string.prompt_query_meeting_detail_failure);
+			}
+		});
+	}
+
 	/**
 	 * 加入会议
 	 */
@@ -456,13 +505,14 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 				df.dismiss();
 			}
 		});
+
 	}
 
 	/**
 	 * 执行加入会议任务
 	 */
 	private void doJoin(final MeetingUserInfo meetingInfo, MeetingListContract.View view) {
-		view.showLoadingProgress(null);
+		view.showLoadingProgress(context.getString(R.string.prompt_joining));
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.joinMeeting(meetingInfo, new JsonHttpResponseHandler<JoinMeetingResponse>() {

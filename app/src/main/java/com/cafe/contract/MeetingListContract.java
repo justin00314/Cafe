@@ -160,7 +160,12 @@ public interface MeetingListContract {
 		void dismissMeeting(MeetingUserInfo meetingInfo);
 
 		/**
-		 * 加入会议
+		 * 扫描二维码加入会议
+		 */
+		void joinMeetingByQRCode(String result);
+
+		/**
+		 * 点击列表加入会议
 		 */
 		void joinMeeting(MeetingUserInfo meetingInfo);
 
@@ -181,6 +186,11 @@ public interface MeetingListContract {
 	 * Model接口方法，一般是数据操作方法,不一定存在Model
 	 */
 	interface Model extends BaseModel {
+
+		/**
+		 * 获取会议详情
+		 */
+		void getMeetingDetail(int meetingId, ResponseHandlerInterface response);
 
 		/**
 		 * 获取当前登录人用户信息
