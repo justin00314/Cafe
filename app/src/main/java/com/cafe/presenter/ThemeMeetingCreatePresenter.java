@@ -99,6 +99,8 @@ public class ThemeMeetingCreatePresenter extends MVPPresenter<ThemeMeetingCreate
 
     @Override
     public void findMeetingRooms(MeetingRoomListRequest request) {
+        getView().showLoadingProgress(mContext.getString(R.string.finding_meeting_rooms));
+
         getModel().findMeetingRooms(request, new JsonHttpResponseHandler<MeetingRoomListResponse>() {
 
             @Override

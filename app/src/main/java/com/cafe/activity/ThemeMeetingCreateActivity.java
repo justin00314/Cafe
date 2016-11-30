@@ -20,6 +20,7 @@ import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
 import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
 import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker;
 import com.cafe.R;
+import com.cafe.common.TextInputValidater;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.ThemeMeetingCreateContract;
 import com.cafe.data.meeting.CreateMeetingRequest;
@@ -57,6 +58,8 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
     private Spinner mLocationSpinner;
 
     private int mDateType = DATE_TYPE_START;
+
+    private TextInputValidater mTextValidater;
 
     SublimePickerFragment.Callback mFragmentCallback = new SublimePickerFragment.Callback() {
         @Override
@@ -117,6 +120,25 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
     }
 
     private boolean validate() {
+        if (!mTextValidater.validate()) {
+            return false;
+        }
+
+        String numStr = mParticipantNumber.getText().toString();
+
+        try {
+            int number = Integer.parseInt(numStr);
+            if (number <= 0) {
+                Snackbar.make(findViewById(R.id.coordinator_layout), R.string.prompt_meeting_people_wrong, Snackbar.LENGTH_SHORT)
+                        .show();
+                return false;
+            }
+        } catch (Exception e) {
+            Snackbar.make(findViewById(R.id.coordinator_layout), R.string.prompt_meeting_people_wrong, Snackbar.LENGTH_SHORT)
+                    .show();
+            return false;
+        }
+
         MeetingRoomInfo meetingRoom = (MeetingRoomInfo) mLocationSpinner.getSelectedItem();
 
         if (meetingRoom == null) {
@@ -165,6 +187,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
 
         ImageButton dateButton = (ImageButton) findViewById(R.id.start_date).findViewById(R.id.button);
         dateButton.setImageResource(R.mipmap.icon_calendar);
+        dateButton.setClickable(false);
 
         findViewById(R.id.start_date).setClickable(true);
         findViewById(R.id.start_date).setOnClickListener(new View.OnClickListener() {
@@ -181,6 +204,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
 
         ImageButton finishDateButton = (ImageButton) findViewById(R.id.finish_date).findViewById(R.id.button);
         finishDateButton.setImageResource(R.mipmap.icon_calendar);
+        finishDateButton.setClickable(false);
 
         findViewById(R.id.finish_date).setClickable(true);
         findViewById(R.id.finish_date).setOnClickListener(new View.OnClickListener() {
@@ -195,6 +219,12 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
 
             }
         });
+
+        mTextValidater = new TextInputValidater();
+        mTextValidater.putValidateItem(mMeetingTheme, getString(R.string.prompt_need_meeting_theme));
+        mTextValidater.putValidateItem(mParticipantNumber, getString(R.string.prompt_need_meeting_people));
+        mTextValidater.putValidateItem(meetingDate, getString(R.string.prompt_need_meeting_start));
+        mTextValidater.putValidateItem(meetingFinishDate, getString(R.string.prompt_need_meeting_finish));
     }
 
     @Override
@@ -203,7 +233,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
             setResult(Activity.RESULT_OK);
             finish();
         } else {
-            Snackbar.make(findViewById(R.id.coordinator_layout), getString(R.string.fail),
+            Snackbar.make(findViewById(R.id.coordinator_layout), getString(R.string.create_meeting_fail),
                     Snackbar.LENGTH_SHORT).show();
         }
     }

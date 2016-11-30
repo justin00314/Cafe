@@ -119,5 +119,12 @@
 	<string name="repassword_wrong">两次密码输入不一致</string>
 	<string name="meetingroom_empty">未选择会议室</string>
 	<string name="submitting">正在提交…</string>
+	<string name="prompt_need_meeting_theme">请输入会议主题</string>
+	<string name="prompt_need_meeting_people">请输入会议人数</string>
+	<string name="prompt_need_meeting_start">请选择会议时间</string>
+	<string name="prompt_need_meeting_finish">请选择会议结束时间</string>
+	<string name="prompt_meeting_people_wrong">会议人数输入不正确</string>
+	<string name="finding_meeting_rooms">正在查找可用的会议室</string>
+	<string name="create_meeting_fail">创建会议失败</string>
 
 </resources>
