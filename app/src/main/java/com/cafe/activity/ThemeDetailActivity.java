@@ -1,6 +1,8 @@
 package com.cafe.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -30,6 +32,7 @@ import org.justin.utils.common.TimeUtils;
 import org.justin.utils.system.DisplayUtils;
 import org.justin.utils.thread.ThreadUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -48,6 +51,10 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		ThemeDetailPresenter> implements ThemeDetailContract.View, View.OnClickListener {
 
 	private final static String TAG = ThemeDetailActivity.class.getSimpleName();
+
+	private final static int MSG_GET_SPEAKER = 0x010;
+	private final static int MSG_GET_PROCEDURE = 0x020;
+
 	/**
 	 * 每5秒轮询一次会议过程和当前说话人
 	 */
@@ -134,7 +141,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		meetingStateTv = (TextView) findViewById(R.id.meeting_state_tv);
 		shakePhoneIv = (ImageView) findViewById(R.id.shake_phone_iv);
 		meetingTimeCasc = (ChronometerAsc) findViewById(R.id.meeting_time_casc);
-		speakerPortraitCiv = (CircleImageView) findViewById(R.id.talker_portrait_civ);
+		speakerPortraitCiv = (CircleImageView) findViewById(R.id.speaker_portrait_civ);
 		speakerNameTv = (TextView) findViewById(R.id.speaker_name_tv);
 		speakerStateTv = (TextView) findViewById(R.id.speaker_state_tv);
 		procedureListRv = (RecyclerView) findViewById(R.id.procedure_list_rv);
@@ -164,15 +171,42 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 
 	// TODO:轮询当前说话人和会议过程列表
 	private void getProcedureInfo() {
+		final RefreshHandler handler = new RefreshHandler(this, meetingInfo);
 		timer = new Timer();
 		timerTask = new TimerTask() {
 			@Override
 			public void run() {
-				getPresenter().getNowTalker(meetingInfo);
-				getPresenter().loadProcedureList(meetingInfo);
+				handler.obtainMessage(MSG_GET_SPEAKER).sendToTarget();
+				handler.obtainMessage(MSG_GET_PROCEDURE).sendToTarget();
 			}
 		};
 		timer.schedule(timerTask, 500, QUERY_PROCEDURE_PERIOD);
+	}
+
+	private static class RefreshHandler extends Handler {
+
+		private WeakReference<ThemeDetailActivity> reference;
+		private MeetingUserInfo meetingInfo;
+
+		RefreshHandler(ThemeDetailActivity activity, MeetingUserInfo info) {
+			reference = new WeakReference<>(activity);
+			this.meetingInfo = info;
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			ThemeDetailActivity activity = reference.get();
+			if (activity == null) return;
+			switch (msg.what) {
+				case MSG_GET_SPEAKER:
+					activity.getPresenter().getNowTalker(meetingInfo);
+					break;
+				case MSG_GET_PROCEDURE:
+					activity.getPresenter().loadProcedureList(meetingInfo);
+					break;
+			}
+
+		}
 	}
 
 	/**
@@ -181,7 +215,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	private void setMeetingCasc() {
 		// 首先设置计时器的样式
 		int size = DisplayUtils.getScreenWidth(this);
-		meetingTimeCasc.setSize(size * 3 / 4);
+		meetingTimeCasc.setSize(size * 2 / 3);
 		// 延迟启动计时
 		ThreadUtils.runOnUIThread(new Runnable() {
 			@Override
@@ -230,9 +264,6 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	 */
 	@Override
 	public void setNowTalker(GetNowTalkerResponse.GetNowTalkerResult result) {
-		speakerPortraitCiv = (CircleImageView) findViewById(R.id.talker_portrait_civ);
-		speakerNameTv = (TextView) findViewById(R.id.speaker_name_tv);
-		speakerStateTv = (TextView) findViewById(R.id.speaker_state_tv);
 		speakerNameTv.setText(result.userName);
 		speakerStateTv.setText(getSpeakType(result.type));
 		// 加载说话人头像
@@ -266,6 +297,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		int size = procedureInfos.size();
 		for (int i = 0; i < size; i++) {
 			// 将数据插入
+			LogUtils.i(TAG, "说话详情数据插入-->" + procedureInfos.get(i).userName);
 			procedureListRvAdapter.add(i, procedureInfos.get(i));
 		}
 	}

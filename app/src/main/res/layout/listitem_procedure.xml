@@ -8,7 +8,7 @@
 	android:orientation="vertical"
 	android:paddingStart="16dp">
 
-	<LinearLayout
+	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="5dp"
@@ -17,8 +17,9 @@
 
 		<de.hdodenhof.circleimageview.CircleImageView
 			android:id="@+id/talker_portrait_civ"
-			android:layout_width="50dp"
-			android:layout_height="50dp"
+			android:layout_width="35dp"
+			android:layout_height="35dp"
+			android:layout_centerVertical="true"
 			android:src="@mipmap/talker_default"/>
 
 		<TextView
@@ -26,28 +27,32 @@
 			style="@style/TextNormal.Light"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="10dp"/>
+			android:layout_marginStart="10dp"
+			tools:text="小锐哥"/>
 		<TextView
 			android:id="@+id/speak_type_tv"
 			style="@style/TextLittle.Light"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="10dp"/>
+			android:layout_marginStart="10dp"
+			tools:text="发言"/>
 
 		<TextView
 			android:id="@+id/speak_duration_tv"
 			style="@style/TextLittle.Light"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="30dp"/>
+			android:layout_marginStart="40dp"
+			tools:text="110"/>
 
 		<TextView
 			android:id="@+id/speak_state_tv"
 			style="@style/TextLittle"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="30dp"/>
-	</LinearLayout>
+			android:layout_marginStart="40dp"
+			tools:text="正常"/>
+	</RelativeLayout>
 
 	<ImageView
 		android:layout_width="match_parent"

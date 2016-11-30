@@ -53,7 +53,8 @@
 		android:id="@+id/meeting_time_rl"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/meeting_info_rl">
+		android:layout_below="@+id/meeting_info_rl"
+		android:layout_centerHorizontal="true">
 
 		<!--中间计时器区域-->
 		<com.cafe.view.ChronometerAsc
@@ -70,17 +71,20 @@
 		android:id="@+id/now_talker_ll"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_below="@+id/meeting_time_rl"
 		android:background="@mipmap/talker_info_bg"
+		android:gravity="center_vertical"
 		android:orientation="horizontal"
+		android:layout_marginTop="30dp"
 		android:paddingBottom="10dp"
-		android:paddingEnd="16dp"
-		android:paddingStart="16dp"
+		android:paddingEnd="20dp"
+		android:paddingStart="20dp"
 		android:paddingTop="10dp">
 
 		<de.hdodenhof.circleimageview.CircleImageView
 			android:id="@+id/speaker_portrait_civ"
-			android:layout_width="60dp"
-			android:layout_height="60dp"
+			android:layout_width="40dp"
+			android:layout_height="40dp"
 			android:src="@mipmap/talker_default"/>
 
 		<TextView

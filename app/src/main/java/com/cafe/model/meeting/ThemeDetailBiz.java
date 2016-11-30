@@ -40,7 +40,8 @@ public class ThemeDetailBiz implements ThemeDetailContract.Model {
 	@Override
 	public void loadProcedureList(MeetingUserInfo info, ResponseHandlerInterface response) {
 		ProcedureListRequest data = new ProcedureListRequest();
-		data.id = info.id;
+//		data.id = info.id;
+		data.id = 5;
 		HttpManager.postJson(context, UrlName.PROCEDURE_LIST.getUrl(), data, response);
 	}
 
