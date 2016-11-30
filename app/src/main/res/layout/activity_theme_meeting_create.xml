@@ -43,13 +43,6 @@
                 android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />-->
 
             <include
-                android:id="@+id/place"
-                layout="@layout/include_icon_title_spinner_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
-
-            <include
                 android:id="@+id/start_date"
                 layout="@layout/include_icon_title_imagebutton"
                 android:layout_width="match_parent"
@@ -59,6 +52,13 @@
             <include
                 android:id="@+id/finish_date"
                 layout="@layout/include_icon_title_imagebutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />
+
+            <include
+                android:id="@+id/place"
+                layout="@layout/include_icon_title_spinner_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/meeting_item_vertical_margin" />

@@ -75,10 +75,10 @@ public class LoginPresenter extends MVPPresenter<LoginContract.View, LoginContra
 
                 getView().dismissLoadingProgress();
 
-                final boolean[] registerResult = {false};
+                final boolean[] result = {false};
 
                 if (jsonObj != null && jsonObj.data.token != null) {
-                    registerResult[0] = true;
+                    result[0] = true;
                     getModel().processToken(jsonObj.data.token);
 
                 }
@@ -86,7 +86,7 @@ public class LoginPresenter extends MVPPresenter<LoginContract.View, LoginContra
                 new Handler(mContext.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        getView().loginDone(registerResult[0], "");
+                        getView().loginDone(result[0], "");
                     }
                 });
 
