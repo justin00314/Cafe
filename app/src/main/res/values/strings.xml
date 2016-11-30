@@ -27,6 +27,7 @@
 	<string name="speak_over_time">▪ 超时</string>
 	<string name="speak_theme">发言</string>
 	<string name="speak_episode">插嘴</string>
+	<string name="speak_duration_m" formatted="false">%d′</string>
 	<string name="speak_duration_ms" formatted="false">%d′%d″</string>
 	<string name="speak_duration_s" formatted="false">%d″</string>
 

@@ -3,6 +3,7 @@ package com.cafe.model.meeting;
 import android.content.Context;
 
 import com.cafe.common.CommonUtils;
+import com.cafe.common.PreManager;
 import com.cafe.common.net.HttpManager;
 import com.cafe.common.net.UrlName;
 import com.cafe.contract.ThemeDetailContract;
@@ -41,7 +42,9 @@ public class ThemeDetailBiz implements ThemeDetailContract.Model {
 	public void loadProcedureList(MeetingUserInfo info, ResponseHandlerInterface response) {
 		ProcedureListRequest data = new ProcedureListRequest();
 //		data.id = info.id;
-		data.id = 5;
+//		data.id = 5;
+		// 获取上次的过滤时间
+		data.filterTime = PreManager.getProcedureFilterTime(context);
 		HttpManager.postJson(context, UrlName.PROCEDURE_LIST.getUrl(), data, response);
 	}
 

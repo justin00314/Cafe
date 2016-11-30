@@ -1,7 +1,9 @@
 package com.cafe.presenter;
 
 import android.content.Context;
+import android.text.TextUtils;
 
+import com.cafe.common.PreManager;
 import com.cafe.common.mvp.MVPPresenter;
 import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.ThemeDetailContract;
@@ -112,11 +114,14 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	private void handleSuccess(ProcedureListResponse jsonObj) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
-		if (jsonObj.data.procedureInfos == null || jsonObj.data.procedureInfos.size() == 0) {
-			return;
+		if(!TextUtils.isEmpty(jsonObj.data.filterTime)){
+			PreManager.setProcedureFilterTime(context, jsonObj.data.filterTime);
 		}
-		// 界面加载说话详情列表
-		view.loadProcedureList(jsonObj.data.procedureInfos);
+		if (jsonObj.data.procedureInfos != null || jsonObj.data.procedureInfos.size() != 0) {
+			// 界面加载说话详情列表
+			view.loadProcedureList(jsonObj.data.procedureInfos);
+		}
+
 	}
 
 	@Override

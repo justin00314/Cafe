@@ -1,7 +1,7 @@
 package com.cafe.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +14,6 @@ import com.cafe.common.CommonUtils;
 import com.cafe.data.meeting.ProcedureInfo;
 import com.cafe.data.meeting.SpeakState;
 import com.cafe.data.meeting.SpeakType;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.justin.utils.common.LogUtils;
@@ -33,13 +32,15 @@ public class ProcedureListRvAdapter extends ProcedureListAdapter<ProcedureListRv
 
 	private final static String TAG = ProcedureListRvAdapter.class.getSimpleName();
 
-	private LayoutInflater inflater;
 	private Context context;
 
 	private String speakNormal;
 	private String speakOverTime;
 	private String speakTheme;
 	private String speakEpisode;
+
+	private int speakNormalColor;
+	private int speakOverTimeColor;
 
 	public ProcedureListRvAdapter(Context context) {
 		this.context = context;
@@ -51,6 +52,8 @@ public class ProcedureListRvAdapter extends ProcedureListAdapter<ProcedureListRv
 		speakOverTime = context.getString(R.string.speak_over_time);
 		speakTheme = context.getString(R.string.speak_theme);
 		speakEpisode = context.getString(R.string.speak_episode);
+		speakNormalColor = ResourcesUtils.getColor(R.color.speak_normal_text);
+		speakOverTimeColor = ResourcesUtils.getColor(R.color.speak_over_time_text);
 	}
 
 	@Override
@@ -72,6 +75,7 @@ public class ProcedureListRvAdapter extends ProcedureListAdapter<ProcedureListRv
 		holder.speakDurationTv.setText(getSpeakDuration(procedureInfo.duration));
 		// 设置说话人发言状态
 		holder.speakStateTv.setText(getSpeakState(procedureInfo.state));
+		holder.speakStateTv.setTextColor(getSpeakStateColor(procedureInfo.state));
 		// 加载说话人头像
 		ImageLoader.getInstance().displayImage(procedureInfo.userPortrait,
 				holder.portraitCiv, CommonUtils.getPortraitOptions(),
@@ -104,6 +108,16 @@ public class ProcedureListRvAdapter extends ProcedureListAdapter<ProcedureListRv
 		return speakNormal;
 	}
 
+	private int getSpeakStateColor(int state){
+		switch (state) {
+			case SpeakState.NORMAL:
+				return speakNormalColor;
+			case SpeakState.OVER_TIME:
+				return speakOverTimeColor;
+		}
+		return speakNormalColor;
+	}
+
 	/**
 	 * 获取说话时长文字显示
 	 */
@@ -111,8 +125,12 @@ public class ProcedureListRvAdapter extends ProcedureListAdapter<ProcedureListRv
 		int minute = CommonUtils.getMinute(time);
 		int second = CommonUtils.getSecond(time);
 		if (minute > 0) {
-			return String.format(context.getString(R.string.speak_duration_ms),
-					minute, second);
+			if (second > 0)
+				return String.format(context.getString(R.string.speak_duration_ms),
+						minute, second);
+			else
+				return String.format(context.getString(R.string.speak_duration_m),
+						minute);
 		}
 		return String.format(context.getString(R.string.speak_duration_s),
 				second);
@@ -128,7 +146,7 @@ public class ProcedureListRvAdapter extends ProcedureListAdapter<ProcedureListRv
 
 		ItemViewHolder(View view) {
 			super(view);
-			portraitCiv = (CircleImageView) view.findViewById(R.id.main_area);
+			portraitCiv = (CircleImageView) view.findViewById(R.id.speaker_portrait_civ);
 			speakerNameTv = (TextView) view.findViewById(R.id.speaker_name_tv);
 			speakTypeTv = (TextView) view.findViewById(R.id.speak_type_tv);
 			speakDurationTv = (TextView) view.findViewById(R.id.speak_duration_tv);
