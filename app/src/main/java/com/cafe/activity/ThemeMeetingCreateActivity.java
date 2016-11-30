@@ -156,7 +156,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
      */
     private void setToolbar() {
         supportToolbar(true);
-        setToolbarLeft(R.mipmap.logout, new OnLeftClickListener() {
+        setToolbarLeft(R.mipmap.back, new OnLeftClickListener() {
             @Override
             public void onClick() {
                 finish();
@@ -182,7 +182,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
                 (Spinner) findViewById(R.id.place).findViewById(R.id.spinner);
 
         TextView meetingDate = (TextView) findViewById(R.id.start_date).findViewById(R.id.title);
-        meetingDate.setText(R.string.meeting_date);
+        meetingDate.setText(R.string.meeting_start_date);
         mStartDate = (TextView) findViewById(R.id.start_date).findViewById(R.id.content);
 
         ImageButton dateButton = (ImageButton) findViewById(R.id.start_date).findViewById(R.id.button);

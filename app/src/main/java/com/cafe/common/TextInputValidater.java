@@ -25,7 +25,7 @@ public class TextInputValidater {
 
     private Map<TextView, String> mValidateMap = new LinkedHashMap<>();
 
-    public void setmUnifiedPrompt(String unifiedPrompt) {
+    public void setUnifiedPrompt(String unifiedPrompt) {
         mUnifiedPrompt = unifiedPrompt;
     }
 
