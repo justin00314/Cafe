@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
+import android.text.InputType;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,6 +97,7 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
 
         mName = (EditText) findViewById(R.id.user_name).findViewById(R.id.editor_content);
         mId = (EditText) findViewById(R.id.user_id).findViewById(R.id.editor_content);
+        mId.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         mPassword = (EditText) findViewById(R.id.user_password).findViewById(R.id.editor_content);
         mPassword.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
         mRepassword = (EditText) findViewById(R.id.user_repassword).findViewById(R.id.editor_content);
