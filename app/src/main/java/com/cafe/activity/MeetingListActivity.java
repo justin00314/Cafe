@@ -31,6 +31,7 @@ import com.cafe.common.IntentExtra;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.MeetingListContract;
 import com.cafe.data.account.UserInfo;
+import com.cafe.data.meeting.MeetingState;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.fragment.QRCodeDialog;
 import com.cafe.presenter.MeetingListPresenter;
@@ -138,7 +139,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		if (requestCode == PERMISSION_CAMERA_REQUEST_CODE) {
 			if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
 					PackageManager.PERMISSION_GRANTED) {
-			//	getPresenter().loadCamera();
+				//	getPresenter().loadCamera();
 			}
 		} else if (requestCode == REQUEST_QR_CODE) {
 
@@ -155,15 +156,14 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 				} else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
 
 					//// TODO: 2016/11/30 SCAN QR fail
-				//	Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
+					//	Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
 				}
 			}
-		}  else if (requestCode == REQUEST_CREATE_MEETING_CODE) {
+		} else if (requestCode == REQUEST_CREATE_MEETING_CODE) {
 			if (resultCode == Activity.RESULT_OK) {
 				//// TODO: 2016/11/30 create meeting success
 			}
 		}
-
 
 
 	}
@@ -338,11 +338,11 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	@Override
 	public void refreshAfterJoin(MeetingUserInfo info) {
 		int position = meetingListRvAdapter.getIndex(info.id);
-		MeetingUserInfo meetingInfo = meetingListRvAdapter.getItem(position);
-		if (!meetingInfo.participatedFlag) {
-			meetingInfo.participatedFlag = true;
-			meetingListRvAdapter.notifyItemChanged(position);
-		}
+		// 先移除
+		meetingListRvAdapter.remove(position);
+		info.participatedFlag = true;
+		int addPosition = position == 0 ? 0 : position - 1;
+		meetingListRvAdapter.add(addPosition, info);
 	}
 
 	/**
@@ -351,11 +351,11 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	@Override
 	public void refreshAfterQuit(MeetingUserInfo info) {
 		int position = meetingListRvAdapter.getIndex(info.id);
-		MeetingUserInfo meetingInfo = meetingListRvAdapter.getItem(position);
-		if (meetingInfo.participatedFlag) {
-			meetingInfo.participatedFlag = false;
-			meetingListRvAdapter.notifyItemChanged(position);
-		}
+		// 先移除
+		meetingListRvAdapter.remove(position);
+		info.participatedFlag = false;
+		int addPosition = position == 0 ? 0 : position - 1;
+		meetingListRvAdapter.add(addPosition, info);
 	}
 
 	/**
@@ -363,6 +363,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 */
 	@Override
 	public void refreshAfterCancel(MeetingUserInfo info) {
+		// 取消的会议不在列表中展示
 		meetingListRvAdapter.remove(meetingListRvAdapter.getIndex(info.id));
 	}
 
@@ -372,6 +373,24 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	@Override
 	public void refreshAfterDismiss(MeetingUserInfo info) {
 
+		// 解散成功之后的会议直接加入历史会议列表,并从当前的位置移除
+		int position = meetingListRvAdapter.getIndex(info.id);
+		LogUtils.i(TAG, "当前解散的记录的位置-->" + position);
+		// 先移除
+		meetingListRvAdapter.remove(position);
+		// 找到历史记录的第一条的位置
+		int historyOneIndex = meetingListRvAdapter.getHistoryOne();
+		LogUtils.i(TAG, "历史记录的第一条位置-->" + historyOneIndex);
+		info.participatedFlag = false;
+		info.state = MeetingState.HISTORY;
+		// 原本列表中没有历史记录就加入列表末尾
+		if (historyOneIndex == -1) {
+			int size = meetingListRvAdapter.getItemCount();
+			meetingListRvAdapter.add(size == 0 ? 0 : size - 1, info);
+		} else {
+			meetingListRvAdapter.add(historyOneIndex, info);
+		}
+
 	}
 
 	/**
@@ -379,16 +398,131 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 */
 	@Override
 	public void loadMeetingList(List<MeetingUserInfo> meetingInfos) {
-		meetingListRvAdapter.clear();
+//		meetingListRvAdapter.clear();
+//		if (meetingInfos == null || meetingInfos.size() == 0) {
+//			LogUtils.i(TAG, "-->没有会议列表数据");
+//			return;
+//		}
+//		int size = meetingInfos.size();
+//		for (int i = 0; i < size; i++) {
+//			LogUtils.i(TAG, "加入数据-->" + i);
+//			meetingListRvAdapter.add(i, meetingInfos.get(i));
+//		}
+
 		if (meetingInfos == null || meetingInfos.size() == 0) {
-			LogUtils.i(TAG, "-->没有会议列表数据");
+			LogUtils.i(TAG, "-->没有返回会议列表数据");
 			return;
 		}
-		int size = meetingInfos.size();
-		for (int i = 0; i < size; i++) {
-			LogUtils.i(TAG, "加入数据-->" + i);
-			meetingListRvAdapter.add(i, meetingInfos.get(i));
+		// 获取列表原来的长度
+		int itemSize = meetingListRvAdapter.getItemCount();
+		// 如果本来没有数据，则依次加入数据
+		if (itemSize == 0) {
+			int size = meetingInfos.size();
+			for (int i = 0; i < size; i++) {
+				LogUtils.i(TAG, "加入数据-->" + i);
+				meetingListRvAdapter.add(i, meetingInfos.get(i));
+			}
 		}
+		// 如果本来有数据
+		else {
+			int size = meetingInfos.size();
+			for (int i = 0; i < size; i++) {
+				MeetingUserInfo info = meetingInfos.get(i);
+				int index = meetingListRvAdapter.getIndex(info.id);
+				// 如果记录在原来的列表中不存在，则一定是新记录
+				if (index == -1) {
+					// 正在进行
+					if (info.state == MeetingState.PROGRESS) {
+						meetingListRvAdapter.add(0, info);
+					}
+					// 预约的
+					else if (info.state == MeetingState.APPOINTMENT) {
+						int progressOne = meetingListRvAdapter.getProgressOne();
+						int appointOne = meetingListRvAdapter.getAppointOne();
+						int historyOne = meetingListRvAdapter.getHistoryOne();
+						if (appointOne != -1) {
+							meetingListRvAdapter.add(appointOne, info);
+						} else {
+							if (progressOne == -1 && historyOne != -1) {
+								meetingListRvAdapter.add(0, info);
+							} else if (progressOne != -1 && historyOne == -1) {
+								meetingListRvAdapter.add(meetingListRvAdapter.getItemCount() - 1,
+										info);
+							}
+						}
+
+					}
+					// 历史的
+					else if (info.state == MeetingState.HISTORY) {
+						int historyOne = meetingListRvAdapter.getHistoryOne();
+						if (historyOne != -1) {
+							meetingListRvAdapter.add(historyOne, info);
+						} else {
+							meetingListRvAdapter.add(meetingListRvAdapter.getItemCount() - 1,
+									info);
+						}
+					}
+				}
+				// 如果已经在列表中存在，则需要更新他
+				else {
+					// 找到列表中id相同的对象
+					MeetingUserInfo originInfo = meetingListRvAdapter.getItem(index);
+					// 状态不变
+					if (info.state == originInfo.state) {
+						// 加入会议
+						if (info.participatedFlag) {
+							if (!originInfo.participatedFlag) {
+								meetingListRvAdapter.remove(index);
+								info.participatedFlag = true;
+								int addPosition = index == 0 ? 0 : index - 1;
+								meetingListRvAdapter.add(addPosition, info);
+							}
+						}
+						// 退出会议
+						if (!info.participatedFlag) {
+							if (originInfo.participatedFlag) {
+								meetingListRvAdapter.remove(index);
+								info.participatedFlag = false;
+								int addPosition = index == 0 ? 0 : index - 1;
+								meetingListRvAdapter.add(addPosition, info);
+							}
+						}
+					}
+					// 状态变更
+					else {
+						// 从预约变更到正在进行--会议自动开始
+						if (info.state == MeetingState.PROGRESS) {
+							if (originInfo.state == MeetingState.APPOINTMENT) {
+								meetingListRvAdapter.remove(index);
+								meetingListRvAdapter.add(0, info);
+							}
+						}
+						// 从正在进行变更到历史--解散
+						else if (info.state == MeetingState.HISTORY) {
+							if (originInfo.state == MeetingState.PROGRESS) {
+								meetingListRvAdapter.remove(index);
+								int historyOne = meetingListRvAdapter.getHistoryOne();
+								// 原本列表中没有历史记录就加入列表末尾
+								if (historyOne == -1) {
+									int itemCount = meetingListRvAdapter.getItemCount();
+									meetingListRvAdapter.add(itemCount == 0 ? 0 : itemCount - 1, info);
+								} else {
+									meetingListRvAdapter.add(historyOne, info);
+								}
+							}
+						}
+
+
+					}
+
+
+				}
+
+
+			}
+
+		}
+
 
 	}
 

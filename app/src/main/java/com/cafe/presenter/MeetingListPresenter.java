@@ -1,9 +1,7 @@
 package com.cafe.presenter;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.Intent;
 
 import com.aiviews.dialog.AlertDialogInfo;
 import com.aiviews.dialog.OnClickDialogBtnListener;
@@ -23,7 +21,6 @@ import com.cafe.data.meeting.MeetingType;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.data.meeting.QuitMeetingResponse;
 import com.cafe.model.meeting.MeetingListBiz;
-import com.uuzuche.lib_zxing.activity.CaptureActivity;
 
 import org.justin.utils.common.ToastUtils;
 import org.justin.utils.thread.ThreadUtils;
@@ -390,7 +387,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	/**
 	 * 执行加入会议任务
 	 */
-	private void doDismiss(MeetingUserInfo meetingInfo, MeetingListContract.View view) {
+	private void doDismiss(final MeetingUserInfo meetingInfo, MeetingListContract.View view) {
 		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
@@ -398,7 +395,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			@Override
 			public void onHandleSuccess(int statusCode, Header[] headers, DismissMeetingResponse jsonObj) {
 				// 处理加入会议成功
-				handleSuccess(jsonObj);
+				handleSuccess(meetingInfo, jsonObj);
 			}
 
 			@Override
@@ -422,19 +419,22 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	/**
 	 * 处理解散会议成功
 	 */
-	private void handleSuccess(DismissMeetingResponse response) {
+	private void handleSuccess(MeetingUserInfo info, DismissMeetingResponse response) {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		if (response.data != null && response.data.result)
+		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_dismiss_success);
-		else
+			view.refreshAfterDismiss(info);
+		} else {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_dismiss_failure);
+		}
 	}
 
 	/**
 	 * 加入会议
 	 */
+	// TODO:为什么加入会议对话框弹出的时候界面按钮会闪动成退出会议
 	@Override
 	public void joinMeeting(final MeetingUserInfo meetingInfo) {
 		final MeetingListContract.View view = getView();
@@ -548,7 +548,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		}
 		if (meetingInfo.type == MeetingType.THEME.getId())
 			view.skipToThemeDetailActivity(meetingInfo);
-		else if(meetingInfo.type == MeetingType.BRAIN_STORM.getId())
+		else if (meetingInfo.type == MeetingType.BRAIN_STORM.getId())
 			view.skipToBrainStormActivity(meetingInfo);
 	}
 

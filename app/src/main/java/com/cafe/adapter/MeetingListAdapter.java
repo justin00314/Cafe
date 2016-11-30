@@ -2,6 +2,7 @@ package com.cafe.adapter;
 
 import android.support.v7.widget.RecyclerView;
 
+import com.cafe.data.meeting.MeetingState;
 import com.cafe.data.meeting.MeetingUserInfo;
 
 import org.justin.utils.common.LogUtils;
@@ -84,6 +85,48 @@ public abstract class MeetingListAdapter<VH extends RecyclerView.ViewHolder>
 		}
 		return -1;
 	}
+
+
+	// 找到列表中历史记录的第一条的index
+	public int getHistoryOne() {
+		int position = -1;
+		int size = items.size();
+		for (int i = 0; i < size; i++) {
+			MeetingUserInfo meetingInfo = items.get(i);
+			if (meetingInfo.state == MeetingState.HISTORY) {
+				position = i;
+				break;
+			}
+		}
+		return position;
+	}
+
+	public int getProgressOne() {
+		int position = -1;
+		int size = items.size();
+		for (int i = 0; i < size; i++) {
+			MeetingUserInfo meetingInfo = items.get(i);
+			if (meetingInfo.state == MeetingState.PROGRESS) {
+				position = i;
+				break;
+			}
+		}
+		return position;
+	}
+
+	public int getAppointOne() {
+		int position = -1;
+		int size = items.size();
+		for (int i = 0; i < size; i++) {
+			MeetingUserInfo meetingInfo = items.get(i);
+			if (meetingInfo.state == MeetingState.APPOINTMENT) {
+				position = i;
+				break;
+			}
+		}
+		return position;
+	}
+
 
 	public MeetingUserInfo getItem(int position) {
 		return items.get(position);
