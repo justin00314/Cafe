@@ -7,6 +7,8 @@ import com.cafe.R;
 import com.cafe.common.mvp.MVPPresenter;
 import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.MeetingSearchContract;
+import com.cafe.data.meeting.JoinMeetingRequest;
+import com.cafe.data.meeting.JoinMeetingResponse;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingListResponse;
 import com.cafe.data.meeting.QueryMeetingResponse;
@@ -58,7 +60,7 @@ public class MeetingSearchPresenter extends MVPPresenter<MeetingSearchContract.V
                     new Handler(mContext.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            getView().showSearchResults(false, null);
+                            getView().joinMeetingResult(false);
                         }
                     });
                 }
@@ -73,10 +75,10 @@ public class MeetingSearchPresenter extends MVPPresenter<MeetingSearchContract.V
 
                 getView().dismissLoadingProgress();
 
-                final boolean[] registerResult = {false};
+                final boolean[] result = {false};
 
                 if (jsonObj != null && jsonObj.data != null) {
-                    registerResult[0] = true;
+                    result[0] = true;
                 }
 
                 new Handler(mContext.getMainLooper()).post(new Runnable() {
@@ -86,7 +88,61 @@ public class MeetingSearchPresenter extends MVPPresenter<MeetingSearchContract.V
                         if (jsonObj.data.name != null) { // use name to judge meeting is whether exist
                             meetings.add(jsonObj.data);
                         }
-                        getView().showSearchResults(registerResult[0], meetings);
+                        getView().showSearchResults(result[0], meetings);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void joinMeeting(JoinMeetingRequest request) {
+        getModel().joinMeeting(request, new JsonHttpResponseHandler<JoinMeetingResponse>() {
+            @Override
+            public void onCancel() {
+                super.onCancel();
+
+                if (getView() == null)
+                    return;
+
+                getView().dismissLoadingProgress();
+                getView().showNoNetworkPrompt();
+            }
+
+            @Override
+            public void onHandleFailure(final String errorMsg) {
+
+                if (getView() != null) {
+                    getView().dismissLoadingProgress();
+
+                    new Handler(mContext.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            getView().showSearchResults(false, null);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onHandleSuccess(int statusCode, Header[] headers, final JoinMeetingResponse jsonObj) {
+                if (getView() == null) {
+                    // do nothing
+                    return;
+                }
+
+                getView().dismissLoadingProgress();
+
+                final boolean[] result = {false};
+
+                if (jsonObj != null && jsonObj.data.result) {
+                    result[0] = true;
+                }
+
+                new Handler(mContext.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        getView().joinMeetingResult(result[0]);
                     }
                 });
             }

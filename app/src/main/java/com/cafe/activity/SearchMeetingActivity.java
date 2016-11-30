@@ -14,7 +14,9 @@ import com.cafe.R;
 import com.cafe.common.TextInputValidater;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.MeetingSearchContract;
+import com.cafe.data.meeting.JoinMeetingRequest;
 import com.cafe.data.meeting.MeetingInfo;
+import com.cafe.data.meeting.MeetingState;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.presenter.MeetingSearchPresenter;
 
@@ -61,6 +63,13 @@ public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.Vie
 
     }
 
+    @Override
+    public void joinMeetingResult(boolean result) {
+        int strId = result ? R.string.prompt_join_success : R.string.prompt_join_failure;
+
+        Toast.makeText(this, strId, Toast.LENGTH_SHORT).show();
+    }
+
     public void search(View v) {
         if (validate()) {
             String idStr = mMeetintId.getText().toString();
@@ -98,7 +107,11 @@ public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.Vie
         return false;
     }
 
-	public static  class SearchMeetingListAdapter extends RecyclerView.Adapter<SearchMeetingListAdapter.ItemViewHolder> {
+    private boolean meetingCanJoin(MeetingInfo meeting) {
+        return meeting.state == MeetingState.PROGRESS;
+    }
+
+	private class SearchMeetingListAdapter extends RecyclerView.Adapter<SearchMeetingListAdapter.ItemViewHolder> {
 
         private final List<MeetingInfo> mmMeetings;
 
@@ -161,7 +174,15 @@ public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.Vie
 
                         MeetingInfo meeting = mmMeetings.get(position);
 
-                        Toast.makeText(view.getContext(), meeting.id, Toast.LENGTH_SHORT).show();
+                        if (meetingCanJoin(meeting)) {
+                            JoinMeetingRequest request = new JoinMeetingRequest();
+                            request.id = meeting.id;
+
+                            getPresenter().joinMeeting(request);
+                        } else {
+                            Toast.makeText(SearchMeetingActivity.this, R.string.meeting_not_start, Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
             }

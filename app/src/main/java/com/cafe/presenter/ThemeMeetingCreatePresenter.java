@@ -65,18 +65,18 @@ public class ThemeMeetingCreatePresenter extends MVPPresenter<ThemeMeetingCreate
 
                 getView().dismissLoadingProgress();
 
-                final boolean[] registerResult = {false};
+                final boolean[] result = {false};
                 final long[] meetingId = {0};
 
                 if (jsonObj != null && jsonObj.data.result) {
-                    registerResult[0] = true;
+                    result[0] = true;
                     meetingId[0] = jsonObj.data.id;
                 }
 
                 new Handler(mContext.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        getView().submitDone(registerResult[0], meetingId[0]);
+                        getView().submitDone(result[0], meetingId[0]);
                     }
                 });
             }

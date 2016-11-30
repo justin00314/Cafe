@@ -5,11 +5,13 @@ import com.cafe.common.mvp.base.BaseView;
 import com.cafe.common.mvp.base.IMVPPresent;
 import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.data.account.LoginResponse;
+import com.cafe.data.meeting.JoinMeetingRequest;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingListResponse;
 import com.cafe.data.meeting.MeetingRoomListResponse;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.data.meeting.QueryMeetingResponse;
+import com.loopj.android.http.ResponseHandlerInterface;
 
 import java.util.List;
 
@@ -24,6 +26,7 @@ public interface MeetingSearchContract {
      */
     interface View extends BaseView {
         void showSearchResults(boolean result, List<MeetingInfo> meetings);
+        void joinMeetingResult(boolean result);
     }
 
     /**
@@ -31,6 +34,7 @@ public interface MeetingSearchContract {
      */
     interface Presenter<V extends MeetingSearchContract.View, M extends MeetingSearchContract.Model> extends IMVPPresent<V, M> {
         void search(int meetingId);
+        void joinMeeting(JoinMeetingRequest request);
     }
 
     /**
@@ -38,5 +42,6 @@ public interface MeetingSearchContract {
      */
     interface Model extends BaseModel {
         void search(int meetingId, JsonHttpResponseHandler<QueryMeetingResponse> handler);
+        void joinMeeting(JoinMeetingRequest request, ResponseHandlerInterface response);
     }
 }
