@@ -17,6 +17,7 @@ import com.cafe.R;
 import com.cafe.adapter.ProcedureListRvAdapter;
 import com.cafe.common.CommonUtils;
 import com.cafe.common.IntentExtra;
+import com.cafe.common.PreManager;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.ThemeDetailContract;
 import com.cafe.data.meeting.GetNowTalkerResponse;
@@ -120,6 +121,8 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			timerTask.cancel();
 		if (timer != null)
 			timer.cancel();
+		// 退出界面需要清除过滤条件的时间
+		PreManager.setProcedureFilterTime(this, "");
 	}
 
 	/**
@@ -127,7 +130,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	 */
 	private void setToolbar() {
 		supportToolbar(true);
-//		setToolbarTitle();
+		setToolbarTitle(getString(R.string.activity_title_meeting_detail));
 		setToolbarLeft(R.mipmap.back, new ToolbarActivity.OnLeftClickListener() {
 			@Override
 			public void onClick() {
@@ -230,8 +233,11 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 
 	private void startTime() {
 		// TODO:根据当前时间和会议开始时间计算计时器的初始值
-		long startTime = TimeUtils.dateToTimeStamp(meetingInfo.startTime, TimeUtils.Template.YMDHMS);
+		long startTime = TimeUtils.dateToTimeStamp(meetingInfo.startTime,
+				TimeUtils.Template.YMDHMS) / 1000;
 		long currentTime = new Date().getTime() / 1000;
+		LogUtils.i(TAG, "会议开始时间-->" + startTime);
+		LogUtils.i(TAG, "当前时间-->" + currentTime);
 		long base = currentTime - startTime;
 		LogUtils.i(TAG, "会议已经开始了-->" + base + " 秒");
 		meetingTimeCasc.setCurrentTime(base > 0 ? base : 0);
