@@ -1,5 +1,6 @@
 package com.cafe.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -199,8 +200,8 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
     @Override
     public void submitDone(boolean success, long meetingId) {
         if (success) {
-            Snackbar.make(findViewById(R.id.coordinator_layout), getString(R.string.success),
-                    Snackbar.LENGTH_SHORT).show();
+            setResult(Activity.RESULT_OK);
+            finish();
         } else {
             Snackbar.make(findViewById(R.id.coordinator_layout), getString(R.string.fail),
                     Snackbar.LENGTH_SHORT).show();

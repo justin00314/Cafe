@@ -237,10 +237,8 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 
 	@Override
 	public void scanQRCode() {
-		Intent intent = new Intent(context, CaptureActivity.class);
-
-		if (context instanceof Activity) {
-			((Activity) context).startActivityForResult(intent, 1);
+		if (getView() != null) {
+			getView().skipToScanQRCodeActivity();
 		}
 	}
 
