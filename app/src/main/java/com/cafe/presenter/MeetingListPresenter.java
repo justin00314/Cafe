@@ -1,7 +1,9 @@
 package com.cafe.presenter;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 
 import com.aiviews.dialog.AlertDialogInfo;
 import com.aiviews.dialog.OnClickDialogBtnListener;
@@ -21,6 +23,7 @@ import com.cafe.data.meeting.MeetingType;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.data.meeting.QuitMeetingResponse;
 import com.cafe.model.meeting.MeetingListBiz;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
 
 import org.justin.utils.common.ToastUtils;
 import org.justin.utils.thread.ThreadUtils;
@@ -234,7 +237,11 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 
 	@Override
 	public void scanQRCode() {
-		ToastUtils.getInstance().showToast(context, "扫描二维码");
+		Intent intent = new Intent(context, CaptureActivity.class);
+
+		if (context instanceof Activity) {
+			((Activity) context).startActivityForResult(intent, 1);
+		}
 	}
 
 	/**
