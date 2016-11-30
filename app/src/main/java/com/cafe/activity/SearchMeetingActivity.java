@@ -85,7 +85,7 @@ public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.Vie
             holder.themeName.setText(meeting.name);
             holder.id.setText(meeting.id);
             holder.date.setText(meeting.startTime);
-            holder.place.setText(meeting.meetingRoomId);
+            holder.place.setText(meeting.meetingRoomId + "");
         }
 
         class ItemViewHolder extends RecyclerView.ViewHolder {
