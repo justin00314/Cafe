@@ -71,7 +71,6 @@ public class ThemeMeetingCreatePresenter extends MVPPresenter<ThemeMeetingCreate
                 if (jsonObj != null && jsonObj.data.result) {
                     registerResult[0] = true;
                     meetingId[0] = jsonObj.data.id;
-
                 }
 
                 new Handler(mContext.getMainLooper()).post(new Runnable() {

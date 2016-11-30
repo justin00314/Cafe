@@ -20,7 +20,7 @@ public class MeetingSearchMockPresenter extends MVPPresenter<MeetingSearchContra
 
         for (int i = 0; i < 3; i++) {
             MeetingInfo meeting = new MeetingInfo();
-            meeting.meetingRoomId = "meetingRoomId" + i;
+            meeting.meetingRoomId = i;
             meeting.id = new Random().nextInt(999999);
             meeting.name = "meeting " + i;
             meeting.startTime = "2016/" +  new Random().nextInt(12) + "/" + new Random().nextInt(28);

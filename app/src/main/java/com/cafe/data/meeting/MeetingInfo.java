@@ -47,7 +47,7 @@ public class MeetingInfo implements Serializable {
 	 * 会议室id
 	 */
 	@SerializedName("meeting_room_id")
-	public String meetingRoomId;
+	public int meetingRoomId;
 	/**
 	 * 会议室名字
 	 */
