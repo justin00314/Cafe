@@ -119,7 +119,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		// 获取用户信息
 		getPresenter().getUserInfo();
 		// 轮询会议列表
-		getMeetingList();
+//		getMeetingList();
 		// 开始手机摇一摇检测
 		startShakePhone();
 		checkCameraPermission();

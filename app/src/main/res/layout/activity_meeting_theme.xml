@@ -36,7 +36,6 @@
 			android:layout_centerVertical="true"
 			android:layout_marginStart="10dp"
 			android:layout_toEndOf="@+id/meeting_name_tv"
-			android:text="@string/meeting_state_progress_"
 			android:textColor="@color/meeting_info_text"/>
 
 		<ImageView
@@ -100,8 +99,7 @@
 			style="@style/TextLittle.Light"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="10dp"
-			android:text="@string/prompt_talking"/>
+			android:layout_marginStart="10dp"/>
 
 	</LinearLayout>
 

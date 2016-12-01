@@ -250,6 +250,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			public void run() {
 				handler.obtainMessage(MSG_GET_SPEAKER).sendToTarget();
 				handler.obtainMessage(MSG_GET_PROCEDURE).sendToTarget();
+				handler.obtainMessage(MSG_CHECK_START_TIME).sendToTarget();
 			}
 		};
 		timer.schedule(timerTask, 500, QUERY_PROCEDURE_PERIOD);
@@ -291,14 +292,6 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		// 首先设置计时器的样式
 		int size = DisplayUtils.getScreenWidth(this);
 		meetingTimeCasc.setSize(size * 2 / 3);
-//		// 延迟启动计时
-//		ThreadUtils.runOnUIThread(new Runnable() {
-//			@Override
-//			public void run() {
-//				startTime();
-//			}
-//		}, 500);
-
 	}
 
 	private void startTime() {
@@ -309,9 +302,9 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		LogUtils.i(TAG, "会议开始时间-->" + startTime);
 		LogUtils.i(TAG, "当前时间-->" + currentTime);
 		long base = currentTime - startTime;
-		if(base > 0) {
+		meetingTimeCasc.setCurrentTime(base > 0 ? base : 0);
+		if(base >= 0) {
 			LogUtils.i(TAG, "会议已经开始了-->" + base + " 秒");
-			meetingTimeCasc.setCurrentTime(base > 0 ? base : 0);
 			meetingTimeCasc.startTime();
 			meetingStateTv.setText(getString(R.string.meeting_state_progress_));
 		}

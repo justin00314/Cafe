@@ -138,7 +138,7 @@ public class CheckService extends Service {
 	 */
 	private void handleSuccess(QueryMeetingUserResponse response) {
 		boolean funfFlag = AppUtils.isServiceRunning(this,
-				FunfManagerService.class.getSimpleName());
+				FunfManagerService.class.getCanonicalName());
 		LogUtils.i(TAG, "funf启动状态-->" + funfFlag);
 		// 启动funf逻辑：当前用户参加了某个会议，并且会议已经开始,funf没有启动
 		if (response.data != null && response.data.id != -1) {

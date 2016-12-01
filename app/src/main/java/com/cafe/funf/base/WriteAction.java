@@ -180,7 +180,7 @@ public abstract class WriteAction extends Action {
 		funfDataRequest.funfDatas = new ArrayList<>();
 
 		// 从key缓存中读取key，并限制上传数据总数不超过100条
-//		int i = 0;
+		int i = 0;
 		for (String key : keysData.keys.keySet()) {
 			String uploadDataStr = DiskCacheManager.getInstance()
 					.getString(savePath, key);
@@ -190,10 +190,10 @@ public abstract class WriteAction extends Action {
 			FunfData funfData = JsonUtils.getInstance()
 					.deserializeToObj(uploadDataStr, FunfData.class);
 			funfDataRequest.funfDatas.add(funfData);
-//			i++;
-//			if (i > 100) {
-//				break;
-//			}
+			i++;
+			if (i > 100) {
+				break;
+			}
 		}
 		if (funfDataRequest.funfDatas == null || funfDataRequest.funfDatas.size() == 0)
 			return;
