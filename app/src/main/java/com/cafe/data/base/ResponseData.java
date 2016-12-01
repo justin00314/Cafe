@@ -17,7 +17,7 @@ public class ResponseData<T> implements Serializable {
 		/**
 		 * 服务器返回状态吗
 		 */
-		public String result_code;
+		public int result_code;
 
 		/**
 		 * 服务器返回状态信息

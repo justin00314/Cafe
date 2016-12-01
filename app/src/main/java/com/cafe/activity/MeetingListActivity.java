@@ -135,7 +135,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 				handler.obtainMessage(MSG_GET_MEETING_LIST).sendToTarget();
 			}
 		};
-		timer.schedule(timerTask, 500, GET_MEETING_LIST_PERIOD);
+		timer.schedule(timerTask, 0, GET_MEETING_LIST_PERIOD);
 
 	}
 
@@ -386,7 +386,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		// 先移除
 		meetingListRvAdapter.remove(position);
 		info.participatedFlag = true;
-		int addPosition = position == 0 ? 0 : position - 1;
+		int addPosition = position <= 0 ? 0 : position - 1;
 		meetingListRvAdapter.add(addPosition, info);
 	}
 
@@ -399,7 +399,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		// 先移除
 		meetingListRvAdapter.remove(position);
 		info.participatedFlag = false;
-		int addPosition = position == 0 ? 0 : position - 1;
+		int addPosition = position <= 0 ? 0 : position - 1;
 		meetingListRvAdapter.add(addPosition, info);
 	}
 

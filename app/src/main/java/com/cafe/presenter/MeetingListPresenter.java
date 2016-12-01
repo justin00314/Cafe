@@ -9,6 +9,7 @@ import com.cafe.R;
 import com.cafe.common.PreManager;
 import com.cafe.common.mvp.MVPPresenter;
 import com.cafe.common.net.JsonHttpResponseHandler;
+import com.cafe.common.net.ResultCode;
 import com.cafe.contract.MeetingListContract;
 import com.cafe.data.account.LogUserResponse;
 import com.cafe.data.account.LogoutResponse;
@@ -106,37 +107,38 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	 */
 	@Override
 	public void loadMeetingList() {
-		MeetingListContract.View view = getView();
-		if (view == null) return;
-		view.showLoadingProgress(null);
+//		MeetingListContract.View view = getView();
+//		if (view == null) return;
+//		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.loadMeetingList(new JsonHttpResponseHandler<MeetingListResponse>() {
 			@Override
 			public void onHandleSuccess(int statusCode, Header[] headers,
 			                            final MeetingListResponse jsonObj) {
-				ThreadUtils.runOnUIThread(new Runnable() {
-					@Override
-					public void run() {
-						handleSuccess(jsonObj);
-					}
-				}, 1000);
+				handleSuccess(jsonObj);
+//				ThreadUtils.runOnUIThread(new Runnable() {
+//					@Override
+//					public void run() {
+//
+//					}
+//				}, 1000);
 			}
 
 			@Override
 			public void onCancel() {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
+//				MeetingListContract.View view = getView();
+//				if (view == null) return;
+//				view.dismissLoadingProgress();
 				//TODO: 没有网络的情况会终止请求,显示点击屏幕重新加载
 
 			}
 
 			@Override
 			public void onHandleFailure(String errorMsg) {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
+//				MeetingListContract.View view = getView();
+//				if (view == null) return;
+//				view.dismissLoadingProgress();
 				// TODO:请求失败, 显示点击屏幕重新加载
 			}
 		});
@@ -146,7 +148,12 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	private void handleSuccess(MeetingListResponse response) {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
-		view.dismissLoadingProgress();
+//		view.dismissLoadingProgress();
+		if (response.desc.result_code == ResultCode.LOGIN_FAILURE) {
+			// 处理登录失效
+			view.skipToLoginActivity();
+			return;
+		}
 		if (response.data.meetingInfos == null || response.data.meetingInfos.size() == 0) {
 			// TODO:会议列表数据为空，显示提示
 			return;
@@ -192,7 +199,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			@Override
 			public void onHandleSuccess(int statusCode, Header[] headers, LogoutResponse jsonObj) {
 				// 处理登出成功
-				handleSuccess();
+				handleSuccess(jsonObj);
 			}
 
 			@Override
@@ -216,12 +223,17 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	/**
 	 * 处理登出成功
 	 */
-	private void handleSuccess() {
+	private void handleSuccess(LogoutResponse jsonObj) {
 		// 清除token
 		PreManager.setToken(context, "");
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
+		if (jsonObj.desc.result_code == ResultCode.LOGIN_FAILURE) {
+			// 处理登录失效
+			view.skipToLoginActivity();
+			return;
+		}
 		ToastUtils.getInstance().showToast(context, R.string.prompt_logout_success);
 		// 跳转到登录界面
 		view.skipToLoginActivity();
@@ -355,6 +367,11 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
+		if (response.desc.result_code == ResultCode.LOGIN_FAILURE) {
+			// 处理登录失效
+			view.skipToLoginActivity();
+			return;
+		}
 		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_quit_success);
 			view.refreshAfterQuit(info);
@@ -428,6 +445,11 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
+		if (response.desc.result_code == ResultCode.LOGIN_FAILURE) {
+			// 处理登录失效
+			view.skipToLoginActivity();
+			return;
+		}
 		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_dismiss_success);
 			view.refreshAfterDismiss(info);
@@ -445,9 +467,9 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		int meetingId = -1;
-		try{
+		try {
 			meetingId = Integer.parseInt(result);
-		} catch(Exception e){
+		} catch (Exception e) {
 			LogUtils.e(TAG, "Exception", e);
 		}
 		meetingListBiz.getMeetingDetail(meetingId, new JsonHttpResponseHandler<QueryMeetingUserResponse>() {
@@ -458,6 +480,11 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 				MeetingListContract.View view = getView();
 				if (view == null) return;
 				view.dismissLoadingProgress();
+				if (jsonObj.desc.result_code == ResultCode.LOGIN_FAILURE) {
+					// 处理登录失效
+					view.skipToLoginActivity();
+					return;
+				}
 				doJoin(jsonObj.data, view);
 			}
 
@@ -548,6 +575,11 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
+		if (response.desc.result_code == ResultCode.LOGIN_FAILURE) {
+			// 处理登录失效
+			view.skipToLoginActivity();
+			return;
+		}
 		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_join_success);
 			view.refreshAfterJoin(info);
@@ -641,6 +673,11 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
+		if (response.desc.result_code == ResultCode.LOGIN_FAILURE) {
+			// 处理登录失效
+			view.skipToLoginActivity();
+			return;
+		}
 		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_cancel_success);
 			view.refreshAfterCancel(info);

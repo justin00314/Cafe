@@ -8,4 +8,5 @@ public interface ResultCode {
 
 	int SUCCESS = 1;
 	int FAILURE = 0;
+	int LOGIN_FAILURE = 403;
 }

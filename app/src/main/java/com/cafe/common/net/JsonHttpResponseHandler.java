@@ -54,7 +54,7 @@ public abstract class JsonHttpResponseHandler<T extends ResponseData> extends Te
 			onHandleFailure("返回数据desc为空");
 			return;
 		}
-		if (StringUtils.parseInt(data.desc.result_code) != ResultCode.SUCCESS) {
+		if (data.desc.result_code != ResultCode.SUCCESS) {
 			LogUtils.i(TAG, "----返回数据desc.result_code不为success----");
 
 			String msg = "返回数据desc.result_code不为success";

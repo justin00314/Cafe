@@ -10,4 +10,6 @@
 	<color name="speak_over_time_text">#d0021b</color>
 
 	<color name="procedure_divider">#979797</color>
+
+	<color name="chronometer_desc_circle">#83a3f4</color>
 </resources>
