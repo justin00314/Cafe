@@ -98,6 +98,7 @@
 		<activity
 			android:name="com.cafe.activity.LoginActivity"
 			android:configChanges="orientation|screenLayout|keyboardHidden|screenSize|navigation"
+			android:launchMode="singleTask"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.NoActionBar"
 			android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
@@ -141,7 +142,8 @@
 
 		<!-- 后台采集数据服务 -->
 		<service android:name="com.cafe.service.FunfManagerService"/>
-
+		<!--检查funf并启动停止的服务-->
+		<service android:name="com.cafe.service.CheckService"/>
 
 	</application>
 

@@ -461,9 +461,9 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	// TODO:通过扫描二维码加入会议
 	@Override
 	public void joinMeetingByQRCode(String result) {
-		final MeetingListContract.View view = getView();
-		if (view == null) return;
-		view.showLoadingProgress(context.getString(R.string.prompt_query_meeting_detail));
+//		final MeetingListContract.View view = getView();
+//		if (view == null) return;
+//		view.showLoadingProgress(context.getString(R.string.prompt_query_meeting_detail));
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		int meetingId = -1;
@@ -472,35 +472,32 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		} catch (Exception e) {
 			LogUtils.e(TAG, "Exception", e);
 		}
-		meetingListBiz.getMeetingDetail(meetingId, new JsonHttpResponseHandler<QueryMeetingUserResponse>() {
+		final int id = meetingId;
+		meetingListBiz.getMeetingDetail(id, new JsonHttpResponseHandler<QueryMeetingUserResponse>() {
 			@Override
 			public void onHandleSuccess(int statusCode, Header[] headers,
 			                            QueryMeetingUserResponse jsonObj) {
 				// TODO:包一个接口来查询一下用户会议详情，返回是否本人创建
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
-				if (jsonObj.desc.result_code == ResultCode.LOGIN_FAILURE) {
-					// 处理登录失效
-					view.skipToLoginActivity();
-					return;
-				}
-				doJoin(jsonObj.data, view);
+//				MeetingListContract.View view = getView();
+//				if (view == null) return;
+//				view.dismissLoadingProgress();
+				jsonObj.data.id = id;
+				doJoin(jsonObj.data);
 			}
 
 			@Override
 			public void onCancel() {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
+//				MeetingListContract.View view = getView();
+//				if (view == null) return;
+//				view.dismissLoadingProgress();
 				ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
 			}
 
 			@Override
 			public void onHandleFailure(String errorMsg) {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
+//				MeetingListContract.View view = getView();
+//				if (view == null) return;
+//				view.dismissLoadingProgress();
 				ToastUtils.getInstance().showToast(context,
 						R.string.prompt_query_meeting_detail_failure);
 			}
@@ -524,7 +521,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			@Override
 			public void onClickEnsure(DialogFragment df, Void aVoid) {
 				df.dismiss();
-				doJoin(meetingInfo, view);
+				doJoin(meetingInfo);
 			}
 
 			@Override
@@ -538,7 +535,9 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	/**
 	 * 执行加入会议任务
 	 */
-	private void doJoin(final MeetingUserInfo meetingInfo, MeetingListContract.View view) {
+	private void doJoin(final MeetingUserInfo meetingInfo) {
+		final MeetingListContract.View view = getView();
+		if (view == null) return;
 		view.showLoadingProgress(context.getString(R.string.prompt_joining));
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
@@ -628,10 +627,15 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			// TODO: 提示只有正在进行的会议才能展示详情？
 			return;
 		}
-		if (meetingInfo.type == MeetingType.THEME.getId())
-			view.skipToThemeDetailActivity(meetingInfo);
-		else if (meetingInfo.type == MeetingType.BRAIN_STORM.getId())
-			view.skipToBrainStormActivity(meetingInfo);
+		// 不是自己创建的又没有加入会议，是不能查看详情的
+		if(meetingInfo.createdFlag || meetingInfo.participatedFlag) {
+			if (meetingInfo.type == MeetingType.THEME.getId())
+				view.skipToThemeDetailActivity(meetingInfo);
+			else if (meetingInfo.type == MeetingType.BRAIN_STORM.getId())
+				view.skipToBrainStormActivity(meetingInfo);
+		} else {
+			ToastUtils.getInstance().showToast(context, R.string.prompt_not_participated);
+		}
 	}
 
 	/**

@@ -40,6 +40,14 @@ public class MeetingListBiz implements MeetingListContract.Model {
 	}
 
 	/**
+	 * 获取当前用户是否已经加入了某个会议
+	 */
+	@Override
+	public void getIsAtSomeMeeting(ResponseHandlerInterface response) {
+		HttpManager.postJson(context, UrlName.PRESENT_AT_MEETING.getUrl(), null, response);
+	}
+
+	/**
 	 * 获取会议详情
 	 */
 	@Override

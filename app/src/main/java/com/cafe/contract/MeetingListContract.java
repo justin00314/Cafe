@@ -188,6 +188,11 @@ public interface MeetingListContract {
 	interface Model extends BaseModel {
 
 		/**
+		 * 查询当前用户是否在某个会议
+		 */
+		void getIsAtSomeMeeting(ResponseHandlerInterface response);
+
+		/**
 		 * 获取会议详情
 		 */
 		void getMeetingDetail(int meetingId, ResponseHandlerInterface response);

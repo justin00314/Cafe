@@ -89,7 +89,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 		stateHistory = context.getString(R.string.meeting_state_history);
 	}
 
-	public void setOnClickItemListener(OnClickItemListener onClickItemListener){
+	public void setOnClickItemListener(OnClickItemListener onClickItemListener) {
 		this.onClickItemListener = onClickItemListener;
 	}
 
@@ -282,17 +282,33 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 				}
 				// 不是创建人的情况，这种情况下一定是已经加入了会议才显示
 				else {
+					holder.operation1Ibt.setVisibility(View.VISIBLE);
 					holder.operation2Ibt.setVisibility(View.GONE);
-					holder.operation1Ibt.setImage(opQuitDrawable);
-					holder.operation1Ibt.setText(opQuit);
-					// 退出会议点击事件
-					holder.operation1Ibt.setOnClickListener(new View.OnClickListener() {
-						@Override
-						public void onClick(View view) {
-							if (onClickQuitListener != null)
-								onClickQuitListener.onClick(meetingInfo);
-						}
-					});
+					if (meetingInfo.participatedFlag) {
+						holder.operation1Ibt.setImage(opQuitDrawable);
+						holder.operation1Ibt.setText(opQuit);
+						// 退出会议点击事件
+						holder.operation1Ibt.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View view) {
+								if (onClickQuitListener != null)
+									onClickQuitListener.onClick(meetingInfo);
+							}
+						});
+					}
+					else {
+						holder.operation1Ibt.setImage(opAddDrawable);
+						holder.operation1Ibt.setText(opAdd);
+						// 加入会议点击事件
+						holder.operation1Ibt.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View view) {
+								LogUtils.i(TAG, "--点击了加入会议--");
+								if (onClickAddListener != null)
+									onClickAddListener.onClick(meetingInfo);
+							}
+						});
+					}
 				}
 				break;
 			case MeetingState.APPOINTMENT:
@@ -325,7 +341,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 		holder.mainAreaRl.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(onClickItemListener != null)
+				if (onClickItemListener != null)
 					onClickItemListener.onClick(meetingInfo);
 			}
 		});

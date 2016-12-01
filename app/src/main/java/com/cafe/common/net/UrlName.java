@@ -45,6 +45,10 @@ public enum UrlName {
 	PROCEDURE_TALKER("querySpeakerForMeeting"),
 	// 查询会议过程详情列表(说话实时记录列表)
 	PROCEDURE_LIST("queryMeetingProcedure"),
+	// 查询当前登录用户在会状态
+	PRESENT_AT_MEETING("queryIsPresentAtMeeting"),
+	// 查询用户实时事件
+	UNSTOP_EVENT("queryUnstopEvent"),
 
 	// 上传采集数据
 	UPLOAD_DATA("uploadFunf");

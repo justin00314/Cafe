@@ -35,6 +35,22 @@
 
 	<string name="prompt_talking">正在发言中…</string>
 	<string name="prompt_episode">正在插嘴中…</string>
+	<string name="prompt_no_speaker">当前没有人说话</string>
+
+	<string name="prompt_not_participated">只有自己创建的会议和已经加入的会议才能查看详情</string>
+
+	<string name="prompt_start_theme">开始主题请求中…</string>
+	<string name="prompt_start_episode">开始插话请求中…</string>
+	<string name="prompt_start_theme_success">开始主题请求成功</string>
+	<string name="prompt_start_episode_success">开始插话请求成功</string>
+	<string name="prompt_start_theme_failure">开始主题请求失败</string>
+	<string name="prompt_start_episode_failure">开始插话请求失败</string>
+	<string name="prompt_stop_theme">结束主题请求中…</string>
+	<string name="prompt_stop_episode">结束插话请求中…</string>
+	<string name="prompt_stop_theme_success">结束主题请求成功</string>
+	<string name="prompt_stop_episode_success">结束插话请求成功</string>
+	<string name="prompt_stop_theme_failure">结束主题请求失败</string>
+	<string name="prompt_stop_episode_failure">结束插话请求失败</string>
 
 	<string name="prompt_query_meeting_detail">正在查询会议信息，请稍后…</string>
 	<string name="prompt_query_meeting_detail_failure">查询会议信息失败，请重试</string>
@@ -65,6 +81,7 @@
 	<string name="dialog_content_dismiss" formatted="false">是否要解散会议 %s？</string>
 
 	<string name="meeting_state_progress_">会议中…</string>
+	<string name="meeting_state_not_start">会议还未开始</string>
 
 	<string name="hour_min_second" formatted="false">%s:%s:%s</string>
 

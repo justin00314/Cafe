@@ -42,6 +42,11 @@ public interface ThemeDetailContract {
 		 */
 		void loadProcedureList(List<ProcedureInfo> procedureInfos);
 
+		/**
+		 * 登录失效需要跳转到登录界面
+		 */
+		void skipToLoginActivity();
+
 	}
 
 

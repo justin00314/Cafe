@@ -1,10 +1,14 @@
 package com.cafe.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.BounceInterpolator;
@@ -18,6 +22,7 @@ import com.cafe.adapter.ProcedureListRvAdapter;
 import com.cafe.common.CommonUtils;
 import com.cafe.common.IntentExtra;
 import com.cafe.common.PreManager;
+import com.cafe.common.ShakePhoneUtils;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.ThemeDetailContract;
 import com.cafe.data.meeting.GetNowTalkerResponse;
@@ -55,11 +60,12 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 
 	private final static int MSG_GET_SPEAKER = 0x0010;
 	private final static int MSG_GET_PROCEDURE = 0x0020;
+	private final static int MSG_CHECK_START_TIME = 0x0030;
 
 	/**
 	 * 每5秒轮询一次会议过程和当前说话人
 	 */
-	private final static int QUERY_PROCEDURE_PERIOD = 1000 * 5;
+	private final static int QUERY_PROCEDURE_PERIOD = 1000;
 
 	/**
 	 * 会议名字
@@ -91,6 +97,14 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	private Timer timer;
 	private TimerTask timerTask;
 
+//	private Timer checkStartTimer;
+//	private TimerTask checkStartTimerTask;
+
+	/**
+	 * 手势监听
+	 */
+	private GestureDetector gestureDetector;
+
 
 	/**
 	 * 界面入口
@@ -109,11 +123,16 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		setMeetingCasc();
 		// 轮询
 		getProcedureInfo();
+		// 监听手势
+		listenGesture();
+		// 摇一摇监听
+		startShakePhone();
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		stopShakePhone();
 		// 一定要结束计时器，避免内存泄露
 		if (meetingTimeCasc.isTimeStart())
 			meetingTimeCasc.stopTime();
@@ -121,8 +140,17 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			timerTask.cancel();
 		if (timer != null)
 			timer.cancel();
+//		if (checkStartTimerTask != null)
+//			checkStartTimerTask.cancel();
+//		if (checkStartTimer != null)
+//			checkStartTimer.cancel();
 		// 退出界面需要清除过滤条件的时间
 		PreManager.setProcedureFilterTime(this, "");
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent e) {
+		return gestureDetector.onTouchEvent(e);
 	}
 
 	/**
@@ -150,6 +178,45 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		speakerStateTv = (TextView) findViewById(R.id.speaker_state_tv);
 		procedureListRv = (RecyclerView) findViewById(R.id.procedure_list_rv);
 		// TODO:还差一个倒计时
+	}
+
+	// TODO:监听手势，双击屏幕开始主题,还需要完善双指敲击
+	private void listenGesture() {
+		gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+			// 监听双击事件
+			@Override
+			public boolean onDoubleTap(MotionEvent e) {
+				//TODO:处理双击手势,暂时不考虑开始主题之后用户换手机的情况
+				// 开始主题
+				if (!PreManager.getStartTopicFlag(getActivity())) {
+					getPresenter().startTheme(meetingInfo);
+				} else {
+					// 停止主题
+					getPresenter().stopTheme(meetingInfo);
+				}
+				return super.onDoubleTap(e);
+			}
+		});
+	}
+
+	private void startShakePhone() {
+		ShakePhoneUtils.getInstance().startShake(this, new ShakePhoneUtils.OnShakeListener() {
+			@Override
+			public void onShake() {
+				LogUtils.i(TAG, "-->手机摇一摇");
+				// 开始插话
+				if (!PreManager.getStartEpisodeFlag(getActivity())) {
+					getPresenter().startEpisode(meetingInfo);
+				} else {
+					// 停止插话
+					getPresenter().stopEpisode(meetingInfo);
+				}
+			}
+		});
+	}
+
+	private void stopShakePhone() {
+		ShakePhoneUtils.getInstance().stopShake();
 	}
 
 	private void setMeetingInfo() {
@@ -209,6 +276,9 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 				case MSG_GET_PROCEDURE:
 					activity.getPresenter().loadProcedureList(meetingInfo);
 					break;
+				case MSG_CHECK_START_TIME:
+					activity.startTime();
+					break;
 			}
 
 		}
@@ -221,13 +291,13 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		// 首先设置计时器的样式
 		int size = DisplayUtils.getScreenWidth(this);
 		meetingTimeCasc.setSize(size * 2 / 3);
-		// 延迟启动计时
-		ThreadUtils.runOnUIThread(new Runnable() {
-			@Override
-			public void run() {
-				startTime();
-			}
-		}, 500);
+//		// 延迟启动计时
+//		ThreadUtils.runOnUIThread(new Runnable() {
+//			@Override
+//			public void run() {
+//				startTime();
+//			}
+//		}, 500);
 
 	}
 
@@ -239,9 +309,16 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		LogUtils.i(TAG, "会议开始时间-->" + startTime);
 		LogUtils.i(TAG, "当前时间-->" + currentTime);
 		long base = currentTime - startTime;
-		LogUtils.i(TAG, "会议已经开始了-->" + base + " 秒");
-		meetingTimeCasc.setCurrentTime(base > 0 ? base : 0);
-		meetingTimeCasc.startTime();
+		if(base > 0) {
+			LogUtils.i(TAG, "会议已经开始了-->" + base + " 秒");
+			meetingTimeCasc.setCurrentTime(base > 0 ? base : 0);
+			meetingTimeCasc.startTime();
+			meetingStateTv.setText(getString(R.string.meeting_state_progress_));
+		}
+		// 会议还没有开始
+		else {
+			meetingStateTv.setText(getString(R.string.meeting_state_not_start));
+		}
 	}
 
 	@Override
@@ -272,7 +349,8 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	 */
 	@Override
 	public void setNowTalker(GetNowTalkerResponse.GetNowTalkerResult result) {
-		speakerNameTv.setText(result.userName);
+		speakerNameTv.setText(TextUtils.isEmpty(result.userName) ? "" :
+				result.userName);
 		speakerStateTv.setText(getSpeakType(result.type));
 		// 加载说话人头像
 		ImageLoader.getInstance().displayImage(result.userPortrait,
@@ -290,7 +368,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			case SpeakType.EPISODE:
 				return getString(R.string.prompt_episode);
 		}
-		return getString(R.string.prompt_talking);
+		return getString(R.string.prompt_no_speaker);
 	}
 
 	/**
@@ -309,5 +387,15 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			procedureListRvAdapter.add(i, procedureInfos.get(i));
 			layoutManager.scrollToPosition(0);
 		}
+	}
+
+	/**
+	 * 跳转到登录界面
+	 */
+	@Override
+	public void skipToLoginActivity() {
+		Intent intent = new Intent(this, LoginActivity.class);
+		startActivity(intent);
+		finish();
 	}
 }

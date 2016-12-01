@@ -29,6 +29,7 @@ import com.cafe.R;
 import com.cafe.adapter.MeetingListRvAdapter;
 import com.cafe.common.ImageLoaderManager;
 import com.cafe.common.IntentExtra;
+import com.cafe.common.ShakePhoneUtils;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.MeetingListContract;
 import com.cafe.data.account.UserInfo;
@@ -36,6 +37,7 @@ import com.cafe.data.meeting.MeetingState;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.fragment.QRCodeDialog;
 import com.cafe.presenter.MeetingListPresenter;
+import com.cafe.service.CheckService;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
@@ -97,16 +99,20 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 */
 	private RecyclerView meetingListRv;
 	private MeetingListRvAdapter meetingListRvAdapter;
+	private LinearLayoutManager layoutManager;
 
 	// TODO:定时任务，轮询会议列表
 	private Timer timer;
 	private TimerTask timerTask;
+
+	private Intent checkIntent;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_meeting_list);
+		checkIntent = new Intent(this, CheckService.class);
 		setToolbar();
 		initViews();
 		setMeetingListRv();
@@ -114,19 +120,42 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		getPresenter().getUserInfo();
 		// 轮询会议列表
 		getMeetingList();
+		// 开始手机摇一摇检测
+		startShakePhone();
 		checkCameraPermission();
+		// 启动检查FUNF的服务
+		startService(checkIntent);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		// 停止手机摇一摇检测
+		stopShakePhone();
+		stopService(checkIntent);
 		if (timerTask != null)
 			timerTask.cancel();
 		if (timer != null)
 			timer.cancel();
 	}
 
-	private void getMeetingList(){
+	private void startShakePhone() {
+		ShakePhoneUtils.getInstance().startShake(this, new ShakePhoneUtils.OnShakeListener() {
+			@Override
+			public void onShake() {
+				LogUtils.i(TAG, "-->手机摇一摇");
+			}
+		});
+	}
+
+	private void stopShakePhone() {
+		ShakePhoneUtils.getInstance().stopShake();
+	}
+
+	/**
+	 * 轮询会议列表
+	 */
+	private void getMeetingList() {
 		final RefreshHandler handler = new RefreshHandler(this);
 		timer = new Timer();
 		timerTask = new TimerTask() {
@@ -139,6 +168,9 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 
 	}
 
+	/**
+	 * Handler处理消息
+	 */
 	private static class RefreshHandler extends Handler {
 
 		private WeakReference<MeetingListActivity> reference;
@@ -175,6 +207,9 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 
 	}
 
+	/**
+	 * 处理其他界面的返回
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -290,7 +325,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 */
 	private void setMeetingListRv() {
 		meetingListRvAdapter = new MeetingListRvAdapter(this);
-		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+		layoutManager = new LinearLayoutManager(this);
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		meetingListRv.setLayoutManager(layoutManager);
 		// 加入分组头部
@@ -384,10 +419,12 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	public void refreshAfterJoin(MeetingUserInfo info) {
 		int position = meetingListRvAdapter.getIndex(info.id);
 		// 先移除
-		meetingListRvAdapter.remove(position);
+		if (position >= 0)
+			meetingListRvAdapter.remove(position);
 		info.participatedFlag = true;
 		int addPosition = position <= 0 ? 0 : position - 1;
 		meetingListRvAdapter.add(addPosition, info);
+		layoutManager.scrollToPosition(0);
 	}
 
 	/**
@@ -397,10 +434,12 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	public void refreshAfterQuit(MeetingUserInfo info) {
 		int position = meetingListRvAdapter.getIndex(info.id);
 		// 先移除
-		meetingListRvAdapter.remove(position);
+		if (position >= 0)
+			meetingListRvAdapter.remove(position);
 		info.participatedFlag = false;
 		int addPosition = position <= 0 ? 0 : position - 1;
 		meetingListRvAdapter.add(addPosition, info);
+		layoutManager.scrollToPosition(0);
 	}
 
 	/**
@@ -466,6 +505,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 			for (int i = 0; i < size; i++) {
 				LogUtils.i(TAG, "加入数据-->" + i);
 				meetingListRvAdapter.add(i, meetingInfos.get(i));
+				layoutManager.scrollToPosition(0);
 			}
 		}
 		// 如果本来有数据
@@ -565,7 +605,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 
 
 			}
-
+			layoutManager.scrollToPosition(0);
 		}
 
 

@@ -1,8 +1,10 @@
 package com.cafe.base;
 
 import android.app.Application;
+import android.content.Intent;
 
 import com.cafe.common.ImageLoaderManager;
+import com.cafe.service.CheckService;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import org.justin.utils.common.LogUtils;
@@ -50,7 +52,6 @@ public class BaseApplication extends Application {
 //						.setFontAttrId(R.attr.fontPath)
 //						.build()
 //		);
-
 		ZXingLibrary.initDisplayOpinion(this);
 	}
 
