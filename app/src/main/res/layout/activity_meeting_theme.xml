@@ -48,6 +48,7 @@
 			tools:ignore="contentDescription"/>
 	</RelativeLayout>
 
+	<!--中间计时器区域-->
 	<RelativeLayout
 		android:id="@+id/meeting_time_rl"
 		android:layout_width="wrap_content"
@@ -55,7 +56,7 @@
 		android:layout_below="@+id/meeting_info_rl"
 		android:layout_centerHorizontal="true">
 
-		<!--中间计时器区域-->
+		<!--正向计时-->
 		<com.cafe.view.ChronometerAsc
 			android:id="@+id/meeting_time_casc"
 			android:layout_width="wrap_content"
@@ -63,6 +64,15 @@
 			android:layout_centerHorizontal="true"
 			android:layout_margin="10dp"
 			android:visibility="visible"/>
+
+		<!--倒计时-->
+		<com.cafe.view.ChronometerDesc
+			android:id="@+id/meeting_time_cdesc"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_margin="10dp"
+			android:visibility="gone"/>
 	</RelativeLayout>
 
 	<!--展示当前说话人区域-->

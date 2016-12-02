@@ -1,5 +1,6 @@
 package com.cafe.activity;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +32,7 @@ import com.cafe.data.meeting.ProcedureInfo;
 import com.cafe.data.meeting.SpeakType;
 import com.cafe.presenter.ThemeDetailPresenter;
 import com.cafe.view.ChronometerAsc;
+import com.cafe.view.ChronometerDesc;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.justin.utils.common.LogUtils;
@@ -62,6 +64,8 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	private final static int MSG_GET_PROCEDURE = 0x0020;
 	private final static int MSG_CHECK_START_TIME = 0x0030;
 
+	private final static int COUNT_DOWN_MAX = 30;
+
 	/**
 	 * 每5秒轮询一次会议过程和当前说话人
 	 */
@@ -79,6 +83,10 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	 * 正向计时
 	 */
 	private ChronometerAsc meetingTimeCasc;
+	/**
+	 * 倒计时
+	 */
+	private ChronometerDesc meetingTimeCdesc;
 
 	private ImageView shakePhoneIv;
 	private CircleImageView speakerPortraitCiv;
@@ -96,9 +104,6 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	 */
 	private Timer timer;
 	private TimerTask timerTask;
-
-//	private Timer checkStartTimer;
-//	private TimerTask checkStartTimerTask;
 
 	/**
 	 * 手势监听
@@ -136,14 +141,12 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		// 一定要结束计时器，避免内存泄露
 		if (meetingTimeCasc.isTimeStart())
 			meetingTimeCasc.stopTime();
+		if (meetingTimeCdesc.isTimeStart())
+			meetingTimeCdesc.stopTime();
 		if (timerTask != null)
 			timerTask.cancel();
 		if (timer != null)
 			timer.cancel();
-//		if (checkStartTimerTask != null)
-//			checkStartTimerTask.cancel();
-//		if (checkStartTimer != null)
-//			checkStartTimer.cancel();
 		// 退出界面需要清除过滤条件的时间
 		PreManager.setProcedureFilterTime(this, "");
 	}
@@ -280,6 +283,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		// 首先设置计时器的样式
 		int size = DisplayUtils.getScreenWidth(this);
 		meetingTimeCasc.setSize(size * 2 / 3);
+		meetingTimeCdesc.setSize(size * 2 / 3);
 	}
 
 	private void startTime() {
@@ -291,7 +295,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		LogUtils.i(TAG, "当前时间-->" + currentTime);
 		long base = currentTime - startTime;
 		meetingTimeCasc.setCurrentTime(base > 0 ? base : 0);
-		if(base >= 0) {
+		if (base >= 0) {
 			LogUtils.i(TAG, "会议已经开始了-->" + base + " 秒");
 			meetingTimeCasc.startTime();
 			meetingStateTv.setText(getString(R.string.meeting_state_progress_));
@@ -318,11 +322,25 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	@Override
 	public void refreshAfterStartEpisode() {
 		meetingTimeCasc.setVisibility(View.GONE);
+		meetingTimeCdesc.setVisibility(View.VISIBLE);
+		// 执行动画
+//		ObjectAnimator scaleX = ObjectAnimator.ofFloat(meetingTimeCasc, "scaleX", 1f, 0f);
+//		ObjectAnimator scaleY = ObjectAnimator.ofFloat(meetingTimeCasc, "scaleY", 1f, 0f);
+//		ObjectAnimator scaleX1 = ObjectAnimator.ofFloat(meetingTimeCdesc, "scaleX", 0f, 1f);
+//		ObjectAnimator scaleY1 = ObjectAnimator.ofFloat(meetingTimeCdesc, "scaleY", 0f, 1f);
+
+		// 倒计时开始
+		meetingTimeCdesc.setCurrentTime(COUNT_DOWN_MAX);
+		meetingTimeCdesc.startTime();
 	}
 
 	@Override
 	public void refreshAfterStopEpisode() {
 		meetingTimeCasc.setVisibility(View.VISIBLE);
+		meetingTimeCdesc.setVisibility(View.GONE);
+		// 倒计时结束
+		meetingTimeCdesc.setCurrentTime(0);
+		meetingTimeCdesc.stopTime();
 	}
 
 	/**
@@ -337,6 +355,9 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		ImageLoader.getInstance().displayImage(result.userPortrait,
 				speakerPortraitCiv, CommonUtils.getPortraitOptions(),
 				new AnimationImageLoadingListener());
+//		if (result.type == SpeakType.EPISODE && !meetingTimeCdesc.isTimeStart()) {
+//			refreshAfterStartEpisode();
+//		}
 	}
 
 	/**

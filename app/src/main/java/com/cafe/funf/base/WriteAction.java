@@ -38,6 +38,7 @@ public abstract class WriteAction extends Action {
 
 	private final static String TIMESTAMP = "_timeStamp";
 
+	private final static int UPLOAD_NUMBER_LIMIT = 30;
 	private final static int UPLOAD_DELAY = 5000;
 	private final static int UPLOAD_PERIOD = 3000;
 	/**
@@ -191,7 +192,7 @@ public abstract class WriteAction extends Action {
 					.deserializeToObj(uploadDataStr, FunfData.class);
 			funfDataRequest.funfDatas.add(funfData);
 			i++;
-			if (i > 100) {
+			if (i > UPLOAD_NUMBER_LIMIT) {
 				break;
 			}
 		}

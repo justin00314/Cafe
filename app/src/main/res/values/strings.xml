@@ -89,6 +89,8 @@
 
 	<string name="hour_min_second" formatted="false">%s:%s:%s</string>
 
+	<string name="second" formatted="false">%s″</string>
+
 
 	<string name="user_name">用户名</string>
 	<string name="password">密码</string>

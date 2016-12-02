@@ -38,6 +38,7 @@ import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.fragment.QRCodeDialog;
 import com.cafe.presenter.MeetingListPresenter;
 import com.cafe.service.CheckService;
+import com.cafe.service.FunfManagerService;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
@@ -46,6 +47,7 @@ import com.uuzuche.lib_zxing.activity.CodeUtils;
 import org.justin.utils.common.LogUtils;
 import org.justin.utils.common.ResourcesUtils;
 import org.justin.utils.common.ToastUtils;
+import org.justin.utils.system.AppUtils;
 import org.justin.utils.system.DisplayUtils;
 
 import java.lang.ref.WeakReference;
@@ -119,7 +121,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		// 获取用户信息
 		getPresenter().getUserInfo();
 		// 轮询会议列表
-//		getMeetingList();
+		getMeetingList();
 		// 开始手机摇一摇检测
 		startShakePhone();
 		checkCameraPermission();
@@ -137,6 +139,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 			timerTask.cancel();
 		if (timer != null)
 			timer.cancel();
+
 	}
 
 	private void startShakePhone() {

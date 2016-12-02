@@ -354,6 +354,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 		if (jsonObj.data.result) {
 			PreManager.setStartEpisodeFlag(context, true);
 			ToastUtils.getInstance().showToast(context, R.string.prompt_start_episode_success);
+			view.refreshAfterStartEpisode();
 		} else {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_start_episode_failure);
 		}
@@ -393,6 +394,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 		if (jsonObj.data.result) {
 			PreManager.setStartEpisodeFlag(context, false);
 			ToastUtils.getInstance().showToast(context, R.string.prompt_stop_episode_success);
+			view.refreshAfterStopEpisode();
 		} else {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_stop_episode_failure);
 		}
