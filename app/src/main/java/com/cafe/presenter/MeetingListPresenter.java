@@ -148,12 +148,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	private void handleSuccess(MeetingListResponse response) {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
-//		view.dismissLoadingProgress();
-		if (response.desc.result_code == ResultCode.LOGIN_FAILURE) {
-			// 处理登录失效
-			view.skipToLoginActivity();
-			return;
-		}
 		if (response.data.meetingInfos == null || response.data.meetingInfos.size() == 0) {
 			// TODO:会议列表数据为空，显示提示
 			return;
@@ -229,11 +223,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		if (jsonObj.desc.result_code == ResultCode.LOGIN_FAILURE) {
-			// 处理登录失效
-			view.skipToLoginActivity();
-			return;
-		}
 		ToastUtils.getInstance().showToast(context, R.string.prompt_logout_success);
 		// 跳转到登录界面
 		view.skipToLoginActivity();
@@ -367,11 +356,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		if (response.desc.result_code == ResultCode.LOGIN_FAILURE) {
-			// 处理登录失效
-			view.skipToLoginActivity();
-			return;
-		}
 		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_quit_success);
 			view.refreshAfterQuit(info);
@@ -445,11 +429,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		if (response.desc.result_code == ResultCode.LOGIN_FAILURE) {
-			// 处理登录失效
-			view.skipToLoginActivity();
-			return;
-		}
 		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_dismiss_success);
 			view.refreshAfterDismiss(info);
@@ -574,11 +553,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		if (response.desc.result_code == ResultCode.LOGIN_FAILURE) {
-			// 处理登录失效
-			view.skipToLoginActivity();
-			return;
-		}
 		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_join_success);
 			view.refreshAfterJoin(info);
@@ -677,11 +651,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		view.dismissLoadingProgress();
-		if (response.desc.result_code == ResultCode.LOGIN_FAILURE) {
-			// 处理登录失效
-			view.skipToLoginActivity();
-			return;
-		}
 		if (response.data != null && response.data.result) {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_cancel_success);
 			view.refreshAfterCancel(info);

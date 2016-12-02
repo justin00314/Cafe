@@ -11,6 +11,7 @@ import com.cafe.data.account.LogUserRequest;
 import com.cafe.data.meeting.GetNowTalkerRequest;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.data.meeting.ProcedureListRequest;
+import com.cafe.data.meeting.QueryUnstopEventRequest;
 import com.cafe.data.meeting.StartEpisodeRequest;
 import com.cafe.data.meeting.StartThemeRequest;
 import com.cafe.data.meeting.StopEpisodeRequest;
@@ -29,6 +30,13 @@ public class ThemeDetailBiz implements ThemeDetailContract.Model {
 
 	public ThemeDetailBiz(Context context) {
 		this.context = context;
+	}
+
+	@Override
+	public void queryUnstopEvent(MeetingUserInfo info, ResponseHandlerInterface response) {
+		QueryUnstopEventRequest data = new QueryUnstopEventRequest();
+		data.id = info.id;
+		HttpManager.postJson(context, UrlName.UNSTOP_EVENT.getUrl(), data, response);
 	}
 
 	@Override

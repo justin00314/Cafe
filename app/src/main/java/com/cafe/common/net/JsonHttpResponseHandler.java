@@ -1,5 +1,7 @@
 package com.cafe.common.net;
 
+import android.content.Context;
+
 import com.cafe.data.base.ErrorMessageResponse;
 import com.cafe.data.base.ResponseData;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -22,6 +24,8 @@ public abstract class JsonHttpResponseHandler<T extends ResponseData> extends Te
 	private final static String TAG = JsonHttpResponseHandler.class.getSimpleName();
 
 	private Class<T> mEntityClz;
+
+	private Context context;
 
 	@SuppressWarnings("unchecked")
 	public JsonHttpResponseHandler() {
@@ -65,8 +69,6 @@ public abstract class JsonHttpResponseHandler<T extends ResponseData> extends Te
 			if (error != null && error.data.message != null) {
 				msg = error.data.message;
 			}
-
-//			ToastUtils.getInstance().showToast(context, context.getString(R.string.request_failure));
 			onHandleFailure(msg);
 			return;
 		}

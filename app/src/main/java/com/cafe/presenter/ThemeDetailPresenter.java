@@ -15,6 +15,8 @@ import com.cafe.data.meeting.MeetingListResponse;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.data.meeting.ProcedureListRequest;
 import com.cafe.data.meeting.ProcedureListResponse;
+import com.cafe.data.meeting.QueryUnstopEventResponse;
+import com.cafe.data.meeting.SpeakType;
 import com.cafe.data.meeting.StartEpisodeRequest;
 import com.cafe.data.meeting.StartEpisodeResponse;
 import com.cafe.data.meeting.StartThemeResponse;
@@ -144,6 +146,103 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	}
 
 	/**
+	 * 操作开始或者结束主题
+	 */
+	@Override
+	public void operateTheme(final MeetingUserInfo info) {
+		ThemeDetailContract.Model themeDetailBiz = getModel();
+		if (themeDetailBiz == null) return;
+		ToastUtils.getInstance().showToast(context, R.string.prompt_query_unstop_event);
+		themeDetailBiz.queryUnstopEvent(info, new JsonHttpResponseHandler<QueryUnstopEventResponse>() {
+
+			@Override
+			public void onHandleSuccess(int statusCode, Header[] headers,
+			                            QueryUnstopEventResponse jsonObj) {
+				handleThemeSuccess(info, jsonObj);
+			}
+
+			@Override
+			public void onCancel() {
+				ToastUtils.getInstance().showToast(context,
+						R.string.prompt_query_unstop_event_failure);
+			}
+
+			@Override
+			public void onHandleFailure(String errorMsg) {
+				ToastUtils.getInstance().showToast(context,
+						R.string.prompt_query_unstop_event_failure);
+			}
+		});
+	}
+
+	private void handleThemeSuccess(MeetingUserInfo info, QueryUnstopEventResponse jsonObj) {
+		ThemeDetailContract.View view = getView();
+		if (view == null) return;
+		// 用户在事件中
+		if (jsonObj.data.result) {
+			if (jsonObj.data.speakType == SpeakType.THEME) {
+				// 已经开始主题则结束主题
+				stopTheme(info);
+			} else if(jsonObj.data.speakType == SpeakType.EPISODE){
+				ToastUtils.getInstance().showToast(context,
+						R.string.prompt_episode_);
+			}
+		} else {
+			// 不在事件中则开始主题
+			startTheme(info);
+		}
+	}
+
+	/**
+	 * 操作开始或者结束插话
+	 */
+	@Override
+	public void operateEpisode(final MeetingUserInfo info) {
+		ThemeDetailContract.Model themeDetailBiz = getModel();
+		if (themeDetailBiz == null) return;
+		ToastUtils.getInstance().showToast(context, R.string.prompt_query_unstop_event);
+		themeDetailBiz.queryUnstopEvent(info, new JsonHttpResponseHandler<QueryUnstopEventResponse>() {
+
+			@Override
+			public void onHandleSuccess(int statusCode, Header[] headers,
+			                            QueryUnstopEventResponse jsonObj) {
+				handleEpisodeSuccess(info, jsonObj);
+			}
+
+			@Override
+			public void onCancel() {
+				ToastUtils.getInstance().showToast(context,
+						R.string.prompt_query_unstop_event_failure);
+			}
+
+			@Override
+			public void onHandleFailure(String errorMsg) {
+				ToastUtils.getInstance().showToast(context,
+						R.string.prompt_query_unstop_event_failure);
+			}
+		});
+	}
+
+	private void handleEpisodeSuccess(MeetingUserInfo info, QueryUnstopEventResponse jsonObj) {
+		ThemeDetailContract.View view = getView();
+		if (view == null) return;
+		// 用户在事件中
+		if (jsonObj.data.result) {
+			if (jsonObj.data.speakType == SpeakType.EPISODE) {
+				// 已经开始主题则结束主题
+				stopEpisode(info);
+			} else if(jsonObj.data.speakType == SpeakType.THEME){
+				ToastUtils.getInstance().showToast(context,
+						R.string.prompt_theme_);
+			}
+		} else {
+			// 不在事件中则开始主题
+			startEpisode(info);
+		}
+	}
+
+
+	/**
 	 * 开始主题
 	 */
 	@Override
@@ -174,11 +273,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	private void handleSuccess(StartThemeResponse jsonObj) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
-		if (jsonObj.desc.result_code == ResultCode.LOGIN_FAILURE) {
-			// 处理登录失效
-			view.skipToLoginActivity();
-			return;
-		}
 		if (jsonObj.data.result) {
 			PreManager.setStartTopicFlag(context, true);
 			ToastUtils.getInstance().showToast(context, R.string.prompt_start_theme_success);
@@ -218,11 +312,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	private void handleSuccess(StopThemeResponse jsonObj) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
-		if (jsonObj.desc.result_code == ResultCode.LOGIN_FAILURE) {
-			// 处理登录失效
-			view.skipToLoginActivity();
-			return;
-		}
 		if (jsonObj.data.result) {
 			PreManager.setStartTopicFlag(context, false);
 			ToastUtils.getInstance().showToast(context, R.string.prompt_stop_theme_success);
@@ -262,11 +351,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	private void handleSuccess(StartEpisodeResponse jsonObj) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
-		if (jsonObj.desc.result_code == ResultCode.LOGIN_FAILURE) {
-			// 处理登录失效
-			view.skipToLoginActivity();
-			return;
-		}
 		if (jsonObj.data.result) {
 			PreManager.setStartEpisodeFlag(context, true);
 			ToastUtils.getInstance().showToast(context, R.string.prompt_start_episode_success);
@@ -306,11 +390,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	private void handleSuccess(StopEpisodeResponse jsonObj) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
-		if (jsonObj.desc.result_code == ResultCode.LOGIN_FAILURE) {
-			// 处理登录失效
-			view.skipToLoginActivity();
-			return;
-		}
 		if (jsonObj.data.result) {
 			PreManager.setStartEpisodeFlag(context, false);
 			ToastUtils.getInstance().showToast(context, R.string.prompt_stop_episode_success);

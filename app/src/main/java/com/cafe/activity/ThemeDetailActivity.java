@@ -186,14 +186,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			// 监听双击事件
 			@Override
 			public boolean onDoubleTap(MotionEvent e) {
-				//TODO:处理双击手势,暂时不考虑开始主题之后用户换手机的情况
-				// 开始主题
-				if (!PreManager.getStartTopicFlag(getActivity())) {
-					getPresenter().startTheme(meetingInfo);
-				} else {
-					// 停止主题
-					getPresenter().stopTheme(meetingInfo);
-				}
+				getPresenter().operateTheme(meetingInfo);
 				return super.onDoubleTap(e);
 			}
 		});
@@ -205,12 +198,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			public void onShake() {
 				LogUtils.i(TAG, "-->手机摇一摇");
 				// 开始插话
-				if (!PreManager.getStartEpisodeFlag(getActivity())) {
-					getPresenter().startEpisode(meetingInfo);
-				} else {
-					// 停止插话
-					getPresenter().stopEpisode(meetingInfo);
-				}
+				getPresenter().operateEpisode(meetingInfo);
 			}
 		});
 	}

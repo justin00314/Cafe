@@ -39,6 +39,10 @@
 
 	<string name="prompt_not_participated">只有自己创建的会议和已经加入的会议才能查看详情</string>
 
+	<string name="prompt_episode_">您正在插话中，不能开始主题</string>
+	<string name="prompt_theme_">您正在主题中，不能插话</string>
+	<string name="prompt_query_unstop_event">查询用户事件中…</string>
+	<string name="prompt_query_unstop_event_failure">查询用户事件失败</string>
 	<string name="prompt_start_theme">开始主题请求中…</string>
 	<string name="prompt_start_episode">开始插话请求中…</string>
 	<string name="prompt_start_theme_success">开始主题请求成功</string>

@@ -21,7 +21,6 @@ public interface ThemeDetailContract {
 
 	interface View extends BaseView {
 
-
 		/**
 		 * 开始插话后刷新界面
 		 */
@@ -62,6 +61,16 @@ public interface ThemeDetailContract {
 		void loadProcedureList(MeetingUserInfo info);
 
 		/**
+		 * 操作开始主题或结束主题
+		 */
+		void operateTheme(MeetingUserInfo info);
+
+		/**
+		 * 操作开始插话或结束插话
+		 */
+		void operateEpisode(MeetingUserInfo info);
+
+		/**
 		 * 开始主题
 		 */
 		void startTheme(MeetingUserInfo info);
@@ -84,6 +93,11 @@ public interface ThemeDetailContract {
 	}
 
 	interface Model extends BaseModel {
+
+		/**
+		 * 查询当前登录人的未结束事件
+		 */
+		void queryUnstopEvent(MeetingUserInfo info, ResponseHandlerInterface response);
 		/**
 		 * 获取当前的说话人
 		 */
