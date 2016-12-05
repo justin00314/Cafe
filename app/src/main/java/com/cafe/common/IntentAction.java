@@ -6,6 +6,9 @@ package com.cafe.common;
  * Email:502953057@qq.com,zhenghx3@asiainfo.com
  */
 public interface IntentAction {
+	/**
+	 * 检查用户是否已经参加会议的结果广播
+	 */
+	String RECEIVER_IS_PRESENT_AT_MEETING = "com.cafe.user.is.present.at.meeting.receiver";
 
-	String ACTIVITY_ANALYSIS_DETAIL = "com.ai2020lab.textanalysis.activity.AnalysisDetailActivity";
 }

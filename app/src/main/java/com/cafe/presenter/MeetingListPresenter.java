@@ -28,10 +28,12 @@ import com.cafe.data.meeting.QuitMeetingResponse;
 import com.cafe.model.meeting.MeetingListBiz;
 
 import org.justin.utils.common.LogUtils;
+import org.justin.utils.common.TimeUtils;
 import org.justin.utils.common.ToastUtils;
 import org.justin.utils.thread.ThreadUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -148,6 +150,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	private void handleSuccess(MeetingListResponse response) {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
+//		view.dismissLoadingProgress();
 		if (response.data.meetingInfos == null || response.data.meetingInfos.size() == 0) {
 			// TODO:会议列表数据为空，显示提示
 			return;
@@ -591,7 +594,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	}
 
 	/**
-	 * 展示会议过程详情
+	 * 跳转到会议详情界面
 	 */
 	@Override
 	public void showMeetingProcedure(MeetingUserInfo meetingInfo) {
@@ -601,8 +604,17 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			// TODO: 提示只有正在进行的会议才能展示详情？
 			return;
 		}
+		long startTime = TimeUtils.dateToTimeStamp(meetingInfo.startTime,
+				TimeUtils.Template.YMDHMS) / 1000;
+		long currentTime = new Date().getTime() / 1000;
+		LogUtils.i(TAG, "会议开始时间-->" + startTime);
+		LogUtils.i(TAG, "当前时间-->" + currentTime);
+		if (currentTime < startTime) {
+			ToastUtils.getInstance().showToast(context, R.string.prompt_meeting_not_start);
+			return;
+		}
 		// 不是自己创建的又没有加入会议，是不能查看详情的
-		if(meetingInfo.createdFlag || meetingInfo.participatedFlag) {
+		if (meetingInfo.createdFlag || meetingInfo.participatedFlag) {
 			if (meetingInfo.type == MeetingType.THEME.getId())
 				view.skipToThemeDetailActivity(meetingInfo);
 			else if (meetingInfo.type == MeetingType.BRAIN_STORM.getId())

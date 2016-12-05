@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 
+import com.cafe.common.IntentExtra;
 import com.cafe.common.net.HttpManager;
 import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.common.net.UrlName;
@@ -24,6 +25,8 @@ import java.util.TimerTask;
 
 import cz.msebera.android.httpclient.Header;
 
+import static com.cafe.common.IntentAction.RECEIVER_IS_PRESENT_AT_MEETING;
+
 /**
  * 检查状态用的Service,用于后台启动数据采集
  * Created by Justin Z on 2016/12/1.
@@ -35,6 +38,7 @@ public class CheckService extends Service {
 	private final static String TAG = CheckService.class.getSimpleName();
 
 	private final static int MSG_CHECK_PRESENT_AT_MEETING = 0x0010;
+	// 10秒检查一次用户是否已经参加会议
 	private final static long CHECK_PERIOD = 10 * 1000;
 
 	private Timer timer;
@@ -140,16 +144,18 @@ public class CheckService extends Service {
 		boolean funfFlag = AppUtils.isServiceRunning(this,
 				FunfManagerService.class.getCanonicalName());
 		LogUtils.i(TAG, "funf启动状态-->" + funfFlag);
-		// 启动funf逻辑：当前用户参加了某个会议，并且会议已经开始,funf没有启动
 		if (response.data != null && response.data.id != -1) {
 			long startTime = TimeUtils.dateToTimeStamp(response.data.startTime,
 					TimeUtils.Template.YMDHMS) / 1000;
 			long currentTime = new Date().getTime() / 1000;
 			LogUtils.i(TAG, "会议开始时间-->" + startTime);
 			LogUtils.i(TAG, "当前时间-->" + currentTime);
-			if (startTime != -1 && currentTime >= startTime && !funfFlag) {
-				LogUtils.i(TAG, "启动funf-->");
-				startService(funfIntent);
+			// 启动funf逻辑：1.当前用户参加了某个会议，2.会议已经开始 3.funf没有启动
+			if (startTime != -1 && currentTime >= startTime) {
+				if (!funfFlag) {
+					LogUtils.i(TAG, "启动funf-->");
+					startService(funfIntent);
+				}
 			}
 		}
 		// 停止funf逻辑:用户没有参与会议,并且funf已经启动
@@ -157,6 +163,11 @@ public class CheckService extends Service {
 			LogUtils.i(TAG, "停止funf-->");
 			stopService(funfIntent);
 		}
+		// TODO:发送广播通知全局
+		Intent intent = new Intent(RECEIVER_IS_PRESENT_AT_MEETING);
+		intent.putExtra(IntentExtra.MEETING_USER_INFO, response.data);
+		sendBroadcast(intent);
+
 	}
 
 

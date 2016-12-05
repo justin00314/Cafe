@@ -1,7 +1,9 @@
 package com.cafe.activity;
 
-import android.animation.ObjectAnimator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,6 +23,7 @@ import com.aiviews.toolbar.ToolbarActivity;
 import com.cafe.R;
 import com.cafe.adapter.ProcedureListRvAdapter;
 import com.cafe.common.CommonUtils;
+import com.cafe.common.IntentAction;
 import com.cafe.common.IntentExtra;
 import com.cafe.common.PreManager;
 import com.cafe.common.ShakePhoneUtils;
@@ -38,7 +41,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import org.justin.utils.common.LogUtils;
 import org.justin.utils.common.TimeUtils;
 import org.justin.utils.system.DisplayUtils;
-import org.justin.utils.thread.ThreadUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.Date;
@@ -110,6 +112,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	 */
 	private GestureDetector gestureDetector;
 
+	private PresentAtMeetingReceiver receiver;
 
 	/**
 	 * 界面入口
@@ -120,18 +123,26 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		// 设置屏幕不休眠
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		meetingInfo = (MeetingUserInfo) getIntent().getSerializableExtra(
+				IntentExtra.MEETING_USER_INFO);
 		setContentView(R.layout.activity_meeting_theme);
 		setToolbar();
+		// 初始化各个view
 		initViews();
-		setProcedureListRv();
+		// 设置会议基本信息
 		setMeetingInfo();
-		setMeetingCasc();
-		// 轮询
+		setProcedureListRv();
+		// 轮询说话详情列表
 		getProcedureInfo();
+		setMeetingCasc();
+		// 开始会议计时
+		getPresenter().startMeetingTime(meetingInfo);
 		// 监听手势
 		listenGesture();
 		// 摇一摇监听
 		startShakePhone();
+		// 注册广播监听用户再会状态
+		registerReceiver();
 	}
 
 	@Override
@@ -139,8 +150,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		super.onDestroy();
 		stopShakePhone();
 		// 一定要结束计时器，避免内存泄露
-		if (meetingTimeCasc.isTimeStart())
-			meetingTimeCasc.stopTime();
+		getPresenter().stopMeetingTime();
 		if (meetingTimeCdesc.isTimeStart())
 			meetingTimeCdesc.stopTime();
 		if (timerTask != null)
@@ -149,11 +159,43 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			timer.cancel();
 		// 退出界面需要清除过滤条件的时间
 		PreManager.setProcedureFilterTime(this, "");
+		unregisterReceiver();
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
 		return gestureDetector.onTouchEvent(e);
+	}
+
+	// 注册用户在会状态广播
+	private void registerReceiver(){
+		if(receiver == null)
+			receiver = new PresentAtMeetingReceiver();
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(IntentAction.RECEIVER_IS_PRESENT_AT_MEETING);
+		registerReceiver(receiver, intentFilter);
+	}
+
+	/**
+	 * 反注册用户在会状态广播
+	 */
+	private void unregisterReceiver(){
+		if(receiver != null)
+			unregisterReceiver(receiver);
+
+	}
+
+	/**
+	 * 用户在会状态广播接收器
+	 */
+	private class PresentAtMeetingReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			MeetingUserInfo info = (MeetingUserInfo) intent
+					.getSerializableExtra(IntentExtra.MEETING_USER_INFO);
+			getPresenter().doReceiveAtMeeting(info);
+		}
 	}
 
 	/**
@@ -176,6 +218,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		meetingStateTv = (TextView) findViewById(R.id.meeting_state_tv);
 		shakePhoneIv = (ImageView) findViewById(R.id.shake_phone_iv);
 		meetingTimeCasc = (ChronometerAsc) findViewById(R.id.meeting_time_casc);
+		meetingTimeCdesc = (ChronometerDesc) findViewById(R.id.meeting_time_cdesc);
 		speakerPortraitCiv = (CircleImageView) findViewById(R.id.speaker_portrait_civ);
 		speakerNameTv = (TextView) findViewById(R.id.speaker_name_tv);
 		speakerStateTv = (TextView) findViewById(R.id.speaker_state_tv);
@@ -195,6 +238,9 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		});
 	}
 
+	/**
+	 * 开始手机摇晃监听
+	 */
 	private void startShakePhone() {
 		ShakePhoneUtils.getInstance().startShake(this, new ShakePhoneUtils.OnShakeListener() {
 			@Override
@@ -206,14 +252,19 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		});
 	}
 
+	/**
+	 * 结束手机摇晃监听
+	 */
 	private void stopShakePhone() {
 		ShakePhoneUtils.getInstance().stopShake();
 	}
 
+	/**
+	 * 设置会议信息
+	 */
 	private void setMeetingInfo() {
-		meetingInfo = (MeetingUserInfo) getIntent().getSerializableExtra(
-				IntentExtra.MEETING_USER_INFO);
 		meetingNameTv.setText(meetingInfo.name);
+		meetingStateTv.setText(getString(R.string.meeting_state_progress_));
 	}
 
 	/**
@@ -241,7 +292,6 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			public void run() {
 				handler.obtainMessage(MSG_GET_SPEAKER).sendToTarget();
 				handler.obtainMessage(MSG_GET_PROCEDURE).sendToTarget();
-				handler.obtainMessage(MSG_CHECK_START_TIME).sendToTarget();
 			}
 		};
 		timer.schedule(timerTask, 500, QUERY_PROCEDURE_PERIOD);
@@ -268,9 +318,6 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 				case MSG_GET_PROCEDURE:
 					activity.getPresenter().loadProcedureList(meetingInfo);
 					break;
-				case MSG_CHECK_START_TIME:
-					activity.startTime();
-					break;
 			}
 
 		}
@@ -286,26 +333,6 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		meetingTimeCdesc.setSize(size * 2 / 3);
 	}
 
-	private void startTime() {
-		// TODO:根据当前时间和会议开始时间计算计时器的初始值
-		long startTime = TimeUtils.dateToTimeStamp(meetingInfo.startTime,
-				TimeUtils.Template.YMDHMS) / 1000;
-		long currentTime = new Date().getTime() / 1000;
-		LogUtils.i(TAG, "会议开始时间-->" + startTime);
-		LogUtils.i(TAG, "当前时间-->" + currentTime);
-		long base = currentTime - startTime;
-		meetingTimeCasc.setCurrentTime(base > 0 ? base : 0);
-		if (base >= 0) {
-			LogUtils.i(TAG, "会议已经开始了-->" + base + " 秒");
-			meetingTimeCasc.startTime();
-			meetingStateTv.setText(getString(R.string.meeting_state_progress_));
-		}
-		// 会议还没有开始
-		else {
-			meetingStateTv.setText(getString(R.string.meeting_state_not_start));
-		}
-	}
-
 	@Override
 	public void onClick(View view) {
 
@@ -314,6 +341,33 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	@Override
 	public ThemeDetailPresenter initPresenter() {
 		return new ThemeDetailPresenter(this);
+	}
+
+	/**
+	 * 退出界面
+	 */
+	@Override
+	public void finishActivity() {
+		finish();
+	}
+
+	/**
+	 * 开始会议计时
+	 */
+	@Override
+	public void startMeetingTime(long time) {
+		if (meetingTimeCasc.isTimeStart()) return;
+		meetingTimeCasc.setCurrentTime(time);
+		meetingTimeCasc.startTime();
+	}
+
+	/**
+	 * 结束会议计时
+	 */
+	@Override
+	public void stopMeetingTime() {
+		if (meetingTimeCasc.isTimeStart())
+			meetingTimeCasc.stopTime();
 	}
 
 	/**
@@ -350,14 +404,16 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	public void setNowTalker(GetNowTalkerResponse.GetNowTalkerResult result) {
 		speakerNameTv.setText(TextUtils.isEmpty(result.userName) ? "" :
 				result.userName);
-		speakerStateTv.setText(getSpeakType(result.type));
+		speakerStateTv.setText(getSpeakType(result.speakType));
 		// 加载说话人头像
 		ImageLoader.getInstance().displayImage(result.userPortrait,
 				speakerPortraitCiv, CommonUtils.getPortraitOptions(),
 				new AnimationImageLoadingListener());
-//		if (result.type == SpeakType.EPISODE && !meetingTimeCdesc.isTimeStart()) {
-//			refreshAfterStartEpisode();
-//		}
+		// TODO:如果是本人在插话就更新界面,倒计时重新开始，不做处理
+		if (result.speakType == SpeakType.EPISODE && result.isSelfFlag &&
+				!meetingTimeCdesc.isTimeStart()) {
+			refreshAfterStartEpisode();
+		}
 	}
 
 	/**

@@ -22,6 +22,21 @@ public interface ThemeDetailContract {
 	interface View extends BaseView {
 
 		/**
+		 * 退出界面
+		 */
+		void finishActivity();
+
+		/**
+		 * 开始会议计时
+		 */
+		void startMeetingTime(long time);
+
+		/**
+		 * 结束会议计时
+		 */
+		void stopMeetingTime();
+
+		/**
 		 * 开始插话后刷新界面
 		 */
 		void refreshAfterStartEpisode();
@@ -50,6 +65,21 @@ public interface ThemeDetailContract {
 
 
 	interface Presenter extends BasePresenter {
+
+		/**
+		 * 收到用户在会广播后处理
+		 */
+		void doReceiveAtMeeting(MeetingUserInfo info);
+
+		/**
+		 * 开始会议计时
+		 */
+		void startMeetingTime(MeetingUserInfo info);
+
+		/**
+		 * 结束会议计时
+		 */
+		void stopMeetingTime();
 		/**
 		 * 获取当前说话人
 		 */

@@ -15,7 +15,10 @@ public class GetNowTalkerResponse extends ResponseData<GetNowTalkerResponse.GetN
 	public class GetNowTalkerResult extends UserInfo {
 
 		@SerializedName("speak_type")
-		public int type;
+		public int speakType;
+
+		@SerializedName("is_self")
+		public boolean isSelfFlag;
 
 	}
 }

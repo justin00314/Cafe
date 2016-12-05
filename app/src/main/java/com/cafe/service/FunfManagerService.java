@@ -13,6 +13,7 @@ import android.telephony.TelephonyManager;
 import android.widget.RemoteViews;
 
 import com.cafe.R;
+import com.cafe.common.DiskCacheManager;
 import com.cafe.common.DiskCacheMaxSize;
 import com.cafe.common.DiskCachePath;
 import com.cafe.contract.TestContract;
@@ -77,6 +78,9 @@ public class FunfManagerService extends Service {
 		ActionManager.getInstance().removeActions();
 		// 移除电话监听
 		unregisterTelListener();
+
+		// TODO:暂时在退出的时候清除所有缓存
+		DiskCacheManager.getInstance().clearCache();
 	}
 
 	/**

@@ -26,10 +26,12 @@ import com.cafe.model.meeting.ThemeDetailBiz;
 import com.loopj.android.http.ResponseHandlerInterface;
 
 import org.justin.utils.common.LogUtils;
+import org.justin.utils.common.TimeUtils;
 import org.justin.utils.common.ToastUtils;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpResponse;
@@ -56,6 +58,45 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	@Override
 	public ThemeDetailContract.Model initModel() {
 		return new ThemeDetailBiz(context);
+	}
+
+	/**
+	 * 收到用户在会广播后处理
+	 */
+	@Override
+	public void doReceiveAtMeeting(MeetingUserInfo info) {
+		// 会议结束的话就退出界面
+		ThemeDetailContract.View view = getView();
+		if (view == null) return;
+		if (info.id != -1) return;
+		view.finishActivity();
+	}
+
+	/**
+	 * 开始会议计时
+	 */
+	@Override
+	public void startMeetingTime(MeetingUserInfo info) {
+		ThemeDetailContract.View view = getView();
+		if (view == null) return;
+		// TODO:根据当前时间和会议开始时间计算计时器的初始值
+		long startTime = TimeUtils.dateToTimeStamp(info.startTime,
+				TimeUtils.Template.YMDHMS) / 1000;
+		long currentTime = new Date().getTime() / 1000;
+		LogUtils.i(TAG, "会议开始时间-->" + startTime);
+		LogUtils.i(TAG, "当前时间-->" + currentTime);
+		long base = currentTime - startTime;
+		view.startMeetingTime(base);
+	}
+
+	/**
+	 * 结束会议计时
+	 */
+	@Override
+	public void stopMeetingTime() {
+		ThemeDetailContract.View view = getView();
+		if (view == null) return;
+		view.stopMeetingTime();
 	}
 
 	/**
@@ -92,11 +133,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	private void handleSuccess(GetNowTalkerResponse jsonObj) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
-		if (jsonObj.desc.result_code == ResultCode.LOGIN_FAILURE) {
-			// 处理登录失效
-			view.skipToLoginActivity();
-			return;
-		}
 		view.setNowTalker(jsonObj.data);
 	}
 
@@ -131,11 +167,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	private void handleSuccess(ProcedureListResponse jsonObj) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
-		if (jsonObj.desc.result_code == ResultCode.LOGIN_FAILURE) {
-			// 处理登录失效
-			view.skipToLoginActivity();
-			return;
-		}
 		if (!TextUtils.isEmpty(jsonObj.data.filterTime)) {
 			PreManager.setProcedureFilterTime(context, jsonObj.data.filterTime);
 		}
@@ -183,7 +214,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 			if (jsonObj.data.speakType == SpeakType.THEME) {
 				// 已经开始主题则结束主题
 				stopTheme(info);
-			} else if(jsonObj.data.speakType == SpeakType.EPISODE){
+			} else if (jsonObj.data.speakType == SpeakType.EPISODE) {
 				ToastUtils.getInstance().showToast(context,
 						R.string.prompt_episode_);
 			}
@@ -231,7 +262,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 			if (jsonObj.data.speakType == SpeakType.EPISODE) {
 				// 已经开始主题则结束主题
 				stopEpisode(info);
-			} else if(jsonObj.data.speakType == SpeakType.THEME){
+			} else if (jsonObj.data.speakType == SpeakType.THEME) {
 				ToastUtils.getInstance().showToast(context,
 						R.string.prompt_theme_);
 			}

@@ -107,7 +107,12 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	private Timer timer;
 	private TimerTask timerTask;
 
+	/**
+	 * 检查FUNF的service
+	 */
 	private Intent checkIntent;
+
+	private long firstTime = 0;
 
 
 	@Override
@@ -698,6 +703,15 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	public void onBackPressed() {
 		LogUtils.i(TAG, "--点击返回键--");
 		// 让应用回到桌面
-		moveTaskToBack(true);
+//		moveTaskToBack(true);
+		long secondTime = System.currentTimeMillis();
+		if (secondTime - firstTime > 2000) {
+			ToastUtils.getInstance().showToast(this, R.string.prompt_double_click_exit);
+			firstTime = secondTime;
+		} else {
+			finish();
+		}
+
+
 	}
 }
