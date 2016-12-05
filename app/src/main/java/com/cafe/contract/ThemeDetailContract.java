@@ -22,6 +22,11 @@ public interface ThemeDetailContract {
 	interface View extends BaseView {
 
 		/**
+		 * 倒计时是否开始
+		 */
+		boolean isTimeDescStart();
+
+		/**
 		 * 退出界面
 		 */
 		void finishActivity();

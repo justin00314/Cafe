@@ -133,7 +133,14 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	private void handleSuccess(GetNowTalkerResponse jsonObj) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
+		if(TextUtils.isEmpty(jsonObj.data.userName)) return;
 		view.setNowTalker(jsonObj.data);
+		// TODO:针对插话人退出了应用又重新进来的情况
+		// 到计时重新开始，暂时没有返回退出时候的时间
+		if (jsonObj.data.speakType == SpeakType.EPISODE && jsonObj.data.isSelfFlag &&
+				view.isTimeDescStart()) {
+			view.refreshAfterStartEpisode();
+		}
 	}
 
 	/**

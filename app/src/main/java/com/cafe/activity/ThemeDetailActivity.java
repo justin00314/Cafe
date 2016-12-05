@@ -100,6 +100,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	private LinearLayoutManager layoutManager;
 
 	private MeetingUserInfo meetingInfo;
+	private String nowTalkerPortrait = "";
 
 	/**
 	 * 定时任务，用户轮询当前说话人和说话详情列表
@@ -168,8 +169,8 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	}
 
 	// 注册用户在会状态广播
-	private void registerReceiver(){
-		if(receiver == null)
+	private void registerReceiver() {
+		if (receiver == null)
 			receiver = new PresentAtMeetingReceiver();
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(IntentAction.RECEIVER_IS_PRESENT_AT_MEETING);
@@ -179,8 +180,8 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	/**
 	 * 反注册用户在会状态广播
 	 */
-	private void unregisterReceiver(){
-		if(receiver != null)
+	private void unregisterReceiver() {
+		if (receiver != null)
 			unregisterReceiver(receiver);
 
 	}
@@ -344,10 +345,19 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	}
 
 	/**
+	 * 倒计时是否开始
+	 */
+	@Override
+	public boolean isTimeDescStart() {
+		return meetingTimeCdesc.isTimeStart();
+	}
+
+	/**
 	 * 退出界面
 	 */
 	@Override
 	public void finishActivity() {
+		LogUtils.i(TAG, "--详情界面关闭--");
 		finish();
 	}
 
@@ -393,7 +403,6 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		meetingTimeCasc.setVisibility(View.VISIBLE);
 		meetingTimeCdesc.setVisibility(View.GONE);
 		// 倒计时结束
-		meetingTimeCdesc.setCurrentTime(0);
 		meetingTimeCdesc.stopTime();
 	}
 
@@ -402,18 +411,23 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	 */
 	@Override
 	public void setNowTalker(GetNowTalkerResponse.GetNowTalkerResult result) {
-		speakerNameTv.setText(TextUtils.isEmpty(result.userName) ? "" :
-				result.userName);
-		speakerStateTv.setText(getSpeakType(result.speakType));
-		// 加载说话人头像
-		ImageLoader.getInstance().displayImage(result.userPortrait,
-				speakerPortraitCiv, CommonUtils.getPortraitOptions(),
-				new AnimationImageLoadingListener());
-		// TODO:如果是本人在插话就更新界面,倒计时重新开始，不做处理
-		if (result.speakType == SpeakType.EPISODE && result.isSelfFlag &&
-				!meetingTimeCdesc.isTimeStart()) {
-			refreshAfterStartEpisode();
+		// 只有数据发生了变化才更新界面
+		if (!speakerNameTv.getText().toString().equals(result.userName)) {
+			speakerNameTv.setText(result.userName);
 		}
+		String speakerState = getSpeakType(result.speakType);
+		if (!speakerStateTv.getText().toString().equals(speakerState)) {
+			speakerStateTv.setText(speakerState);
+		}
+		if (!TextUtils.isEmpty(result.userPortrait) &&
+				!result.userPortrait.equals(nowTalkerPortrait)) {
+			// 加载说话人头像
+			ImageLoader.getInstance().displayImage(result.userPortrait,
+					speakerPortraitCiv, CommonUtils.getPortraitOptions(),
+					new AnimationImageLoadingListener());
+			nowTalkerPortrait = result.userPortrait;
+		}
+
 	}
 
 	/**
