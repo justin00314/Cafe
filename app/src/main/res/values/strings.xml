@@ -33,6 +33,7 @@
 	<string name="speak_duration_ms" formatted="false">%d′%d″</string>
 	<string name="speak_duration_s" formatted="false">%d″</string>
 
+	<string name="prompt_login_failure">登录失效或已经在其他地方登录</string>
 	<string name="prompt_double_click_exit">再点一次退出应用</string>
 
 	<string name="prompt_meeting_not_start">会议还没有正式开始</string>
@@ -41,7 +42,7 @@
 	<string name="prompt_episode">正在插嘴中…</string>
 	<string name="prompt_no_speaker">当前没有人说话</string>
 
-	<string name="prompt_not_participated">只有自己创建的会议和已经加入的会议才能查看详情</string>
+	<string name="prompt_not_participated">只有已经加入的会议才能查看详情</string>
 
 	<string name="prompt_episode_">您正在插话中，不能开始主题</string>
 	<string name="prompt_theme_">您正在主题中，不能插话</string>

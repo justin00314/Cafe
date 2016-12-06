@@ -61,14 +61,14 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 
 	private final static int MSG_GET_SPEAKER = 0x0010;
 	private final static int MSG_GET_PROCEDURE = 0x0020;
-	private final static int MSG_CHECK_START_TIME = 0x0030;
+//	private final static int MSG_CHECK_START_TIME = 0x0030;
 
 	private final static int COUNT_DOWN_MAX = 30;
 
 	/**
 	 * 每5秒轮询一次会议过程和当前说话人
 	 */
-	private final static int QUERY_PROCEDURE_PERIOD = 1000;
+	private final static int QUERY_PROCEDURE_PERIOD = 1000 * 5;
 
 	/**
 	 * 会议名字
@@ -115,7 +115,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	/**
 	 * 用户控制手机是否能点击，用于控制短时间触屏2次
 	 */
-	private boolean isCanTap = true;
+	private boolean isTap = false;
 	/**
 	 * 用户控制手机是否能摇晃--解决短时间摇晃2次
 	 */
@@ -155,6 +155,8 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		// 退出界面需要清除过滤条件的时间
+		PreManager.setProcedureFilterTime(this, "");
 		// 结束监听手机摇一摇
 		stopShake();
 		// 一定要结束计时器，避免内存泄露
@@ -165,8 +167,6 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			timerTask.cancel();
 		if (timer != null)
 			timer.cancel();
-		// 退出界面需要清除过滤条件的时间
-		PreManager.setProcedureFilterTime(this, "");
 		unregisterReceiver();
 	}
 
@@ -231,7 +231,6 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		speakerNameTv = (TextView) findViewById(R.id.speaker_name_tv);
 		speakerStateTv = (TextView) findViewById(R.id.speaker_state_tv);
 		procedureListRv = (RecyclerView) findViewById(R.id.procedure_list_rv);
-		// TODO:还差一个倒计时
 	}
 
 	// TODO:监听手势，双击屏幕开始主题,还需要完善双指敲击
@@ -240,7 +239,9 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			// 监听双击事件
 			@Override
 			public boolean onDoubleTap(MotionEvent e) {
-				getPresenter().operateTheme(meetingInfo);
+				// 避免多次点击
+				if(!isTap)
+					getPresenter().operateTheme(meetingInfo);
 				return super.onDoubleTap(e);
 			}
 		});
@@ -356,8 +357,13 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	}
 
 	@Override
-	public boolean getIsCanTap() {
-		return isCanTap;
+	public boolean isTap() {
+		return isTap;
+	}
+
+	@Override
+	public void setIsTap(boolean isTap) {
+		this.isTap = isTap;
 	}
 
 	@Override
@@ -484,13 +490,4 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		}
 	}
 
-	/**
-	 * 跳转到登录界面
-	 */
-	@Override
-	public void skipToLoginActivity() {
-		Intent intent = new Intent(this, LoginActivity.class);
-		startActivity(intent);
-		finish();
-	}
 }

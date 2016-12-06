@@ -142,7 +142,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 		// 设置会议名称
 		holder.nameTv.setText(meetingInfo.name);
 		// 设置会议开始时间
-		holder.startTimeTv.setText(meetingInfo.createTime);
+		holder.startTimeTv.setText(meetingInfo.startTime);
 		// 设置会议图标
 		holder.typeIv.setImageDrawable(getTypeDrawable(meetingInfo));
 		// 设置操作区间

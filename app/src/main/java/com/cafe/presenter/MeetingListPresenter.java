@@ -114,7 +114,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 //		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
-		meetingListBiz.loadMeetingList(new JsonHttpResponseHandler<MeetingListResponse>() {
+		meetingListBiz.loadMeetingList(new JsonHttpResponseHandler<MeetingListResponse>(context) {
 			@Override
 			public void onHandleSuccess(int statusCode, Header[] headers,
 			                            final MeetingListResponse jsonObj) {
@@ -613,8 +613,8 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			ToastUtils.getInstance().showToast(context, R.string.prompt_meeting_not_start);
 			return;
 		}
-		// 不是自己创建的又没有加入会议，是不能查看详情的
-		if (meetingInfo.createdFlag || meetingInfo.participatedFlag) {
+		// 没有加入的会议是不能查看详情的
+		if (meetingInfo.participatedFlag) {
 			if (meetingInfo.type == MeetingType.THEME.getId())
 				view.skipToThemeDetailActivity(meetingInfo);
 			else if (meetingInfo.type == MeetingType.BRAIN_STORM.getId())

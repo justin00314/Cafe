@@ -69,7 +69,9 @@ public class ProcedureListRvAdapter extends ProcedureListAdapter<ProcedureListRv
 		ProcedureInfo procedureInfo = getItem(position);
 		// 设置说话人名字
 		holder.speakerNameTv.setText(procedureInfo.userName);
+		LogUtils.i(TAG, "列表--说话人-->" + procedureInfo.userName);
 		// 设置说话人发言类型
+		LogUtils.i(TAG, "列表--说话类型-->" + getSpeakType(procedureInfo.type));
 		holder.speakTypeTv.setText(getSpeakType(procedureInfo.type));
 		// 设置说话人发言时长
 		holder.speakDurationTv.setText(getSpeakDuration(procedureInfo.duration));
@@ -86,6 +88,7 @@ public class ProcedureListRvAdapter extends ProcedureListAdapter<ProcedureListRv
 	 * 获取说话类型文字显示
 	 */
 	private String getSpeakType(int type) {
+		LogUtils.i(TAG, "列表--说话类型 num-->" + type);
 		switch (type) {
 			case SpeakType.THEME:
 				return speakTheme;

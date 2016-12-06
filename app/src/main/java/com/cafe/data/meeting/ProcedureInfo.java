@@ -13,7 +13,7 @@ public class ProcedureInfo extends UserInfo {
 	@SerializedName("duration")
 	public int duration;
 
-	@SerializedName("speakType")
+	@SerializedName("type")
 	public int type;
 
 	@SerializedName("state")

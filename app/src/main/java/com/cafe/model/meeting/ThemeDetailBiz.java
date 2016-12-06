@@ -18,6 +18,8 @@ import com.cafe.data.meeting.StopEpisodeRequest;
 import com.cafe.data.meeting.StopThemeRequest;
 import com.loopj.android.http.ResponseHandlerInterface;
 
+import org.justin.utils.common.LogUtils;
+
 /**
  * 主题会议详情Model实现类
  * Created by Justin Z on 2016/11/29.
@@ -25,6 +27,8 @@ import com.loopj.android.http.ResponseHandlerInterface;
  */
 
 public class ThemeDetailBiz implements ThemeDetailContract.Model {
+
+	private final static String TAG = ThemeDetailBiz.class.getSimpleName();
 
 	private Context context;
 
@@ -53,6 +57,7 @@ public class ThemeDetailBiz implements ThemeDetailContract.Model {
 //		data.id = 5;
 		// 获取上次的过滤时间
 		data.filterTime = PreManager.getProcedureFilterTime(context);
+		LogUtils.i(TAG, "列表过滤时间-->" + data.filterTime);
 		HttpManager.postJson(context, UrlName.PROCEDURE_LIST.getUrl(), data, response);
 	}
 

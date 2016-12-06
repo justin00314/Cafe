@@ -1,7 +1,11 @@
 package com.cafe.common.net;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
+import com.cafe.R;
+import com.cafe.activity.LoginActivity;
 import com.cafe.data.base.ErrorMessageResponse;
 import com.cafe.data.base.ResponseData;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -9,6 +13,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import org.justin.utils.common.JsonUtils;
 import org.justin.utils.common.LogUtils;
 import org.justin.utils.common.StringUtils;
+import org.justin.utils.common.ToastUtils;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -30,6 +35,11 @@ public abstract class JsonHttpResponseHandler<T extends ResponseData> extends Te
 	@SuppressWarnings("unchecked")
 	public JsonHttpResponseHandler() {
 		mEntityClz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+	}
+
+	public JsonHttpResponseHandler(Context context) {
+		this();
+		this.context = context;
 	}
 
 	/**
@@ -62,7 +72,15 @@ public abstract class JsonHttpResponseHandler<T extends ResponseData> extends Te
 			LogUtils.i(TAG, "----返回数据desc.result_code不为success----");
 
 			String msg = "返回数据desc.result_code不为success";
-
+			// TODO:处理登录失效,统一跳转到登录界面
+			if (data.desc.result_code == ResultCode.LOGIN_FAILURE) {
+				if (context != null && context instanceof Activity) {
+					context.startActivity(new Intent(context, LoginActivity.class));
+					((Activity) context).finish();
+					ToastUtils.getInstance().showToast(context, R.string.prompt_login_failure);
+					return;
+				}
+			}
 			ErrorMessageResponse error = JsonUtils.getInstance().deserializeToObj(responseString,
 					ErrorMessageResponse.class);
 

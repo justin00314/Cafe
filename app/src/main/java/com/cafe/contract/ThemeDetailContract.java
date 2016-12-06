@@ -25,7 +25,9 @@ public interface ThemeDetailContract {
 
 		void stopShake();
 
-		boolean getIsCanTap();
+		boolean isTap();
+
+		void setIsTap(boolean isTap);
 
 		boolean isStartShake();
 
@@ -68,11 +70,6 @@ public interface ThemeDetailContract {
 		 * 加载会议说话列表
 		 */
 		void loadProcedureList(List<ProcedureInfo> procedureInfos);
-
-		/**
-		 * 登录失效需要跳转到登录界面
-		 */
-		void skipToLoginActivity();
 
 	}
 

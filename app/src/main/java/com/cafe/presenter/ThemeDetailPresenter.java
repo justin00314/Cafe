@@ -40,15 +40,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 
 	private Context context;
 
-	/**
-	 * 用户控制手机是否能点击，用于控制短时间触屏2次
-	 */
-	private boolean isCanTap = true;
-	/**
-	 * 用户控制手机是否能摇晃--解决短时间摇晃2次
-	 */
-	private boolean isCanShake = true;
-
 
 	public ThemeDetailPresenter(Context context) {
 		this.context = context;
@@ -108,7 +99,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	public void getNowTalker(final MeetingUserInfo info) {
 		ThemeDetailContract.Model themeDetailBiz = getModel();
 		if (themeDetailBiz == null) return;
-		themeDetailBiz.getNowTalker(info, new JsonHttpResponseHandler<GetNowTalkerResponse>() {
+		themeDetailBiz.getNowTalker(info, new JsonHttpResponseHandler<GetNowTalkerResponse>(context) {
 
 			@Override
 			public void onHandleSuccess(int statusCode, Header[] headers, GetNowTalkerResponse jsonObj) {
@@ -156,24 +147,26 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	public void loadProcedureList(final MeetingUserInfo info) {
 		ThemeDetailContract.Model themeDetailBiz = getModel();
 		if (themeDetailBiz == null) return;
-		themeDetailBiz.loadProcedureList(info, new JsonHttpResponseHandler<ProcedureListResponse>() {
+		themeDetailBiz.loadProcedureList(info, new
+				JsonHttpResponseHandler<ProcedureListResponse>(context) {
 
-			@Override
-			public void onHandleSuccess(int statusCode, Header[] headers, ProcedureListResponse jsonObj) {
-				handleSuccess(jsonObj);
-			}
+					@Override
+					public void onHandleSuccess(int statusCode, Header[] headers,
+					                            ProcedureListResponse jsonObj) {
+						handleSuccess(jsonObj);
+					}
 
-			@Override
-			public void onCancel() {
-				// TODO:不做任何处理
+					@Override
+					public void onCancel() {
+						// TODO:不做任何处理
 
-			}
+					}
 
-			@Override
-			public void onHandleFailure(String errorMsg) {
-				// TODO:不做任何处理
-			}
-		});
+					@Override
+					public void onHandleFailure(String errorMsg) {
+						// TODO:不做任何处理
+					}
+				});
 
 	}
 
@@ -196,6 +189,10 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	public void operateTheme(final MeetingUserInfo info) {
 		ThemeDetailContract.Model themeDetailBiz = getModel();
 		if (themeDetailBiz == null) return;
+		ThemeDetailContract.View view = getView();
+		if (view == null) return;
+		// TODO:避免多次点击
+		if (!view.isTap()) view.setIsTap(true);
 //		ToastUtils.getInstance().showToast(context, R.string.prompt_query_unstop_event);
 		themeDetailBiz.queryUnstopEvent(info, new JsonHttpResponseHandler<QueryUnstopEventResponse>() {
 
@@ -207,12 +204,18 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 
 			@Override
 			public void onCancel() {
+				ThemeDetailContract.View view = getView();
+				if (view == null) return;
+				if (view.isTap()) view.setIsTap(false);
 				ToastUtils.getInstance().showToast(context,
 						R.string.prompt_query_unstop_event_failure);
 			}
 
 			@Override
 			public void onHandleFailure(String errorMsg) {
+				ThemeDetailContract.View view = getView();
+				if (view == null) return;
+				if (view.isTap()) view.setIsTap(false);
 				ToastUtils.getInstance().showToast(context,
 						R.string.prompt_query_unstop_event_failure);
 			}
@@ -248,7 +251,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
 		// TODO:开始插话后，暂时结束监听摇一摇
-		if(view.isStartShake()) view.stopShake();
+		if (view.isStartShake()) view.stopShake();
 
 		themeDetailBiz.queryUnstopEvent(info, new JsonHttpResponseHandler<QueryUnstopEventResponse>() {
 
@@ -262,7 +265,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 			public void onCancel() {
 				ThemeDetailContract.View view = getView();
 				if (view == null) return;
-				if(!view.isStartShake()) view.startShake();
+				if (!view.isStartShake()) view.startShake();
 				ToastUtils.getInstance().showToast(context,
 						R.string.prompt_query_unstop_event_failure);
 			}
@@ -271,7 +274,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 			public void onHandleFailure(String errorMsg) {
 				ThemeDetailContract.View view = getView();
 				if (view == null) return;
-				if(!view.isStartShake()) view.startShake();
+				if (!view.isStartShake()) view.startShake();
 				ToastUtils.getInstance().showToast(context,
 						R.string.prompt_query_unstop_event_failure);
 			}
@@ -315,11 +318,17 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 
 			@Override
 			public void onCancel() {
+				ThemeDetailContract.View view = getView();
+				if (view == null) return;
+				if (view.isTap()) view.setIsTap(false);
 				ToastUtils.getInstance().showToast(context, R.string.prompt_start_theme_failure);
 			}
 
 			@Override
 			public void onHandleFailure(String errorMsg) {
+				ThemeDetailContract.View view = getView();
+				if (view == null) return;
+				if (view.isTap()) view.setIsTap(false);
 				ToastUtils.getInstance().showToast(context, R.string.prompt_start_theme_failure);
 			}
 		});
@@ -328,6 +337,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	private void handleSuccess(StartThemeResponse jsonObj) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
+		if (view.isTap()) view.setIsTap(false);
 		if (jsonObj.data.result) {
 			PreManager.setStartTopicFlag(context, true);
 			ToastUtils.getInstance().showToast(context, R.string.prompt_start_theme_success);
@@ -354,11 +364,17 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 
 			@Override
 			public void onCancel() {
+				ThemeDetailContract.View view = getView();
+				if (view == null) return;
+				if (view.isTap()) view.setIsTap(false);
 				ToastUtils.getInstance().showToast(context, R.string.prompt_stop_theme_failure);
 			}
 
 			@Override
 			public void onHandleFailure(String errorMsg) {
+				ThemeDetailContract.View view = getView();
+				if (view == null) return;
+				if (view.isTap()) view.setIsTap(false);
 				ToastUtils.getInstance().showToast(context, R.string.prompt_stop_theme_failure);
 			}
 		});
@@ -367,6 +383,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	private void handleSuccess(StopThemeResponse jsonObj) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
+		if (view.isTap()) view.setIsTap(false);
 		if (jsonObj.data.result) {
 			PreManager.setStartTopicFlag(context, false);
 			ToastUtils.getInstance().showToast(context, R.string.prompt_stop_theme_success);
@@ -395,7 +412,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 			public void onCancel() {
 				ThemeDetailContract.View view = getView();
 				if (view == null) return;
-				if(!view.isStartShake()) view.startShake();
+				if (!view.isStartShake()) view.startShake();
 				ToastUtils.getInstance().showToast(context, R.string.prompt_start_episode_failure);
 			}
 
@@ -403,7 +420,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 			public void onHandleFailure(String errorMsg) {
 				ThemeDetailContract.View view = getView();
 				if (view == null) return;
-				if(!view.isStartShake()) view.startShake();
+				if (!view.isStartShake()) view.startShake();
 				ToastUtils.getInstance().showToast(context, R.string.prompt_start_episode_failure);
 			}
 		});
@@ -412,7 +429,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	private void handleSuccess(StartEpisodeResponse jsonObj) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
-		if(!view.isStartShake()) view.startShake();
+		if (!view.isStartShake()) view.startShake();
 		if (jsonObj.data.result) {
 			PreManager.setStartEpisodeFlag(context, true);
 			ToastUtils.getInstance().showToast(context, R.string.prompt_start_episode_success);
@@ -442,7 +459,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 			public void onCancel() {
 				ThemeDetailContract.View view = getView();
 				if (view == null) return;
-				if(!view.isStartShake()) view.startShake();
+				if (!view.isStartShake()) view.startShake();
 				ToastUtils.getInstance().showToast(context, R.string.prompt_stop_episode_failure);
 			}
 
@@ -450,7 +467,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 			public void onHandleFailure(String errorMsg) {
 				ThemeDetailContract.View view = getView();
 				if (view == null) return;
-				if(!view.isStartShake()) view.startShake();
+				if (!view.isStartShake()) view.startShake();
 				ToastUtils.getInstance().showToast(context, R.string.prompt_stop_episode_failure);
 			}
 		});
@@ -459,7 +476,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	private void handleSuccess(StopEpisodeResponse jsonObj) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
-		if(!view.isStartShake()) view.startShake();
+		if (!view.isStartShake()) view.startShake();
 		if (jsonObj.data.result) {
 			PreManager.setStartEpisodeFlag(context, false);
 			ToastUtils.getInstance().showToast(context, R.string.prompt_stop_episode_success);
