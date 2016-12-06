@@ -2,6 +2,7 @@ package com.cafe.model.meeting;
 
 import android.content.Context;
 
+import com.cafe.common.CommonUtils;
 import com.cafe.common.PreManager;
 import com.cafe.common.net.HttpManager;
 import com.cafe.common.net.UrlName;
@@ -16,6 +17,7 @@ import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingListRequest;
 import com.cafe.data.meeting.MeetingState;
 import com.cafe.data.meeting.QuitMeetingRequest;
+import com.cafe.data.meeting.RequestBrainStormRequest;
 import com.cafe.data.meeting.StatusInfo;
 import com.loopj.android.http.ResponseHandlerInterface;
 
@@ -145,6 +147,9 @@ public class MeetingListBiz implements MeetingListContract.Model {
 	 */
 	@Override
 	public void requestBrainStorm(ResponseHandlerInterface response) {
-
+		RequestBrainStormRequest data = new RequestBrainStormRequest();
+		data.time = CommonUtils.getCurrentTime();
+		HttpManager.postJson(context, UrlName.MEETING_BRAIN_STORM.getUrl(), data,
+				response);
 	}
 }
