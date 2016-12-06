@@ -25,6 +25,7 @@ import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.data.meeting.QueryMeetingResponse;
 import com.cafe.data.meeting.QueryMeetingUserResponse;
 import com.cafe.data.meeting.QuitMeetingResponse;
+import com.cafe.data.meeting.RequestBrainStormResponse;
 import com.cafe.model.meeting.MeetingListBiz;
 
 import org.justin.utils.common.LogUtils;
@@ -132,7 +133,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 //				MeetingListContract.View view = getView();
 //				if (view == null) return;
 //				view.dismissLoadingProgress();
-				//TODO: 没有网络的情况会终止请求,显示点击屏幕重新加载
 
 			}
 
@@ -141,7 +141,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 //				MeetingListContract.View view = getView();
 //				if (view == null) return;
 //				view.dismissLoadingProgress();
-				// TODO:请求失败, 显示点击屏幕重新加载
 			}
 		});
 	}
@@ -259,30 +258,47 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	}
 
 	/**
-	 * 处理创建主题会议返回
-	 */
-	@Override
-	public void handleCreateTheme() {
-
-	}
-
-	/**
-	 * 处理扫描二维码返回：加入会议
-	 */
-	@Override
-	public void handleScanQRCode() {
-
-	}
-
-	/**
-	 * 提示摇一摇创建头脑风暴
+	 * 请求创建头脑风暴
 	 */
 	@Override
 	public void createBrainStorm() {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
-		view.promptShakePhone();
+		// TODO:开始请求创建临时会议后，停止监听摇一摇,避免多次摇晃
+		if (view.isStartShake()) view.stopShake();
+		MeetingListContract.Model meetingListBiz = getModel();
+		if (meetingListBiz == null) return;
+		meetingListBiz.requestBrainStorm(new JsonHttpResponseHandler<RequestBrainStormResponse>() {
+			@Override
+			public void onHandleSuccess(int statusCode, Header[] headers,
+			                            RequestBrainStormResponse jsonObj) {
+				MeetingListContract.View view = getView();
+				if (view == null) return;
+				if (!view.isStartShake()) view.startShake();
+				ToastUtils.getInstance().showToast(context,
+						R.string.prompt_create_brain_storm_success);
+			}
+
+			@Override
+			public void onCancel() {
+				MeetingListContract.View view = getView();
+				if (view == null) return;
+				if (!view.isStartShake()) view.startShake();
+				ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
+			}
+
+			@Override
+			public void onHandleFailure(String errorMsg) {
+				MeetingListContract.View view = getView();
+				if (view == null) return;
+				if (!view.isStartShake()) view.startShake();
+				ToastUtils.getInstance().showToast(context,
+						R.string.prompt_create_brain_storm_failure);
+			}
+		});
+
 	}
+
 
 	/**
 	 * 显示会议二维码
@@ -459,10 +475,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			@Override
 			public void onHandleSuccess(int statusCode, Header[] headers,
 			                            QueryMeetingUserResponse jsonObj) {
-				// TODO:包一个接口来查询一下用户会议详情，返回是否本人创建
-//				MeetingListContract.View view = getView();
-//				if (view == null) return;
-//				view.dismissLoadingProgress();
 				jsonObj.data.id = id;
 				doJoin(jsonObj.data);
 			}
@@ -601,7 +613,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		MeetingListContract.View view = getView();
 		if (view == null) return;
 		if (meetingInfo.state != MeetingState.PROGRESS) {
-			// TODO: 提示只有正在进行的会议才能展示详情？
 			return;
 		}
 		long startTime = TimeUtils.dateToTimeStamp(meetingInfo.startTime,
@@ -669,103 +680,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		} else {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_cancel_failure);
 		}
-	}
-
-
-	//********************************下面是测试
-
-
-	// 测试会议列表
-	@Override
-	public void loadMeetingListTest() {
-		getView().showLoadingProgress(null);
-		ThreadUtils.runOnUIThread(new Runnable() {
-			@Override
-			public void run() {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
-				view.loadMeetingList(getMeetingInfoList());
-			}
-		}, 2000);
-	}
-
-	// TODO:构造会议列表测试数据
-	private List<MeetingUserInfo> getMeetingInfoList() {
-		List<MeetingUserInfo> meetingInfos = new ArrayList<>();
-		MeetingUserInfo info;
-		// 正在进行的
-		info = new MeetingUserInfo();
-		info.state = MeetingState.PROGRESS;
-		info.name = "市场部会议1";
-		info.startTime = "2016-11-10 08:10:00";
-		info.participatedFlag = false;
-		info.createdFlag = true;
-		info.meetingRoomName = "市场部会议室1";
-		meetingInfos.add(info);
-		info = new MeetingUserInfo();
-		info.state = MeetingState.PROGRESS;
-		info.name = "市场部会议2";
-		info.startTime = "2016-11-10 09:10:00";
-		info.participatedFlag = true;
-		info.createdFlag = false;
-		info.meetingRoomName = "市场部会议室2";
-		meetingInfos.add(info);
-		// 预约的
-		info = new MeetingUserInfo();
-		info.state = MeetingState.APPOINTMENT;
-		info.name = "技术部会议1";
-		info.startTime = "2016-11-10 10:10:00";
-		info.participatedFlag = true;
-		info.createdFlag = false;
-		info.meetingRoomName = "技术部会议室1";
-		meetingInfos.add(info);
-		info = new MeetingUserInfo();
-		info.state = MeetingState.APPOINTMENT;
-		info.name = "技术部会议2";
-		info.startTime = "2016-11-10 11:11:00";
-		info.participatedFlag = true;
-		info.createdFlag = false;
-		info.meetingRoomName = "技术部会议室2";
-		meetingInfos.add(info);
-		info = new MeetingUserInfo();
-		info.state = MeetingState.APPOINTMENT;
-		info.name = "技术部会议3";
-		info.startTime = "2016-11-10 12:11:00";
-		info.participatedFlag = true;
-		info.createdFlag = false;
-		info.meetingRoomName = "技术部会议室3";
-		meetingInfos.add(info);
-		// 历史的
-		info = new MeetingUserInfo();
-		info.state = MeetingState.HISTORY;
-		info.name = "人事部会议1";
-		info.startTime = "2016-11-09 12:11:00";
-		info.participatedFlag = true;
-		info.createdFlag = false;
-		meetingInfos.add(info);
-		info = new MeetingUserInfo();
-		info.state = MeetingState.HISTORY;
-		info.name = "人事部会议2";
-		info.startTime = "2016-11-09 10:11:00";
-		info.participatedFlag = false;
-		info.createdFlag = true;
-		meetingInfos.add(info);
-		info = new MeetingUserInfo();
-		info.state = MeetingState.HISTORY;
-		info.name = "人事部会议3";
-		info.startTime = "2016-11-09 09:11:00";
-		info.participatedFlag = true;
-		info.createdFlag = true;
-		meetingInfos.add(info);
-		info = new MeetingUserInfo();
-		info.state = MeetingState.HISTORY;
-		info.name = "人事部会议4";
-		info.startTime = "2016-11-09 08:11:00";
-		info.participatedFlag = true;
-		info.createdFlag = true;
-		meetingInfos.add(info);
-		return meetingInfos;
 	}
 
 

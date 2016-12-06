@@ -21,6 +21,20 @@ public interface MeetingListContract {
 	 * View的接口方法，由Activity去实现
 	 */
 	interface View extends BaseView {
+		/**
+		 * 开始监听摇晃
+		 */
+		void startShake();
+
+		/**
+		 * 停止监听摇晃
+		 */
+		void stopShake();
+
+		/**
+		 * 判断是否已经开始监听摇晃
+		 */
+		boolean isStartShake();
 
 		/**
 		 * 加入成功之后刷新
@@ -96,9 +110,6 @@ public interface MeetingListContract {
 	 */
 	interface Presenter extends BasePresenter {
 
-
-		void loadMeetingListTest();
-
 		/**
 		 * 加载会议列表
 		 */
@@ -128,16 +139,6 @@ public interface MeetingListContract {
 		 * 创建主题会议
 		 */
 		void createTheme();
-
-		/**
-		 * 处理创建主题会议返回
-		 */
-		void handleCreateTheme();
-
-		/**
-		 * 处理扫描二维码返回
-		 */
-		void handleScanQRCode();
 
 		/**
 		 * 创建头脑风暴会议

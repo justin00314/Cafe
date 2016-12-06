@@ -69,7 +69,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
-		MeetingListPresenter> implements MeetingListContract.View, View.OnClickListener, EasyPermissions.PermissionCallbacks {
+		MeetingListPresenter> implements MeetingListContract.View, View.OnClickListener {
 
 	private final static String TAG = MeetingListActivity.class.getSimpleName();
 	private static final int PERMISSION_CAMERA_REQUEST_CODE = 999;
@@ -113,8 +113,15 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 * 检查FUNF的service
 	 */
 	private Intent checkIntent;
-
+	/**
+	 * 缓存点2次退出应用的时间
+	 */
 	private long firstTime = 0;
+
+	/**
+	 * 用户控制手机是否能摇晃--解决短时间摇晃2次
+	 */
+	private boolean isStartShake = false;
 
 
 	@Override
@@ -130,8 +137,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		// 轮询会议列表
 		getMeetingList();
 		// 开始手机摇一摇检测
-		startShakePhone();
-		checkCameraPermission();
+		startShake();
 		// 启动检查FUNF的服务
 		startService(checkIntent);
 	}
@@ -140,7 +146,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	public void onDestroy() {
 		super.onDestroy();
 		// 停止手机摇一摇检测
-		stopShakePhone();
+		stopShake();
 		stopService(checkIntent);
 		if (timerTask != null)
 			timerTask.cancel();
@@ -148,19 +154,6 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 			timer.cancel();
 		// 设置会议过程列表的过滤时间为空
 		PreManager.setProcedureFilterTime(this, "");
-	}
-
-	private void startShakePhone() {
-		ShakePhoneUtils.getInstance().startShake(this, new ShakePhoneUtils.OnShakeListener() {
-			@Override
-			public void onShake() {
-				LogUtils.i(TAG, "-->手机摇一摇");
-			}
-		});
-	}
-
-	private void stopShakePhone() {
-		ShakePhoneUtils.getInstance().stopShake();
 	}
 
 	/**
@@ -212,7 +205,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 				break;
 			case R.id.brain_storm_fab:
 				// 提示摇一摇手机创建头脑风暴
-				getPresenter().createBrainStorm();
+				promptShakePhone();
 				break;
 		}
 
@@ -264,51 +257,6 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		return new MeetingListPresenter(this);
 	}
 
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-		// Forward results to EasyPermissions
-		EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-	}
-
-	@AfterPermissionGranted(PERMISSION_CAMERA_REQUEST_CODE)
-	private void methodRequiresTwoPermission() {
-		String[] perms = {Manifest.permission.CAMERA};
-		if (EasyPermissions.hasPermissions(this, perms)) {
-
-		}
-	}
-
-	@Override
-	public void onPermissionsDenied(int requestCode, List<String> perms) {
-
-		// (Optional) Check whether the user denied any permissions and checked "NEVER ASK AGAIN."
-		// This will display a dialog directing them to enable the permission in app settings.
-		if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-			new AppSettingsDialog.Builder(this, getString(R.string.rationale_ask_again))
-					.setTitle(getString(R.string.title_settings_dialog))
-					.setPositiveButton(getString(R.string.ensure))
-					.setNegativeButton(getString(R.string.cancel), null)
-					.setRequestCode(PERMISSION_CAMERA_REQUEST_CODE)
-					.build()
-					.show();
-		}
-	}
-
-	@Override
-	public void onPermissionsGranted(int requestCode, List<String> perms) {
-
-	}
-
-	private void checkCameraPermission() {
-		// 没有授权的情况下询问用户是否授权
-		if (!EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)) {
-			String[] perms = {Manifest.permission.CAMERA};
-			EasyPermissions.requestPermissions(this, getString(R.string.camera_rationale),
-					PERMISSION_CAMERA_REQUEST_CODE, perms);
-		}
-	}
 
 	/**
 	 * 初始化界面元素
@@ -423,6 +371,36 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	}
 
 	/**
+	 * 开始监听手机摇一摇
+	 */
+	@Override
+	public void startShake() {
+		ShakePhoneUtils.getInstance().startShake(this, new ShakePhoneUtils.OnShakeListener() {
+			@Override
+			public void onShake() {
+				LogUtils.i(TAG, "-->手机摇一摇");
+				// 请求创建临时会议
+				getPresenter().createBrainStorm();
+			}
+		});
+		isStartShake = true;
+	}
+
+	/**
+	 * 停止监听手机摇一摇
+	 */
+	@Override
+	public void stopShake() {
+		ShakePhoneUtils.getInstance().stopShake();
+		isStartShake = false;
+	}
+
+	@Override
+	public boolean isStartShake() {
+		return isStartShake;
+	}
+
+	/**
 	 * 加入成功之后刷新
 	 */
 	@Override
@@ -492,16 +470,6 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 */
 	@Override
 	public void loadMeetingList(List<MeetingUserInfo> meetingInfos) {
-//		meetingListRvAdapter.clear();
-//		if (meetingInfos == null || meetingInfos.size() == 0) {
-//			LogUtils.i(TAG, "-->没有会议列表数据");
-//			return;
-//		}
-//		int size = meetingInfos.size();
-//		for (int i = 0; i < size; i++) {
-//			LogUtils.i(TAG, "加入数据-->" + i);
-//			meetingListRvAdapter.add(i, meetingInfos.get(i));
-//		}
 
 		if (meetingInfos == null || meetingInfos.size() == 0) {
 			LogUtils.i(TAG, "-->没有返回会议列表数据");
@@ -680,6 +648,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 */
 	@Override
 	public void skipToLoginActivity() {
+		startActivity(new Intent(this, LoginActivity.class));
 		finish();
 	}
 

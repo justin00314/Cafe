@@ -339,7 +339,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		ShakePhoneUtils.getInstance().startShake(this, new ShakePhoneUtils.OnShakeListener() {
 			@Override
 			public void onShake() {
-				LogUtils.i(TAG, "-->手机摇一摇");
+//				LogUtils.i(TAG, "-->手机摇一摇");
 				// 开始插话
 				getPresenter().operateEpisode(meetingInfo);
 			}

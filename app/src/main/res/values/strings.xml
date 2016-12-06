@@ -62,7 +62,7 @@
 	<string name="prompt_stop_episode_failure">结束插话请求失败</string>
 
 	<string name="prompt_query_meeting_detail">正在查询会议信息，请稍后…</string>
-	<string name="prompt_query_meeting_detail_failure">查询会议信息失败，请重试</string>
+	<string name="prompt_query_meeting_detail_failure">查询会议信息失败，请重试！</string>
 	<string name="prompt_joining">正在加入会议，请稍后…</string>
 	<string name="prompt_scan_qrcode_failure">解析二维码失败，请重试！</string>
 	<string name="prompt_no_network">没有网络，请重试</string>
@@ -77,6 +77,8 @@
 	<string name="prompt_quit_success">退出会议成功</string>
 	<string name="prompt_cancel_success">取消会议预约成功</string>
 	<string name="prompt_dismiss_success">解散会议成功</string>
+	<string name="prompt_create_brain_storm_failure">请求创建临时会议失败，请重试！</string>
+	<string name="prompt_create_brain_storm_success">请求创建临时会议成功</string>
 
 	<string name="dialog_title_logout">用户登出</string>
 	<string name="dialog_content_logout">是否登出系统并退到登录界面？</string>

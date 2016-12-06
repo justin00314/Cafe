@@ -20,15 +20,23 @@ import java.util.List;
 public interface ThemeDetailContract {
 
 	interface View extends BaseView {
-
+		/**
+		 * 开始监听手机摇一摇
+		 */
 		void startShake();
 
+		/**
+		 * 停止监听手机摇一摇
+		 */
 		void stopShake();
 
 		boolean isTap();
 
 		void setIsTap(boolean isTap);
 
+		/**
+		 * 判断是否已经开始手机摇一摇监听
+		 */
 		boolean isStartShake();
 
 		/**
