@@ -10,7 +10,6 @@ import com.cafe.contract.MeetingSearchContract;
 import com.cafe.data.meeting.JoinMeetingRequest;
 import com.cafe.data.meeting.JoinMeetingResponse;
 import com.cafe.data.meeting.MeetingInfo;
-import com.cafe.data.meeting.MeetingListResponse;
 import com.cafe.data.meeting.QueryMeetingResponse;
 import com.cafe.model.meeting.BDKMeetingSearchBiz;
 
@@ -39,7 +38,7 @@ public class MeetingSearchPresenter extends MVPPresenter<MeetingSearchContract.V
     public void search(int meetingId) {
         getView().showLoadingProgress(mContext.getString(R.string.searching));
 
-        getModel().search(meetingId, new JsonHttpResponseHandler<QueryMeetingResponse>() {
+        getModel().search(meetingId, new JsonHttpResponseHandler<QueryMeetingResponse>(mContext) {
             @Override
             public void onCancel() {
                 super.onCancel();
@@ -97,7 +96,7 @@ public class MeetingSearchPresenter extends MVPPresenter<MeetingSearchContract.V
 
     @Override
     public void joinMeeting(JoinMeetingRequest request) {
-        getModel().joinMeeting(request, new JsonHttpResponseHandler<JoinMeetingResponse>() {
+        getModel().joinMeeting(request, new JsonHttpResponseHandler<JoinMeetingResponse>(mContext) {
             @Override
             public void onCancel() {
                 super.onCancel();
