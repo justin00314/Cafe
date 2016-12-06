@@ -438,6 +438,8 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
         if (success) {
             Intent intent = new Intent(this, MeetingListActivity.class);
             startActivity(intent);
+	        // 登录成功之后结束自己
+	        finish();
         } else {
             Snackbar.make(findViewById(R.id.container_layout), R.string.login_fail, Snackbar.LENGTH_SHORT).show();
         }

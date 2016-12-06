@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,11 +38,9 @@ import com.cafe.view.ChronometerDesc;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.justin.utils.common.LogUtils;
-import org.justin.utils.common.TimeUtils;
 import org.justin.utils.system.DisplayUtils;
 
 import java.lang.ref.WeakReference;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -116,6 +113,15 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	private PresentAtMeetingReceiver receiver;
 
 	/**
+	 * 用户控制手机是否能点击，用于控制短时间触屏2次
+	 */
+	private boolean isCanTap = true;
+	/**
+	 * 用户控制手机是否能摇晃--解决短时间摇晃2次
+	 */
+	private boolean isStartShake = false;
+
+	/**
 	 * 界面入口
 	 */
 	@Override
@@ -140,8 +146,8 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		getPresenter().startMeetingTime(meetingInfo);
 		// 监听手势
 		listenGesture();
-		// 摇一摇监听
-		startShakePhone();
+		// 开始手机摇一摇监听
+		startShake();
 		// 注册广播监听用户再会状态
 		registerReceiver();
 	}
@@ -149,7 +155,8 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		stopShakePhone();
+		// 结束监听手机摇一摇
+		stopShake();
 		// 一定要结束计时器，避免内存泄露
 		getPresenter().stopMeetingTime();
 		if (meetingTimeCdesc.isTimeStart())
@@ -240,27 +247,6 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	}
 
 	/**
-	 * 开始手机摇晃监听
-	 */
-	private void startShakePhone() {
-		ShakePhoneUtils.getInstance().startShake(this, new ShakePhoneUtils.OnShakeListener() {
-			@Override
-			public void onShake() {
-				LogUtils.i(TAG, "-->手机摇一摇");
-				// 开始插话
-				getPresenter().operateEpisode(meetingInfo);
-			}
-		});
-	}
-
-	/**
-	 * 结束手机摇晃监听
-	 */
-	private void stopShakePhone() {
-		ShakePhoneUtils.getInstance().stopShake();
-	}
-
-	/**
 	 * 设置会议信息
 	 */
 	private void setMeetingInfo() {
@@ -345,6 +331,42 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	}
 
 	/**
+	 * 开始监听摇晃手机
+	 */
+	@Override
+	public void startShake() {
+		ShakePhoneUtils.getInstance().startShake(this, new ShakePhoneUtils.OnShakeListener() {
+			@Override
+			public void onShake() {
+				LogUtils.i(TAG, "-->手机摇一摇");
+				// 开始插话
+				getPresenter().operateEpisode(meetingInfo);
+			}
+		});
+		isStartShake = true;
+	}
+
+	/**
+	 * 结束监听摇晃手机
+	 */
+	@Override
+	public void stopShake() {
+		ShakePhoneUtils.getInstance().stopShake();
+		isStartShake = false;
+	}
+
+	@Override
+	public boolean getIsCanTap() {
+		return isCanTap;
+	}
+
+	@Override
+	public boolean isStartShake() {
+		return isStartShake;
+	}
+
+
+	/**
 	 * 倒计时是否开始
 	 */
 	@Override
@@ -419,14 +441,15 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		if (!speakerStateTv.getText().toString().equals(speakerState)) {
 			speakerStateTv.setText(speakerState);
 		}
-		if (!TextUtils.isEmpty(result.userPortrait) &&
-				!result.userPortrait.equals(nowTalkerPortrait)) {
+		String userPortrait = "";
+		if(result.userPortrait != null) userPortrait = result.userPortrait;
+		if (!nowTalkerPortrait.equals(userPortrait)) {
 			// 加载说话人头像
 			ImageLoader.getInstance().displayImage(result.userPortrait,
 					speakerPortraitCiv, CommonUtils.getPortraitOptions(),
 					new AnimationImageLoadingListener());
-			nowTalkerPortrait = result.userPortrait;
 		}
+		nowTalkerPortrait = userPortrait;
 
 	}
 

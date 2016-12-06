@@ -4,8 +4,7 @@
 
 package com.cafe.base;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.app.*;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -70,6 +69,8 @@ public class AIBaseActivity extends ToolbarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		init();
+		// 将每个Activity入栈
+		ActivityManager.getInstance().add(this);
 	}
 
 	// 初始化数据和界面布局

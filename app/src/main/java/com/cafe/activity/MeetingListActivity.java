@@ -27,6 +27,7 @@ import com.aiviews.imageview.RoundImageView;
 import com.aiviews.toolbar.ToolbarActivity;
 import com.cafe.R;
 import com.cafe.adapter.MeetingListRvAdapter;
+import com.cafe.base.ActivityManager;
 import com.cafe.common.ImageLoaderManager;
 import com.cafe.common.IntentExtra;
 import com.cafe.common.ShakePhoneUtils;
@@ -709,9 +710,9 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 			ToastUtils.getInstance().showToast(this, R.string.prompt_double_click_exit);
 			firstTime = secondTime;
 		} else {
-			finish();
+//			finish();
+			ActivityManager.getInstance().finishAll();
 		}
-
-
 	}
+
 }

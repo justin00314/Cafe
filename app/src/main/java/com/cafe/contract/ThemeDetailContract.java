@@ -21,6 +21,14 @@ public interface ThemeDetailContract {
 
 	interface View extends BaseView {
 
+		void startShake();
+
+		void stopShake();
+
+		boolean getIsCanTap();
+
+		boolean isStartShake();
+
 		/**
 		 * 倒计时是否开始
 		 */

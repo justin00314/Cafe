@@ -154,14 +154,14 @@ public class CheckService extends Service {
 			if (startTime != -1 && currentTime >= startTime) {
 				if (!funfFlag) {
 					LogUtils.i(TAG, "启动funf-->");
-					startService(funfIntent);
+//					startService(funfIntent);
 				}
 			}
 		}
 		// 停止funf逻辑:用户没有参与会议,并且funf已经启动
 		else if (funfFlag) {
 			LogUtils.i(TAG, "停止funf-->");
-			stopService(funfIntent);
+//			stopService(funfIntent);
 		}
 		// TODO:发送广播通知全局
 		Intent intent = new Intent(RECEIVER_IS_PRESENT_AT_MEETING);
