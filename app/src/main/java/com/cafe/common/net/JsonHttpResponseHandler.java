@@ -74,7 +74,8 @@ public abstract class JsonHttpResponseHandler<T extends ResponseData> extends Te
 			String msg = "返回数据desc.result_code不为success";
 			// TODO:处理登录失效,统一跳转到登录界面
 			if (data.desc.result_code == ResultCode.LOGIN_FAILURE) {
-				if (context != null && context instanceof Activity) {
+				if (context != null && context instanceof Activity
+						&& !((Activity) context).isFinishing()) {
 					context.startActivity(new Intent(context, LoginActivity.class));
 					((Activity) context).finish();
 					ToastUtils.getInstance().showToast(context, R.string.prompt_login_failure);

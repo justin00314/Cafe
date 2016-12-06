@@ -30,6 +30,7 @@ import com.cafe.adapter.MeetingListRvAdapter;
 import com.cafe.base.ActivityManager;
 import com.cafe.common.ImageLoaderManager;
 import com.cafe.common.IntentExtra;
+import com.cafe.common.PreManager;
 import com.cafe.common.ShakePhoneUtils;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.MeetingListContract;
@@ -145,7 +146,8 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 			timerTask.cancel();
 		if (timer != null)
 			timer.cancel();
-
+		// 设置会议过程列表的过滤时间为空
+		PreManager.setProcedureFilterTime(this, "");
 	}
 
 	private void startShakePhone() {
