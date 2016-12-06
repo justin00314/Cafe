@@ -160,4 +160,5 @@
 	<string name="query_fail">查询失败</string>
 	<string name="query_no_meeting">没有查询到相关会议</string>
 	<string name="meeting_not_start">会议还未开始</string>
+	<string name="search_meeting">搜索会议</string>
 </resources>

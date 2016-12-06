@@ -1,6 +1,11 @@
 package com.cafe.common;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.v4.content.PermissionChecker;
 import android.text.TextUtils;
 
 import com.cafe.R;
@@ -181,6 +186,40 @@ public class CommonUtils {
 		// 设置是否缓存在磁盘中
 		builder.cacheOnDisk(true);
 		return builder.build();
+	}
+
+	public static int getTargetVersion(Context context) {
+		int targetSdkVersion = 0;
+
+		try {
+			final PackageInfo info = context.getPackageManager().getPackageInfo(
+					context.getPackageName(), 0);
+			targetSdkVersion = info.applicationInfo.targetSdkVersion;
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return targetSdkVersion;
+	}
+
+	public static boolean isPermissionGranted(Context context, String permission) {
+		boolean result = true;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+			if (CommonUtils.getTargetVersion(context) >= Build.VERSION_CODES.M) {
+				// targetSdkVersion >= Android M, we can
+				// use Context#checkSelfPermission
+				result = context.checkSelfPermission(permission)
+						== PackageManager.PERMISSION_GRANTED;
+			} else {
+				// targetSdkVersion < Android M, we have to use PermissionChecker
+				result = PermissionChecker.checkSelfPermission(context, permission)
+						== PermissionChecker.PERMISSION_GRANTED;
+			}
+		}
+
+		return result;
 	}
 
 }
