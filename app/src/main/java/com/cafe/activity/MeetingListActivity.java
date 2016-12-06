@@ -301,8 +301,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 
 	private void checkCameraPermission() {
 		// 没有授权的情况下询问用户是否授权
-		if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
-				PackageManager.PERMISSION_GRANTED) {
+		if (!EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)) {
 			String[] perms = {Manifest.permission.CAMERA};
 			EasyPermissions.requestPermissions(this, getString(R.string.camera_rationale),
 					PERMISSION_CAMERA_REQUEST_CODE, perms);

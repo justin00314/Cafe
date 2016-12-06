@@ -4,8 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +39,17 @@ public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_meeting);
 
+        supportToolbar(true);
+
         setupUI();
+
+        setToolbarLeft(R.mipmap.back, new OnLeftClickListener() {
+            @Override
+            public void onClick() {
+                finish();
+            }
+        });
+        setToolbarTitle(getString(R.string.search_meeting));
     }
 
     @Override
@@ -86,6 +99,22 @@ public class SearchMeetingActivity extends MVPActivity<MeetingSearchContract.Vie
         mMeetintsRv.setLayoutManager(layoutManager);
 
         mMeetintId = (EditText) findViewById(R.id.editor_id);
+
+        mMeetintId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_NOT_ALWAYS);
+
+                    search(null);
+                    return true;
+                }
+
+                return false;
+            }
+        });
 
         mTextValidater = new TextInputValidater();
         mTextValidater.putValidateItem(mMeetintId, getString(R.string.prompt_need_meeting_id));
