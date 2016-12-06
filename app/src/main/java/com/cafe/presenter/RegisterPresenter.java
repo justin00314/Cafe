@@ -40,7 +40,7 @@ public class RegisterPresenter extends MVPPresenter<RegisterContract.View, Regis
 
 
 
-        model.register(request, headFilePath, new JsonHttpResponseHandler<ResultResponse>() {
+        model.register(request, headFilePath, new JsonHttpResponseHandler<ResultResponse>(mContext) {
 
             @Override
             public void onCancel() {

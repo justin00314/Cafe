@@ -9,13 +9,9 @@ import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.ThemeMeetingCreateContract;
 import com.cafe.data.meeting.CreateMeetingRequest;
 import com.cafe.data.meeting.CreateMeetingResponse;
-import com.cafe.data.meeting.MeetingListResponse;
-import com.cafe.data.meeting.MeetingRoomInfo;
 import com.cafe.data.meeting.MeetingRoomListRequest;
 import com.cafe.data.meeting.MeetingRoomListResponse;
 import com.cafe.model.meeting.BDKMeetingCreateBiz;
-
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -101,7 +97,7 @@ public class ThemeMeetingCreatePresenter extends MVPPresenter<ThemeMeetingCreate
     public void findMeetingRooms(MeetingRoomListRequest request) {
         getView().showLoadingProgress(mContext.getString(R.string.finding_meeting_rooms));
 
-        getModel().findMeetingRooms(request, new JsonHttpResponseHandler<MeetingRoomListResponse>() {
+        getModel().findMeetingRooms(request, new JsonHttpResponseHandler<MeetingRoomListResponse>(mContext) {
 
             @Override
             public void onCancel() {
