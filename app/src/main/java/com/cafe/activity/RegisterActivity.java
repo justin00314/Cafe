@@ -310,21 +310,28 @@ public class RegisterActivity extends MVPActivity<RegisterContract.View,
     public void takePhoto(View v) {
         if (canTakePhoto) {
 
-            canTakePhoto = false;
+            if (photoFile != null) {
+                mHeadImage.setImageBitmap(null);
+                photoFile = null;
+            } else {
+                canTakePhoto = false;
 
-            CameraManager.getInstance().takePicture(new PhotoTakenCallback() {
-                @Override
-                public void photoTakenSuccess(byte[] data, int orientation) {
-                    // 调用异步任务保存相片
-                    savePhoto(data, orientation);
-                }
+                CameraManager.getInstance().takePicture(new PhotoTakenCallback() {
+                    @Override
+                    public void photoTakenSuccess(byte[] data, int orientation) {
+                        // 调用异步任务保存相片
+                        savePhoto(data, orientation);
+                    }
 
-                @Override
-                public void photoTakenFailure() {
-                    photoFile = null;
-                    canTakePhoto = true;
-                }
-            });
+                    @Override
+                    public void photoTakenFailure() {
+                        photoFile = null;
+                        canTakePhoto = true;
+                    }
+                });
+            }
+
+
         }
     }
 
