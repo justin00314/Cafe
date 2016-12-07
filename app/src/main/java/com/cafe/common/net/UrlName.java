@@ -19,7 +19,9 @@ public enum UrlName {
 	// 创建主题会议
 	MEETING_CREATE("createMeeting"),
 	// 发起创建临时会议（头脑风暴）请求
-	MEETING_BRAIN_STORM("requestForBrainStorm"),
+	MEETING_CREATE_BRAIN_STORM("requestForCreateBrainStorm"),
+	// 发起解散临时会议（头脑风暴）请求
+	MEETING_DISMISS_BRAIN_STORM("requestForDismissBrainStorm"),
 	// 查询会议基本信息
 	MEETING_INFO("getMeetingInfo"),
 	// 加入会议

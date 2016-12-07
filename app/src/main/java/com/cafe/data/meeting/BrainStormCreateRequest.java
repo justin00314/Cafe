@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 502953057@qq.com
  */
 
-public class RequestBrainStormRequest implements Serializable {
+public class BrainStormCreateRequest implements Serializable {
 
 	@SerializedName("time")
 	public String time;

@@ -77,8 +77,13 @@
 	<string name="prompt_quit_success">退出会议成功</string>
 	<string name="prompt_cancel_success">取消会议预约成功</string>
 	<string name="prompt_dismiss_success">解散会议成功</string>
+
+	<string name="prompt_present_meeting" formatted="false">您已经加入了’%s’，请退出后重试！</string>
+	<string name="prompt_present_meeting_failure">查询用户在会状态失败，请重试！</string>
 	<string name="prompt_create_brain_storm_failure">请求创建临时会议失败，请重试！</string>
 	<string name="prompt_create_brain_storm_success">请求创建临时会议成功</string>
+	<string name="prompt_dismiss_brain_storm_failure">请求解散临时会议失败，请重试！</string>
+	<string name="prompt_dismiss_brain_storm_success">请求解散临时会议成功</string>
 
 	<string name="dialog_title_logout">用户登出</string>
 	<string name="dialog_content_logout">是否登出系统并退到登录界面？</string>

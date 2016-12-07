@@ -8,7 +8,7 @@ import com.cafe.data.base.ResponseData;
  * 502953057@qq.com
  */
 
-public class RequestBrainStormResponse extends ResponseData<RequestBrainStormResponse.Result> {
+public class BrainStormCreateResponse extends ResponseData<BrainStormCreateResponse.Result> {
 
 	public class Result extends com.cafe.data.base.Result {
 

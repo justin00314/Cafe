@@ -10,18 +10,19 @@ import com.cafe.contract.MeetingListContract;
 import com.cafe.data.account.DeviceType;
 import com.cafe.data.account.LogUserRequest;
 import com.cafe.data.account.LogoutRequest;
+import com.cafe.data.account.UserInfo;
+import com.cafe.data.meeting.BrainStormDismissRequest;
 import com.cafe.data.meeting.CancelMeetingRequest;
 import com.cafe.data.meeting.DismissMeetingRequest;
 import com.cafe.data.meeting.JoinMeetingRequest;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingListRequest;
 import com.cafe.data.meeting.MeetingState;
+import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.data.meeting.QuitMeetingRequest;
-import com.cafe.data.meeting.RequestBrainStormRequest;
+import com.cafe.data.meeting.BrainStormCreateRequest;
 import com.cafe.data.meeting.StatusInfo;
 import com.loopj.android.http.ResponseHandlerInterface;
-
-import org.justin.utils.common.LogUtils;
 
 import java.util.ArrayList;
 
@@ -39,14 +40,6 @@ public class MeetingListBiz implements MeetingListContract.Model {
 
 	public MeetingListBiz(Context context) {
 		this.context = context;
-	}
-
-	/**
-	 * 获取当前用户是否已经加入了某个会议
-	 */
-	@Override
-	public void getIsAtSomeMeeting(ResponseHandlerInterface response) {
-		HttpManager.postJson(context, UrlName.PRESENT_AT_MEETING.getUrl(), null, response);
 	}
 
 	/**
@@ -143,13 +136,36 @@ public class MeetingListBiz implements MeetingListContract.Model {
 	}
 
 	/**
+	 * 获取当前用户是否已经加入了某个会议
+	 */
+	@Override
+	public void getIsAtSomeMeeting(ResponseHandlerInterface response) {
+		UserInfo data = new UserInfo();
+		HttpManager.postJson(context, UrlName.PRESENT_AT_MEETING.getUrl(), data, response);
+	}
+
+	/**
 	 * 请求创建头脑风暴
 	 */
 	@Override
-	public void requestBrainStorm(ResponseHandlerInterface response) {
-		RequestBrainStormRequest data = new RequestBrainStormRequest();
+	public void requestCreateBrainStorm(ResponseHandlerInterface response) {
+		BrainStormCreateRequest data = new BrainStormCreateRequest();
 		data.time = CommonUtils.getCurrentTime();
-		HttpManager.postJson(context, UrlName.MEETING_BRAIN_STORM.getUrl(), data,
+		HttpManager.postJson(context, UrlName.MEETING_CREATE_BRAIN_STORM.getUrl(), data,
 				response);
 	}
+
+	/**
+	 * 请求解散头脑风暴
+	 */
+	@Override
+	public void requestDismissBrainStorm(MeetingUserInfo info, ResponseHandlerInterface response) {
+		BrainStormDismissRequest data = new BrainStormDismissRequest();
+		data.time = CommonUtils.getCurrentTime();
+		data.id = info.id;
+		HttpManager.postJson(context, UrlName.MEETING_DISMISS_BRAIN_STORM.getUrl(), data,
+				response);
+	}
+
+
 }

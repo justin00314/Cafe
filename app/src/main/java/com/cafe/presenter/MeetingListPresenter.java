@@ -9,33 +9,26 @@ import com.cafe.R;
 import com.cafe.common.PreManager;
 import com.cafe.common.mvp.MVPPresenter;
 import com.cafe.common.net.JsonHttpResponseHandler;
-import com.cafe.common.net.ResultCode;
 import com.cafe.contract.MeetingListContract;
 import com.cafe.data.account.LogUserResponse;
 import com.cafe.data.account.LogoutResponse;
 import com.cafe.data.meeting.CancelMeetingResponse;
 import com.cafe.data.meeting.DismissMeetingResponse;
 import com.cafe.data.meeting.JoinMeetingResponse;
-import com.cafe.data.meeting.JoinType;
-import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingListResponse;
 import com.cafe.data.meeting.MeetingState;
 import com.cafe.data.meeting.MeetingType;
 import com.cafe.data.meeting.MeetingUserInfo;
-import com.cafe.data.meeting.QueryMeetingResponse;
 import com.cafe.data.meeting.QueryMeetingUserResponse;
 import com.cafe.data.meeting.QuitMeetingResponse;
-import com.cafe.data.meeting.RequestBrainStormResponse;
+import com.cafe.data.meeting.BrainStormCreateResponse;
 import com.cafe.model.meeting.MeetingListBiz;
 
 import org.justin.utils.common.LogUtils;
 import org.justin.utils.common.TimeUtils;
 import org.justin.utils.common.ToastUtils;
-import org.justin.utils.thread.ThreadUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -71,9 +64,10 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		if (view == null) return;
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
-		meetingListBiz.getUserInfo(new JsonHttpResponseHandler<LogUserResponse>() {
+		meetingListBiz.getUserInfo(new JsonHttpResponseHandler<LogUserResponse>(context) {
 			@Override
-			public void onHandleSuccess(int statusCode, Header[] headers, LogUserResponse jsonObj) {
+			public void onHandleSuccess(int statusCode, Header[] headers,
+			                            LogUserResponse jsonObj) {
 				// 处理获取用户信息成功
 				handleSuccess(jsonObj);
 			}
@@ -191,7 +185,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
-		meetingListBiz.logout(new JsonHttpResponseHandler<LogoutResponse>() {
+		meetingListBiz.logout(new JsonHttpResponseHandler<LogoutResponse>(context) {
 			@Override
 			public void onHandleSuccess(int statusCode, Header[] headers, LogoutResponse jsonObj) {
 				// 处理登出成功
@@ -258,45 +252,150 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	}
 
 	/**
+	 * 摇一摇手机处理创建或解散临时会议
+	 */
+	@Override
+	public void shakePhoneForBrainStorm() {
+		MeetingListContract.View view = getView();
+		if (view == null) return;
+		// TODO:停止监听摇一摇,避免多次摇晃
+		if (view.isStartShake()) view.stopShake();
+		MeetingListContract.Model meetingListBiz = getModel();
+		if (meetingListBiz == null) return;
+		meetingListBiz.getIsAtSomeMeeting(
+				new JsonHttpResponseHandler<QueryMeetingUserResponse>(context) {
+					@Override
+					public void onHandleSuccess(int statusCode, Header[] headers,
+					                            QueryMeetingUserResponse jsonObj) {
+						handleSuccess(jsonObj);
+					}
+
+					@Override
+					public void onCancel() {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						if (!view.isStartShake()) view.startShake();
+						ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
+					}
+
+					@Override
+					public void onHandleFailure(String errorMsg) {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						if (!view.isStartShake()) view.startShake();
+						ToastUtils.getInstance().showToast(context,
+								R.string.prompt_present_meeting_failure);
+					}
+				});
+
+	}
+
+	/**
+	 * 处理查询用户在会状态成功
+	 */
+	private void handleSuccess(QueryMeetingUserResponse jsonObj) {
+		// 用户不在会才能创建临时会议
+		if (jsonObj.data.id == -1) {
+			createBrainStorm();
+		}
+		// 用户已经在会
+		else {
+			// 如果用户已经在头脑风暴会议中则退出会议
+			if (jsonObj.data.type == MeetingType.BRAIN_STORM.getId()) {
+				MeetingUserInfo info = new MeetingUserInfo();
+				info.id = jsonObj.data.id;
+				dismissBrainStorm(info);
+			}
+			// 提示用户已经在主题会议中
+			else if (jsonObj.data.type == MeetingType.THEME.getId()) {
+				String msg = String.format(context.getString(R.string.prompt_present_meeting),
+						jsonObj.data.name);
+				ToastUtils.getInstance().showToast(context, msg);
+			}
+		}
+
+	}
+
+	/**
 	 * 请求创建头脑风暴
 	 */
 	@Override
 	public void createBrainStorm() {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
-		// TODO:开始请求创建临时会议后，停止监听摇一摇,避免多次摇晃
+		MeetingListContract.Model meetingListBiz = getModel();
+		if (meetingListBiz == null) return;
+		meetingListBiz.requestCreateBrainStorm(
+				new JsonHttpResponseHandler<BrainStormCreateResponse>(context) {
+					@Override
+					public void onHandleSuccess(int statusCode, Header[] headers,
+					                            BrainStormCreateResponse jsonObj) {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						if (!view.isStartShake()) view.startShake();
+						ToastUtils.getInstance().showToast(context,
+								R.string.prompt_create_brain_storm_success);
+					}
+
+					@Override
+					public void onCancel() {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						if (!view.isStartShake()) view.startShake();
+						ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
+					}
+
+					@Override
+					public void onHandleFailure(String errorMsg) {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						if (!view.isStartShake()) view.startShake();
+						ToastUtils.getInstance().showToast(context,
+								R.string.prompt_create_brain_storm_failure);
+					}
+				});
+
+	}
+
+	/**
+	 * 请求解散临时会议
+	 */
+	@Override
+	public void dismissBrainStorm(MeetingUserInfo info) {
+		MeetingListContract.View view = getView();
+		if (view == null) return;
 		if (view.isStartShake()) view.stopShake();
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
-		meetingListBiz.requestBrainStorm(new JsonHttpResponseHandler<RequestBrainStormResponse>() {
-			@Override
-			public void onHandleSuccess(int statusCode, Header[] headers,
-			                            RequestBrainStormResponse jsonObj) {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				if (!view.isStartShake()) view.startShake();
-				ToastUtils.getInstance().showToast(context,
-						R.string.prompt_create_brain_storm_success);
-			}
+		meetingListBiz.requestDismissBrainStorm(info,
+				new JsonHttpResponseHandler<BrainStormCreateResponse>(context) {
+					@Override
+					public void onHandleSuccess(int statusCode, Header[] headers,
+					                            BrainStormCreateResponse jsonObj) {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						if (!view.isStartShake()) view.startShake();
+						ToastUtils.getInstance().showToast(context,
+								R.string.prompt_dismiss_brain_storm_success);
+					}
 
-			@Override
-			public void onCancel() {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				if (!view.isStartShake()) view.startShake();
-				ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
-			}
+					@Override
+					public void onCancel() {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						if (!view.isStartShake()) view.startShake();
+						ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
+					}
 
-			@Override
-			public void onHandleFailure(String errorMsg) {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				if (!view.isStartShake()) view.startShake();
-				ToastUtils.getInstance().showToast(context,
-						R.string.prompt_create_brain_storm_failure);
-			}
-		});
-
+					@Override
+					public void onHandleFailure(String errorMsg) {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						if (!view.isStartShake()) view.startShake();
+						ToastUtils.getInstance().showToast(context,
+								R.string.prompt_dismiss_brain_storm_failure);
+					}
+				});
 	}
 
 
@@ -343,29 +442,31 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
-		meetingListBiz.quitMeeting(meetingInfo, new JsonHttpResponseHandler<QuitMeetingResponse>() {
-			@Override
-			public void onHandleSuccess(int statusCode, Header[] headers, QuitMeetingResponse jsonObj) {
-				// 处理退出会议成功
-				handleSuccess(meetingInfo, jsonObj);
-			}
+		meetingListBiz.quitMeeting(meetingInfo,
+				new JsonHttpResponseHandler<QuitMeetingResponse>(context) {
+					@Override
+					public void onHandleSuccess(int statusCode, Header[] headers,
+					                            QuitMeetingResponse jsonObj) {
+						// 处理退出会议成功
+						handleSuccess(meetingInfo, jsonObj);
+					}
 
-			@Override
-			public void onCancel() {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
-				ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
-			}
+					@Override
+					public void onCancel() {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						view.dismissLoadingProgress();
+						ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
+					}
 
-			@Override
-			public void onHandleFailure(String errorMsg) {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
-				ToastUtils.getInstance().showToast(context, R.string.prompt_quit_failure);
-			}
-		});
+					@Override
+					public void onHandleFailure(String errorMsg) {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						view.dismissLoadingProgress();
+						ToastUtils.getInstance().showToast(context, R.string.prompt_quit_failure);
+					}
+				});
 	}
 
 	/**
@@ -416,29 +517,31 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
-		meetingListBiz.dismissMeeting(meetingInfo, new JsonHttpResponseHandler<DismissMeetingResponse>() {
-			@Override
-			public void onHandleSuccess(int statusCode, Header[] headers, DismissMeetingResponse jsonObj) {
-				// 处理加入会议成功
-				handleSuccess(meetingInfo, jsonObj);
-			}
+		meetingListBiz.dismissMeeting(meetingInfo,
+				new JsonHttpResponseHandler<DismissMeetingResponse>(context) {
+					@Override
+					public void onHandleSuccess(int statusCode, Header[] headers,
+					                            DismissMeetingResponse jsonObj) {
+						// 处理加入会议成功
+						handleSuccess(meetingInfo, jsonObj);
+					}
 
-			@Override
-			public void onCancel() {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
-				ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
-			}
+					@Override
+					public void onCancel() {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						view.dismissLoadingProgress();
+						ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
+					}
 
-			@Override
-			public void onHandleFailure(String errorMsg) {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
-				ToastUtils.getInstance().showToast(context, R.string.prompt_dismiss_failure);
-			}
-		});
+					@Override
+					public void onHandleFailure(String errorMsg) {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						view.dismissLoadingProgress();
+						ToastUtils.getInstance().showToast(context, R.string.prompt_dismiss_failure);
+					}
+				});
 	}
 
 	/**
@@ -471,31 +574,32 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 			LogUtils.e(TAG, "Exception", e);
 		}
 		final int id = meetingId;
-		meetingListBiz.getMeetingDetail(id, new JsonHttpResponseHandler<QueryMeetingUserResponse>() {
-			@Override
-			public void onHandleSuccess(int statusCode, Header[] headers,
-			                            QueryMeetingUserResponse jsonObj) {
-				jsonObj.data.id = id;
-				doJoin(jsonObj.data);
-			}
+		meetingListBiz.getMeetingDetail(id,
+				new JsonHttpResponseHandler<QueryMeetingUserResponse>(context) {
+					@Override
+					public void onHandleSuccess(int statusCode, Header[] headers,
+					                            QueryMeetingUserResponse jsonObj) {
+						jsonObj.data.id = id;
+						doJoin(jsonObj.data);
+					}
 
-			@Override
-			public void onCancel() {
+					@Override
+					public void onCancel() {
 //				MeetingListContract.View view = getView();
 //				if (view == null) return;
 //				view.dismissLoadingProgress();
-				ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
-			}
+						ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
+					}
 
-			@Override
-			public void onHandleFailure(String errorMsg) {
+					@Override
+					public void onHandleFailure(String errorMsg) {
 //				MeetingListContract.View view = getView();
 //				if (view == null) return;
 //				view.dismissLoadingProgress();
-				ToastUtils.getInstance().showToast(context,
-						R.string.prompt_query_meeting_detail_failure);
-			}
-		});
+						ToastUtils.getInstance().showToast(context,
+								R.string.prompt_query_meeting_detail_failure);
+					}
+				});
 	}
 
 	/**
@@ -535,30 +639,31 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		view.showLoadingProgress(context.getString(R.string.prompt_joining));
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
-		meetingListBiz.joinMeeting(meetingInfo, new JsonHttpResponseHandler<JoinMeetingResponse>() {
-			@Override
-			public void onHandleSuccess(int statusCode, Header[] headers,
-			                            JoinMeetingResponse jsonObj) {
-				// 处理加入会议成功
-				handleSuccess(meetingInfo, jsonObj);
-			}
+		meetingListBiz.joinMeeting(meetingInfo,
+				new JsonHttpResponseHandler<JoinMeetingResponse>(context) {
+					@Override
+					public void onHandleSuccess(int statusCode, Header[] headers,
+					                            JoinMeetingResponse jsonObj) {
+						// 处理加入会议成功
+						handleSuccess(meetingInfo, jsonObj);
+					}
 
-			@Override
-			public void onCancel() {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
-				ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
-			}
+					@Override
+					public void onCancel() {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						view.dismissLoadingProgress();
+						ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
+					}
 
-			@Override
-			public void onHandleFailure(String errorMsg) {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
-				ToastUtils.getInstance().showToast(context, R.string.prompt_join_failure);
-			}
-		});
+					@Override
+					public void onHandleFailure(String errorMsg) {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						view.dismissLoadingProgress();
+						ToastUtils.getInstance().showToast(context, R.string.prompt_join_failure);
+					}
+				});
 	}
 
 	/**
@@ -642,29 +747,31 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
-		meetingListBiz.cancelMeeting(meetingInfo, new JsonHttpResponseHandler<CancelMeetingResponse>() {
-			@Override
-			public void onHandleSuccess(int statusCode, Header[] headers, CancelMeetingResponse jsonObj) {
-				// 处理取消预约会议成功
-				handleSuccess(meetingInfo, jsonObj);
-			}
+		meetingListBiz.cancelMeeting(meetingInfo,
+				new JsonHttpResponseHandler<CancelMeetingResponse>(context) {
+					@Override
+					public void onHandleSuccess(int statusCode, Header[] headers,
+					                            CancelMeetingResponse jsonObj) {
+						// 处理取消预约会议成功
+						handleSuccess(meetingInfo, jsonObj);
+					}
 
-			@Override
-			public void onCancel() {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
-				ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
-			}
+					@Override
+					public void onCancel() {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						view.dismissLoadingProgress();
+						ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
+					}
 
-			@Override
-			public void onHandleFailure(String errorMsg) {
-				MeetingListContract.View view = getView();
-				if (view == null) return;
-				view.dismissLoadingProgress();
-				ToastUtils.getInstance().showToast(context, R.string.prompt_cancel_failure);
-			}
-		});
+					@Override
+					public void onHandleFailure(String errorMsg) {
+						MeetingListContract.View view = getView();
+						if (view == null) return;
+						view.dismissLoadingProgress();
+						ToastUtils.getInstance().showToast(context, R.string.prompt_cancel_failure);
+					}
+				});
 	}
 
 	/**

@@ -136,6 +136,11 @@ public interface MeetingListContract {
 		void scanQRCode();
 
 		/**
+		 * 摇一摇手机处理头脑风暴，创建或解散
+		 */
+		void shakePhoneForBrainStorm();
+
+		/**
 		 * 创建主题会议
 		 */
 		void createTheme();
@@ -144,6 +149,11 @@ public interface MeetingListContract {
 		 * 创建头脑风暴会议
 		 */
 		void createBrainStorm();
+
+		/**
+		 * 解散头脑风暴会议
+		 */
+		void dismissBrainStorm(MeetingUserInfo meetingInfo);
 
 		/**
 		 * 显示会议二维码
@@ -189,11 +199,6 @@ public interface MeetingListContract {
 	interface Model extends BaseModel {
 
 		/**
-		 * 查询当前用户是否在某个会议
-		 */
-		void getIsAtSomeMeeting(ResponseHandlerInterface response);
-
-		/**
 		 * 获取会议详情
 		 */
 		void getMeetingDetail(int meetingId, ResponseHandlerInterface response);
@@ -231,11 +236,19 @@ public interface MeetingListContract {
 		void dismissMeeting(MeetingInfo info, ResponseHandlerInterface response);
 
 		/**
+		 * 查询当前用户是否在某个会议
+		 */
+		void getIsAtSomeMeeting(ResponseHandlerInterface response);
+
+		/**
 		 * 请求创建头脑风暴
 		 */
-		void requestBrainStorm(ResponseHandlerInterface response);
+		void requestCreateBrainStorm(ResponseHandlerInterface response);
 
-
+		/**
+		 * 请求解散头脑风暴
+		 */
+		void requestDismissBrainStorm(MeetingUserInfo info, ResponseHandlerInterface response);
 	}
 
 }
