@@ -139,19 +139,37 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
 
 
 
-//                if (bitmap.getHeight() < bitmap.getWidth()) {
-//                    bitmap = ImageUtils.getRotateBitmap(bitmap, orientation, true);
+                switch (orientation) {
+                    case 0:
+                        if (bitmap.getHeight() < bitmap.getWidth()) {
+                            bitmap = ImageUtils.getRotateBitmap(bitmap, -90, true);
+                        }
 
-                int rotation = orientation + 90;
+                        // front camera, 反转图片
+                        bitmap = getReverseBitmap(bitmap, true);
+                        break;
+                    case 90:
+                        bitmap = getVerticalReverseBitmap(bitmap, true);
 
-                if (orientation > 270) {
-                    rotation = orientation;
+                        break;
+                    case 180:
+                        if (bitmap.getHeight() < bitmap.getWidth()) {
+                            bitmap = ImageUtils.getRotateBitmap(bitmap, -90, true);
+                        }
+
+                        bitmap = getVerticalReverseBitmap(bitmap, true);
+                        break;
+                    case 270:
+                        if (bitmap.getHeight() < bitmap.getWidth()) {
+                            bitmap = ImageUtils.getRotateBitmap(bitmap, 270, true);
+                        }
+
+                        // front camera, 反转图片
+                        bitmap = getReverseBitmap(bitmap, true);
+                        break;
+                    default:
+                        break;
                 }
-
-                // front camera, 反转图片
-                bitmap = getReverseBitmap(bitmap, true);
-
-                bitmap = ImageUtils.getRotateBitmap(bitmap, rotation, true);
 
                 // 保存图片
                 ImageUtils.saveBitmapAsJpeg(bitmap, photo.getPath(), COMPRESS_QUALITY);
@@ -330,6 +348,15 @@ public class SavingHeadPhotoTask  extends AsyncTask<Void, Void, File> {
         matrix.postScale(-1, 1); // 镜像水平翻转
 
    //     matrix.postTranslate(b.getWidth() ,0);
+        return Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(), matrix, isFilter);
+    }
+
+    public static Bitmap getVerticalReverseBitmap(Bitmap b, boolean isFilter) {
+        Matrix matrix = new Matrix();
+
+        matrix.postScale(1, -1); // 镜像水平翻转
+
+        //     matrix.postTranslate(b.getWidth() ,0);
         return Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(), matrix, isFilter);
     }
 
