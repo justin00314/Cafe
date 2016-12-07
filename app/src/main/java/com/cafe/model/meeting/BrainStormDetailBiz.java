@@ -8,7 +8,7 @@ import com.cafe.common.net.UrlName;
 import com.cafe.contract.BrainStormDetailContract;
 import com.cafe.data.account.UserInfo;
 import com.cafe.data.meeting.BrainStormDismissRequest;
-import com.cafe.data.meeting.MeetingParticipantListRequest;
+import com.cafe.data.meeting.ParticipantListRequest;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.loopj.android.http.ResponseHandlerInterface;
 
@@ -34,7 +34,7 @@ public class BrainStormDetailBiz implements BrainStormDetailContract.Model {
 	@Override
 	public void queryMeetingParticipantList(MeetingUserInfo info,
 	                                        ResponseHandlerInterface response) {
-		MeetingParticipantListRequest data = new MeetingParticipantListRequest();
+		ParticipantListRequest data = new ParticipantListRequest();
 		data.id = info.id;
 		// TODO:暂时不做分页
 		data.pageNumber = 0;

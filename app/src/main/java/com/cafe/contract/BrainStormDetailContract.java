@@ -3,6 +3,7 @@ package com.cafe.contract;
 import com.cafe.common.mvp.base.BaseModel;
 import com.cafe.common.mvp.base.BasePresenter;
 import com.cafe.common.mvp.base.BaseView;
+import com.cafe.data.account.UserInfo;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.cafe.data.meeting.ProcedureInfo;
 import com.loopj.android.http.ResponseHandlerInterface;
@@ -54,9 +55,9 @@ public interface BrainStormDetailContract {
 		void stopMeetingTime();
 
 		/**
-		 * 加载会议说话列表
+		 * 加载会议参与人列表
 		 */
-		void loadProcedureList(List<ProcedureInfo> procedureInfos);
+		void loadParticipantList(List<UserInfo> userInfos);
 
 	}
 

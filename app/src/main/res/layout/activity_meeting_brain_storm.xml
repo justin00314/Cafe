@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/meeting_detail_bg">
+
+	<!--顶部会议信息区域-->
+	<RelativeLayout
+		android:id="@+id/meeting_info_rl"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="16dp">
+		<ImageView
+			android:id="@+id/meeting_info_logo"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:src="@mipmap/meeting_info_logo"
+			tools:ignore="contentDescription"/>
+		<TextView
+			android:id="@+id/meeting_name_tv"
+			style="@style/TextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_marginStart="10dp"
+			android:layout_toEndOf="@+id/meeting_info_logo"
+			android:textColor="@color/meeting_info_text"/>
+		<TextView
+			android:id="@+id/meeting_state_tv"
+			style="@style/TextNormal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_marginStart="10dp"
+			android:layout_toEndOf="@+id/meeting_name_tv"
+			android:textColor="@color/meeting_info_text"/>
+
+	</RelativeLayout>
+
+	<!--正向计时-->
+	<com.cafe.view.ChronometerAsc
+		android:id="@+id/meeting_time_casc"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/meeting_info_rl"
+		android:layout_centerHorizontal="true"
+		android:layout_margin="10dp"
+		android:visibility="visible"/>
+
+	<!--底部会议过程列表-->
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/participant_list_rv"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_below="@+id/meeting_time_casc"
+		android:layout_marginTop="20dp"/>
+
+
+</RelativeLayout>

@@ -55,7 +55,7 @@ import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
  */
 
 public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
-		ThemeDetailPresenter> implements ThemeDetailContract.View, View.OnClickListener {
+		ThemeDetailPresenter> implements ThemeDetailContract.View {
 
 	private final static String TAG = ThemeDetailActivity.class.getSimpleName();
 
@@ -240,7 +240,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			@Override
 			public boolean onDoubleTap(MotionEvent e) {
 				// 避免多次点击
-				if(!isTap)
+				if (!isTap)
 					getPresenter().operateTheme(meetingInfo);
 				return super.onDoubleTap(e);
 			}
@@ -319,11 +319,6 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		int size = DisplayUtils.getScreenWidth(this);
 		meetingTimeCasc.setSize(size * 2 / 3);
 		meetingTimeCdesc.setSize(size * 2 / 3);
-	}
-
-	@Override
-	public void onClick(View view) {
-
 	}
 
 	@Override
@@ -448,7 +443,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 			speakerStateTv.setText(speakerState);
 		}
 		String userPortrait = "";
-		if(result.userPortrait != null) userPortrait = result.userPortrait;
+		if (result.userPortrait != null) userPortrait = result.userPortrait;
 		if (!nowTalkerPortrait.equals(userPortrait)) {
 			// 加载说话人头像
 			ImageLoader.getInstance().displayImage(result.userPortrait,

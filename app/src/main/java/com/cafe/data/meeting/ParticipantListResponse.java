@@ -12,7 +12,7 @@ import java.util.List;
  * 502953057@qq.com
  */
 
-public class MeetingParticipantListResponse extends ResponseData<MeetingParticipantListResponse
+public class ParticipantListResponse extends ResponseData<ParticipantListResponse
 		.ParticipantListResult> {
 
 	public class ParticipantListResult {

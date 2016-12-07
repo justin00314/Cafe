@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--会议过程列表listitem-->
+<!--临时会议参与人列表listitem-->
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
@@ -16,50 +16,21 @@
 		android:layout_marginTop="10dp">
 
 		<de.hdodenhof.circleimageview.CircleImageView
-			android:id="@+id/speaker_portrait_civ"
+			android:id="@+id/user_portrait_civ"
 			android:layout_width="35dp"
 			android:layout_height="35dp"
 			android:layout_centerVertical="true"
 			android:src="@mipmap/talker_default"/>
 
 		<TextView
-			android:id="@+id/speaker_name_tv"
+			android:id="@+id/user_name_tv"
 			style="@style/TextNormal.Light"
 			android:layout_width="70dp"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
-			android:layout_marginStart="10dp"
-			android:layout_toEndOf="@+id/speaker_portrait_civ"
+			android:layout_marginStart="20dp"
+			android:layout_toEndOf="@+id/user_portrait_civ"
 			tools:text="小锐哥"/>
-		<TextView
-			android:id="@+id/speak_type_tv"
-			style="@style/TextLittle.Light"
-			android:layout_width="50dp"
-			android:layout_height="wrap_content"
-			android:layout_centerVertical="true"
-			android:layout_toEndOf="@+id/speaker_name_tv"
-			tools:text="发言"/>
-
-		<TextView
-			android:id="@+id/speak_duration_tv"
-			style="@style/TextLittle.Light"
-			android:layout_width="80dp"
-			android:layout_height="wrap_content"
-			android:layout_centerVertical="true"
-			android:layout_toEndOf="@+id/speak_type_tv"
-			android:gravity="center"
-			tools:text="110"/>
-
-		<TextView
-			android:id="@+id/speak_state_tv"
-			style="@style/TextLittle"
-			android:layout_width="60dp"
-			android:layout_height="wrap_content"
-			android:layout_alignParentEnd="true"
-			android:layout_centerVertical="true"
-			android:layout_toEndOf="@+id/speak_duration_tv"
-			android:gravity="end"
-			tools:text="正常"/>
 	</RelativeLayout>
 
 	<ImageView

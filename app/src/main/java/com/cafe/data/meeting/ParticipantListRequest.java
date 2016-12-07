@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
  * 502953057@qq.com
  */
 
-public class MeetingParticipantListRequest extends MeetingInfo {
+public class ParticipantListRequest extends MeetingInfo {
 
 	@SerializedName("page_number")
 	public int pageNumber;

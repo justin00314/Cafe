@@ -33,6 +33,7 @@ import com.cafe.common.IntentExtra;
 import com.cafe.common.PreManager;
 import com.cafe.common.ShakePhoneUtils;
 import com.cafe.common.mvp.MVPActivity;
+import com.cafe.contract.BrainStormDetailContract;
 import com.cafe.contract.MeetingListContract;
 import com.cafe.data.account.UserInfo;
 import com.cafe.data.meeting.MeetingState;
@@ -640,7 +641,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 */
 	@Override
 	public void skipToBrainStormActivity(MeetingUserInfo info) {
-		Intent intent = new Intent(this, ThemeDetailActivity.class);
+		Intent intent = new Intent(this, BrainStormDetailActivity.class);
 		intent.putExtra(IntentExtra.MEETING_USER_INFO, info);
 		startActivity(intent);
 	}
