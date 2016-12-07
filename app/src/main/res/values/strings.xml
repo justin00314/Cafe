@@ -33,6 +33,7 @@
 	<string name="speak_duration_ms" formatted="false">%d′%d″</string>
 	<string name="speak_duration_s" formatted="false">%d″</string>
 
+	<string name="prompt_get_user_info_failure">获取用户信息失败，请重新登录！</string>
 	<string name="prompt_login_failure">登录失效或已经在其他地方登录</string>
 	<string name="prompt_double_click_exit">再点一次退出应用</string>
 
@@ -44,6 +45,7 @@
 
 	<string name="prompt_not_participated">只有已经加入的会议才能查看详情</string>
 
+	<string name="prompt_at_meeting">您正在会议中，不能做退出操作</string>
 	<string name="prompt_episode_">您正在插话中，不能开始主题</string>
 	<string name="prompt_theme_">您正在主题中，不能插话</string>
 	<string name="prompt_query_unstop_event">查询用户事件中…</string>
@@ -79,11 +81,12 @@
 	<string name="prompt_dismiss_success">解散会议成功</string>
 
 	<string name="prompt_present_meeting" formatted="false">您已经加入了’%s’，请退出后重试！</string>
+	<string name="prompt_present_meeting_">您已经加入了临时会议，请退出后重试！</string>
 	<string name="prompt_present_meeting_failure">查询用户在会状态失败，请重试！</string>
-	<string name="prompt_create_brain_storm_failure">请求创建临时会议失败，请重试！</string>
-	<string name="prompt_create_brain_storm_success">请求创建临时会议成功</string>
-	<string name="prompt_dismiss_brain_storm_failure">请求解散临时会议失败，请重试！</string>
-	<string name="prompt_dismiss_brain_storm_success">请求解散临时会议成功</string>
+	<string name="prompt_create_brain_storm_failure">创建临时会议请求失败，请重试！</string>
+	<string name="prompt_create_brain_storm_success">创建临时会议请求成功</string>
+	<string name="prompt_dismiss_brain_storm_failure">解散临时会议请求失败，请重试！</string>
+	<string name="prompt_dismiss_brain_storm_success">解散临时会议请求成功</string>
 
 	<string name="dialog_title_logout">用户登出</string>
 	<string name="dialog_content_logout">是否登出系统并退到登录界面？</string>
@@ -130,6 +133,7 @@
 	<string name="op_quit">退出会议</string>
 
 	<string name="submit">提交</string>
+	<string name="brain_storm">临时会议</string>
 	<string name="theme_meeting">主题会议</string>
 	<string name="meeting_theme">会议主题</string>
 	<string name="meeting_number">会议人数</string>

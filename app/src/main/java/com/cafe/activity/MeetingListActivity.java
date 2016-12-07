@@ -379,8 +379,8 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 			@Override
 			public void onShake() {
 				LogUtils.i(TAG, "-->手机摇一摇");
-				// 请求创建临时会议
-				getPresenter().createBrainStorm();
+				// 创建或者解散临时会议
+				getPresenter().shakePhoneForBrainStorm();
 			}
 		});
 		isStartShake = true;
@@ -640,7 +640,9 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 */
 	@Override
 	public void skipToBrainStormActivity(MeetingUserInfo info) {
-
+		Intent intent = new Intent(this, ThemeDetailActivity.class);
+		intent.putExtra(IntentExtra.MEETING_USER_INFO, info);
+		startActivity(intent);
 	}
 
 	/**

@@ -28,7 +28,7 @@ import java.util.Date;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * 主题会议详情Presenter
+ * 主题会议详情 Presenter
  * Created by Justin Z on 2016/11/28.
  * 502953057@qq.com
  */
@@ -72,7 +72,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 	public void startMeetingTime(MeetingUserInfo info) {
 		ThemeDetailContract.View view = getView();
 		if (view == null) return;
-		// TODO:根据当前时间和会议开始时间计算计时器的初始值
+		// 根据当前时间和会议开始时间计算计时器的初始值
 		long startTime = TimeUtils.dateToTimeStamp(info.startTime,
 				TimeUtils.Template.YMDHMS) / 1000;
 		long currentTime = new Date().getTime() / 1000;
@@ -234,6 +234,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 				// 已经开始主题则结束主题
 				stopTheme(info);
 			} else if (jsonObj.data.speakType == SpeakType.EPISODE) {
+				if (view.isTap()) view.setIsTap(false);
 				ToastUtils.getInstance().showToast(context,
 						R.string.prompt_episode_);
 			}
@@ -294,6 +295,7 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 				// 已经开始主题则结束主题
 				stopEpisode(info);
 			} else if (jsonObj.data.speakType == SpeakType.THEME) {
+				if (!view.isStartShake()) view.startShake();
 				ToastUtils.getInstance().showToast(context,
 						R.string.prompt_theme_);
 			}
@@ -312,7 +314,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 		LogUtils.i(TAG, "-->开始主题请求");
 		ThemeDetailContract.Model themeDetailBiz = getModel();
 		if (themeDetailBiz == null) return;
-//		ToastUtils.getInstance().showToast(context, R.string.prompt_start_theme);
 		themeDetailBiz.startTheme(info,
 				new JsonHttpResponseHandler<StartThemeResponse>(context) {
 
@@ -360,7 +361,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 		LogUtils.i(TAG, "-->结束主题请求");
 		ThemeDetailContract.Model themeDetailBiz = getModel();
 		if (themeDetailBiz == null) return;
-//		ToastUtils.getInstance().showToast(context, R.string.prompt_stop_theme);
 		themeDetailBiz.stopTheme(info,
 				new JsonHttpResponseHandler<StopThemeResponse>(context) {
 
@@ -408,7 +408,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 		LogUtils.i(TAG, "-->开始插话请求");
 		ThemeDetailContract.Model themeDetailBiz = getModel();
 		if (themeDetailBiz == null) return;
-//		ToastUtils.getInstance().showToast(context, R.string.prompt_start_episode);
 		themeDetailBiz.startEpisode(info,
 				new JsonHttpResponseHandler<StartEpisodeResponse>(context) {
 
@@ -457,7 +456,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 		LogUtils.i(TAG, "-->结束插话请求");
 		ThemeDetailContract.Model themeDetailBiz = getModel();
 		if (themeDetailBiz == null) return;
-//		ToastUtils.getInstance().showToast(context, R.string.prompt_stop_episode);
 		themeDetailBiz.stopEpisode(info,
 				new JsonHttpResponseHandler<StopEpisodeResponse>(context) {
 

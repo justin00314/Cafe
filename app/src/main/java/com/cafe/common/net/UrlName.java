@@ -34,6 +34,8 @@ public enum UrlName {
 	MEETING_DISMISS("dismissMeeting"),
 	// 查询用户会议列表
 	MEETING_LIST("queryUserMeetingList"),
+	// 查询参与会议的用户列表
+	MEETING_PARTICIPANT_LIST("queryMeetingUserList"),
 
 	// 开始主题
 	PROCEDURE_START_TOPIC("startTopic"),

@@ -14,6 +14,7 @@ import com.aiviews.textview.ImageTextButton;
 import com.cafe.R;
 import com.cafe.data.meeting.MeetingInfo;
 import com.cafe.data.meeting.MeetingState;
+import com.cafe.data.meeting.MeetingType;
 import com.cafe.data.meeting.MeetingUserInfo;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
@@ -139,8 +140,11 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	public void onBindViewHolder(ItemViewHolder holder, int position) {
 		LogUtils.i(TAG, "--onBindViewHolder--");
 		MeetingUserInfo meetingInfo = getItem(position);
-		// 设置会议名称
-		holder.nameTv.setText(meetingInfo.name);
+		if (meetingInfo.type == MeetingType.THEME.getId())
+			// 设置会议名称
+			holder.nameTv.setText(meetingInfo.name);
+		else
+			holder.nameTv.setText(context.getString(R.string.brain_storm));
 		// 设置会议开始时间
 		holder.startTimeTv.setText(meetingInfo.startTime);
 		// 设置会议图标
@@ -216,10 +220,10 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 	 * 设置操作区域
 	 */
 	private void setOperationArea(final MeetingUserInfo meetingInfo, ItemViewHolder holder) {
-		holder.operation1Ibt.setImage(null);
-		holder.operation1Ibt.setText("");
-		holder.operation2Ibt.setImage(null);
-		holder.operation2Ibt.setText("");
+//		holder.operation1Ibt.setImage(null);
+//		holder.operation1Ibt.setText("");
+//		holder.operation2Ibt.setImage(null);
+//		holder.operation2Ibt.setText("");
 		switch (meetingInfo.state) {
 			// 历史会议没有操作区域
 			case MeetingState.HISTORY:
@@ -232,7 +236,10 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 				break;
 			// 正在进行的会议
 			case MeetingState.PROGRESS:
-				holder.QRCodeIb.setVisibility(View.VISIBLE);
+				if (meetingInfo.type == MeetingType.THEME.getId())
+					holder.QRCodeIb.setVisibility(View.VISIBLE);
+				else
+					holder.QRCodeIb.setVisibility(View.GONE);
 				holder.topLineIv.setVisibility(View.VISIBLE);
 				holder.RightLineIv.setVisibility(View.VISIBLE);
 				holder.BottomLineIv.setVisibility(View.VISIBLE);
@@ -295,8 +302,7 @@ public class MeetingListRvAdapter extends MeetingListAdapter<MeetingListRvAdapte
 									onClickQuitListener.onClick(meetingInfo);
 							}
 						});
-					}
-					else {
+					} else {
 						holder.operation1Ibt.setImage(opAddDrawable);
 						holder.operation1Ibt.setText(opAdd);
 						// 加入会议点击事件

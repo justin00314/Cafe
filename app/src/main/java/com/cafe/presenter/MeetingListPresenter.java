@@ -12,6 +12,8 @@ import com.cafe.common.net.JsonHttpResponseHandler;
 import com.cafe.contract.MeetingListContract;
 import com.cafe.data.account.LogUserResponse;
 import com.cafe.data.account.LogoutResponse;
+import com.cafe.data.meeting.BrainStormDismissRequest;
+import com.cafe.data.meeting.BrainStormDismissResponse;
 import com.cafe.data.meeting.CancelMeetingResponse;
 import com.cafe.data.meeting.DismissMeetingResponse;
 import com.cafe.data.meeting.JoinMeetingResponse;
@@ -62,6 +64,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	public void getUserInfo() {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
+		view.showLoadingProgress(null);
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.getUserInfo(new JsonHttpResponseHandler<LogUserResponse>(context) {
@@ -74,18 +77,18 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 
 			@Override
 			public void onCancel() {
-//				MeetingListContract.View view = getView();
-//				if (view == null) return;
-//				view.dismissLoadingProgress();
-//				ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
+				MeetingListContract.View view = getView();
+				if (view == null) return;
+				view.dismissLoadingProgress();
+				ToastUtils.getInstance().showToast(context, R.string.prompt_no_network);
 			}
 
 			@Override
 			public void onHandleFailure(String errorMsg) {
-//				MeetingListContract.View view = getView();
-//				if (view == null) return;
-//				view.dismissLoadingProgress();
-//				ToastUtils.getInstance().showToast(context, R.string.prompt_logout_failure);
+				MeetingListContract.View view = getView();
+				if (view == null) return;
+				view.dismissLoadingProgress();
+				ToastUtils.getInstance().showToast(context, R.string.prompt_get_user_info_failure);
 			}
 		});
 
@@ -95,6 +98,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	private void handleSuccess(LogUserResponse response) {
 		MeetingListContract.View view = getView();
 		if (view == null) return;
+		view.dismissLoadingProgress();
 		if (response.data == null) return;
 		view.setUserInfo(response.data);
 	}
@@ -294,20 +298,26 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	 * 处理查询用户在会状态成功
 	 */
 	private void handleSuccess(QueryMeetingUserResponse jsonObj) {
+		MeetingListContract.View view = getView();
+		if (view == null) return;
 		// 用户不在会才能创建临时会议
 		if (jsonObj.data.id == -1) {
+			LogUtils.i(TAG, "创建头脑风暴-->");
 			createBrainStorm();
 		}
 		// 用户已经在会
 		else {
 			// 如果用户已经在头脑风暴会议中则退出会议
 			if (jsonObj.data.type == MeetingType.BRAIN_STORM.getId()) {
+				LogUtils.i(TAG, "头脑风暴解散-->");
 				MeetingUserInfo info = new MeetingUserInfo();
 				info.id = jsonObj.data.id;
 				dismissBrainStorm(info);
 			}
 			// 提示用户已经在主题会议中
 			else if (jsonObj.data.type == MeetingType.THEME.getId()) {
+				LogUtils.i(TAG, "头脑风暴操作提示已经在主题会议中-->");
+				if (!view.isStartShake()) view.startShake();
 				String msg = String.format(context.getString(R.string.prompt_present_meeting),
 						jsonObj.data.name);
 				ToastUtils.getInstance().showToast(context, msg);
@@ -321,8 +331,6 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	 */
 	@Override
 	public void createBrainStorm() {
-		MeetingListContract.View view = getView();
-		if (view == null) return;
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.requestCreateBrainStorm(
@@ -362,16 +370,13 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	 */
 	@Override
 	public void dismissBrainStorm(MeetingUserInfo info) {
-		MeetingListContract.View view = getView();
-		if (view == null) return;
-		if (view.isStartShake()) view.stopShake();
 		MeetingListContract.Model meetingListBiz = getModel();
 		if (meetingListBiz == null) return;
 		meetingListBiz.requestDismissBrainStorm(info,
-				new JsonHttpResponseHandler<BrainStormCreateResponse>(context) {
+				new JsonHttpResponseHandler<BrainStormDismissResponse>(context) {
 					@Override
 					public void onHandleSuccess(int statusCode, Header[] headers,
-					                            BrainStormCreateResponse jsonObj) {
+					                            BrainStormDismissResponse jsonObj) {
 						MeetingListContract.View view = getView();
 						if (view == null) return;
 						if (!view.isStartShake()) view.startShake();
@@ -414,6 +419,7 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 	 */
 	@Override
 	public void quitMeeting(final MeetingUserInfo meetingInfo) {
+		// TODO:这里需要对会议类型做判断，临时会议和主题会议的退出接口不同
 		final MeetingListContract.View view = getView();
 		if (view == null) return;
 		// 弹出对话框
@@ -559,7 +565,9 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		}
 	}
 
-	// TODO:通过扫描二维码加入会议
+	/**
+	 * 通过扫描二维码加入会议
+	 */
 	@Override
 	public void joinMeetingByQRCode(String result) {
 //		final MeetingListContract.View view = getView();
@@ -680,8 +688,8 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		} else {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_join_failure);
 		}
-		// TODO:跳转到会议详情界面
-//		view.skipToLoginActivity();
+		// 是否需要跳转到会议详情界面
+//		showMeetingProcedure(info);
 	}
 
 	/**
@@ -732,8 +740,10 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		// 没有加入的会议是不能查看详情的
 		if (meetingInfo.participatedFlag) {
 			if (meetingInfo.type == MeetingType.THEME.getId())
+				// 跳转到主题会议详情界面
 				view.skipToThemeDetailActivity(meetingInfo);
 			else if (meetingInfo.type == MeetingType.BRAIN_STORM.getId())
+				// 跳转到临时会议详情界面
 				view.skipToBrainStormActivity(meetingInfo);
 		} else {
 			ToastUtils.getInstance().showToast(context, R.string.prompt_not_participated);
