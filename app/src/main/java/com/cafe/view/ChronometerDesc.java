@@ -15,7 +15,9 @@ import android.widget.TextView;
 import com.cafe.R;
 import com.cafe.common.CommonUtils;
 
+import org.justin.utils.common.ResourcesUtils;
 import org.justin.utils.system.DisplayUtils;
+import org.justin.utils.thread.ThreadUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.Timer;
@@ -31,6 +33,10 @@ public class ChronometerDesc extends RelativeLayout {
 	private final static String TAG = ChronometerAsc.class.getSimpleName();
 
 	private final static int MSG_REFRESH = 0x200;
+
+	private final static int MSG_FLASH_ON = 0x555;
+	private final static int MSG_FLASH_OFF = 0x666;
+
 	/**
 	 * 小于等于5的时候就提醒
 	 */
@@ -43,6 +49,10 @@ public class ChronometerDesc extends RelativeLayout {
 
 	private Timer timer;
 	private TimerTask timerTask;
+
+	private Timer flashTimer;
+	private TimerTask flashTimerTask;
+	private boolean flashFlag = false;
 
 	private ObjectAnimator animator;
 
@@ -171,6 +181,8 @@ public class ChronometerDesc extends RelativeLayout {
 			timer.cancel();
 		// 停止执行旋转动画
 		stopRotationAnim();
+		// 停止闪烁
+		setFlashOff();
 	}
 
 	private void alarm(long currentTime) {
@@ -179,7 +191,56 @@ public class ChronometerDesc extends RelativeLayout {
 			vibrator.vibrate(500);
 		}
 		// TODO:背景闪烁
+		setFlashOn();
 
+	}
+
+	private void setFlashColor(int color){
+		setBackgroundColor(color);
+	}
+
+	private void setFlashFlag(boolean flashFlag){
+		this.flashFlag = flashFlag;
+	}
+
+	/**
+	 * 开启闪屏
+	 */
+	private void setFlashOn() {
+		final RefreshHandler handler = new RefreshHandler(this);
+		flashTimer = new Timer();
+		flashTimerTask = new TimerTask() {
+			@Override
+			public void run() {
+				if(!flashFlag){
+					handler.obtainMessage(MSG_FLASH_ON).sendToTarget();
+				} else {
+					handler.obtainMessage(MSG_FLASH_OFF).sendToTarget();
+				}
+			}
+		};
+		flashTimer.schedule(flashTimerTask, 0, 200);
+	}
+
+	/**
+	 * 关闭闪屏
+	 */
+	private void setFlashOff() {
+		if (flashTimer != null && flashTimerTask != null) {
+			flashTimerTask.cancel();
+			flashTimer.cancel();
+		}
+		flashTimerTask = null;
+		flashTimer = null;
+		// TODO:这里需要延迟设置，否者可能不生效
+		ThreadUtils.runOnUIThread(new Runnable() {
+			@Override
+			public void run() {
+				setBackgroundColor(
+						ResourcesUtils.getColor(R.color.none));
+				flashFlag = false;
+			}
+		}, 200);
 	}
 
 	private static class RefreshHandler extends Handler {
@@ -192,12 +253,20 @@ public class ChronometerDesc extends RelativeLayout {
 
 		@Override
 		public void handleMessage(Message msg) {
+			ChronometerDesc cdesc = cascReference.get();
+			if (cdesc == null) return;
 			switch (msg.what) {
 				case MSG_REFRESH:
-					ChronometerDesc cdesc = cascReference.get();
-					if (cdesc == null) return;
 					cdesc.setCurrentTime((long) msg.obj);
 					cdesc.alarm((long) msg.obj);
+					break;
+				case MSG_FLASH_ON:
+					cdesc.setFlashColor(ResourcesUtils.getColor(android.R.color.black));
+					cdesc.setFlashFlag(true);
+					break;
+				case MSG_FLASH_OFF:
+					cdesc.setFlashColor(ResourcesUtils.getColor(android.R.color.white));
+					cdesc.setFlashFlag(false);
 					break;
 			}
 

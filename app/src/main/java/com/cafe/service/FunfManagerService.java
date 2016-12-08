@@ -80,7 +80,7 @@ public class FunfManagerService extends Service {
 		unregisterTelListener();
 
 		// TODO:暂时在退出的时候清除所有缓存
-		DiskCacheManager.getInstance().clearCache();
+//		DiskCacheManager.getInstance().clearCache();
 	}
 
 	/**
