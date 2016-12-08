@@ -28,6 +28,7 @@ import com.aiviews.toolbar.ToolbarActivity;
 import com.cafe.R;
 import com.cafe.adapter.MeetingListRvAdapter;
 import com.cafe.base.ActivityManager;
+import com.cafe.common.DiskCacheManager;
 import com.cafe.common.ImageLoaderManager;
 import com.cafe.common.IntentExtra;
 import com.cafe.common.PreManager;
@@ -157,6 +158,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 			timer.cancel();
 		// 设置会议过程列表的过滤时间为空
 		PreManager.setProcedureFilterTime(this, "");
+		DiskCacheManager.getInstance().clearCache();
 	}
 
 	/**
