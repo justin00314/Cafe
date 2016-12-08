@@ -123,6 +123,7 @@
 	<string name="dialog_qrcode_time">时间：</string>
 	<string name="dialog_qrcode_location">地点：</string>
 
+	<string name="prompt_meeting_list_empty">您还没有参加过任何会议</string>
 	<string name="prompt_shake_phone">找几个同学一起摇一摇手机试试</string>
 	<string name="prompt_loading">加载中，请稍后…</string>
 	<string name="meeting_state_progress">正在进行中的会议</string>

@@ -56,8 +56,15 @@ public interface MeetingListContract {
 		 */
 		void refreshAfterDismiss(MeetingUserInfo info);
 
+		/**
+		 * 加载会议列表
+		 */
 		void loadMeetingList(List<MeetingUserInfo> meetingInfoList);
 
+		/**
+		 * 显示会议列表为空提示
+		 */
+		void showEmptyView(boolean isShow);
 		/**
 		 * 设置用户信息显示
 		 */

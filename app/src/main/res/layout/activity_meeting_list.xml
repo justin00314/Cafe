@@ -26,7 +26,14 @@
 		android:layout_height="wrap_content"
 		android:clipToPadding="true"
 		android:saveEnabled="false"
+		android:visibility="visible"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+	<!--数据为空的时候显示的提示-->
+	<include
+		android:id="@+id/list_empty_ic"
+		layout="@layout/include_meeting_list_empty"
+		android:visibility="gone"/>
 
 
 	<android.support.design.widget.FloatingActionButton

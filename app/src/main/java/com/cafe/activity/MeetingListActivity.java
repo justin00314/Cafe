@@ -106,6 +106,8 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	private MeetingListRvAdapter meetingListRvAdapter;
 	private LinearLayoutManager layoutManager;
 
+	private View listEmptyPromptView;
+
 	// TODO:定时任务，轮询会议列表
 	private Timer timer;
 	private TimerTask timerTask;
@@ -263,6 +265,7 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 * 初始化界面元素
 	 */
 	private void initViews() {
+		listEmptyPromptView = findViewById(R.id.list_empty_ic);
 		meetingListCl = (CoordinatorLayout) findViewById(R.id.meeting_list_cl);
 		View headerView = findViewById(R.id.meeting_list_header);
 		AppBarLayout.LayoutParams lp = (AppBarLayout.LayoutParams) headerView.getLayoutParams();
@@ -471,11 +474,6 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 	 */
 	@Override
 	public void loadMeetingList(List<MeetingUserInfo> meetingInfos) {
-
-		if (meetingInfos == null || meetingInfos.size() == 0) {
-			LogUtils.i(TAG, "-->没有返回会议列表数据");
-			return;
-		}
 		// 获取列表原来的长度
 		int itemSize = meetingListRvAdapter.getItemCount();
 		// 如果本来没有数据，则依次加入数据
@@ -588,6 +586,20 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		}
 
 
+	}
+
+	/**
+	 * 显示列表数据为空提示
+	 */
+	@Override
+	public void showEmptyView(boolean isShow) {
+		if(isShow) {
+			listEmptyPromptView.setVisibility(View.VISIBLE);
+			meetingListRv.setVisibility(View.GONE);
+		} else {
+			listEmptyPromptView.setVisibility(View.GONE);
+			meetingListRv.setVisibility(View.VISIBLE);
+		}
 	}
 
 	/**

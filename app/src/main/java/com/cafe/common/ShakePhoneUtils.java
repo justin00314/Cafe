@@ -20,7 +20,7 @@ public class ShakePhoneUtils {
 	private final static String TAG = ShakePhoneUtils.class.getSimpleName();
 
 	// 控制摇晃灵敏度
-	private static final int SHAKE_SPEED = 6000;
+	private static final int SHAKE_SPEED = 5500;
 
 	private static final int UPDATE_INTERVAL_TIME = 50;
 

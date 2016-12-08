@@ -11,6 +11,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -18,6 +19,7 @@ import com.aiviews.R;
 import com.rey.material.widget.ProgressView;
 
 import org.justin.utils.common.LogUtils;
+import org.justin.utils.common.ResourcesUtils;
 import org.justin.utils.common.ViewUtils;
 
 
@@ -27,10 +29,14 @@ import org.justin.utils.common.ViewUtils;
  */
 public class LoadingDialog extends DialogFragment {
 	private final static String TAG = LoadingDialog.class.getSimpleName();
+//	/**
+//	 * 加载动画ImageView
+//	 */
+//	private ProgressView loadingPv;
 	/**
 	 * 加载动画ImageView
 	 */
-	private ProgressView loadingPv;
+	private ImageView loadingIv;
 	/**
 	 * 加载提示TextView
 	 */
@@ -75,7 +81,7 @@ public class LoadingDialog extends DialogFragment {
 		BaseDialog dialog = createDialog(contentView);
 		assignViews(contentView);
 		setLoadingTv();
-//		loadAnimation();
+		loadAnimation();
 		return dialog;
 	}
 
@@ -104,7 +110,7 @@ public class LoadingDialog extends DialogFragment {
 	}
 
 	private void assignViews(View view) {
-		loadingPv = (ProgressView) view.findViewById(R.id.loading_pv);
+		loadingIv = (ImageView) view.findViewById(R.id.loading_iv);
 		loadingTv = (TextView) view.findViewById(R.id.loading_tv);
 	}
 
@@ -113,11 +119,11 @@ public class LoadingDialog extends DialogFragment {
 		loadingTv.getPaint().setFakeBoldText(true);
 	}
 
-//	private void loadAnimation() {
-//		loadingIv.setImageDrawable(ResourcesUtils.getDrawable(R.drawable.loading_anim));
-//		loadingAnim = (AnimationDrawable) loadingIv.getDrawable();
-//		loadingAnim.start();
-//	}
+	private void loadAnimation() {
+		loadingIv.setImageDrawable(ResourcesUtils.getDrawable(R.drawable.loading_anim));
+		loadingAnim = (AnimationDrawable) loadingIv.getDrawable();
+		loadingAnim.start();
+	}
 
 
 }

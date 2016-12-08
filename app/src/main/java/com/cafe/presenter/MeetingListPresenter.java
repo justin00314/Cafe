@@ -149,9 +149,10 @@ public class MeetingListPresenter extends MVPPresenter<MeetingListContract.View,
 		if (view == null) return;
 //		view.dismissLoadingProgress();
 		if (response.data.meetingInfos == null || response.data.meetingInfos.size() == 0) {
-			// TODO:会议列表数据为空，显示提示
+			view.showEmptyView(true);
 			return;
 		}
+		view.showEmptyView(false);
 		// 界面加载列表
 		view.loadMeetingList(response.data.meetingInfos);
 	}
