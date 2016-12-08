@@ -7,35 +7,28 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.BounceInterpolator;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aiviews.toolbar.ToolbarActivity;
 import com.cafe.R;
 import com.cafe.adapter.ParticipantListRvAdapter;
-import com.cafe.adapter.ProcedureListRvAdapter;
 import com.cafe.common.IntentAction;
 import com.cafe.common.IntentExtra;
-import com.cafe.common.PreManager;
 import com.cafe.common.ShakePhoneUtils;
 import com.cafe.common.mvp.MVPActivity;
 import com.cafe.contract.BrainStormDetailContract;
 import com.cafe.data.account.UserInfo;
 import com.cafe.data.meeting.MeetingUserInfo;
-import com.cafe.data.meeting.ProcedureInfo;
 import com.cafe.presenter.BrainStormDetailPresenter;
 import com.cafe.view.ChronometerAsc;
-import com.cafe.view.ChronometerDesc;
 
 import org.justin.utils.common.LogUtils;
 import org.justin.utils.system.DisplayUtils;
 
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
 
 /**
