@@ -179,10 +179,12 @@ public class ChronometerDesc extends RelativeLayout {
 			timerTask.cancel();
 		if (timer != null)
 			timer.cancel();
+		if (vibrator != null)
+			vibrator.cancel();
 		// 停止执行旋转动画
 		stopRotationAnim();
 		// 停止闪烁
-		setFlashOff();
+//		setFlashOff();
 	}
 
 	private void alarm(long currentTime) {
@@ -191,15 +193,15 @@ public class ChronometerDesc extends RelativeLayout {
 			vibrator.vibrate(500);
 		}
 		// TODO:背景闪烁
-		setFlashOn();
+//		setFlashOn();
 
 	}
 
-	private void setFlashColor(int color){
+	private void setFlashColor(int color) {
 		setBackgroundColor(color);
 	}
 
-	private void setFlashFlag(boolean flashFlag){
+	private void setFlashFlag(boolean flashFlag) {
 		this.flashFlag = flashFlag;
 	}
 
@@ -212,7 +214,7 @@ public class ChronometerDesc extends RelativeLayout {
 		flashTimerTask = new TimerTask() {
 			@Override
 			public void run() {
-				if(!flashFlag){
+				if (!flashFlag) {
 					handler.obtainMessage(MSG_FLASH_ON).sendToTarget();
 				} else {
 					handler.obtainMessage(MSG_FLASH_OFF).sendToTarget();

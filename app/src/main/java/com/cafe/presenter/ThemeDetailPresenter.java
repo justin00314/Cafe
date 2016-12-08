@@ -440,7 +440,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 		if (view == null) return;
 		if (!view.isStartShake()) view.startShake();
 		if (jsonObj.data.result) {
-			PreManager.setStartEpisodeFlag(context, true);
 			ToastUtils.getInstance().showToast(context, R.string.prompt_start_episode_success);
 			view.refreshAfterStartEpisode();
 		} else {
@@ -488,7 +487,6 @@ public class ThemeDetailPresenter extends MVPPresenter<ThemeDetailContract.View,
 		if (view == null) return;
 		if (!view.isStartShake()) view.startShake();
 		if (jsonObj.data.result) {
-			PreManager.setStartEpisodeFlag(context, false);
 			ToastUtils.getInstance().showToast(context, R.string.prompt_stop_episode_success);
 			view.refreshAfterStopEpisode();
 		} else {

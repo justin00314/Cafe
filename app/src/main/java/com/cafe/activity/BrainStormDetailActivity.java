@@ -94,17 +94,27 @@ public class BrainStormDetailActivity extends MVPActivity<BrainStormDetailContra
 		setParticipantListRv();
 		// 注册广播监听用户在会状态
 		registerReceiver();
-		// 开始手机摇一摇监听
-		startShake();
 		// 加载会议参与者列表
 		getPresenter().loadMeetingParticipantList(meetingInfo);
+		getPresenter().startMeetingTime(meetingInfo);
+	}
+
+	@Override
+	public void onResume(){
+		super.onResume();
+		// 开始手机摇一摇监听
+		startShake();
+	}
+
+	public void onStop(){
+		super.onStop();
+		// 结束监听手机摇一摇
+		stopShake();
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		// 结束监听手机摇一摇
-		stopShake();
 		// 一定要结束计时器，避免内存泄露
 		getPresenter().stopMeetingTime();
 		unregisterReceiver();

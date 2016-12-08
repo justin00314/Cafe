@@ -20,7 +20,7 @@ public class ShakePhoneUtils {
 	private final static String TAG = ShakePhoneUtils.class.getSimpleName();
 
 	// 控制摇晃灵敏度
-	private static final int SHAKE_SPEED = 5500;
+	private static final int SHAKE_SPEED = 5000;
 
 	private static final int UPDATE_INTERVAL_TIME = 50;
 
@@ -49,7 +49,7 @@ public class ShakePhoneUtils {
 	}
 
 	private void init(Context context) {
-		if (sensorManager == null)
+//		if (sensorManager == null)
 			sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 		if (vibrator == null)
 			vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -106,24 +106,6 @@ public class ShakePhoneUtils {
 				}
 			}
 
-//			int medumValue = 30;
-//			if (Math.abs(x) > medumValue || Math.abs(y) > medumValue
-//					|| Math.abs(z) > medumValue) {
-//				long endTime = System.currentTimeMillis();
-//				long startTime = 0;
-//				if (endTime - startTime < 2000) {
-//					return;
-//				}
-//				// 手机振动提示
-//				if (vibrator != null) {
-//					// 伴有震动
-//					vibrator.vibrate(500);
-//				}
-//				if (onShakeListener != null)
-//					onShakeListener.onShake();
-//
-//
-//			}
 		}
 
 		@Override

@@ -59,8 +59,8 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 
 	private final static String TAG = ThemeDetailActivity.class.getSimpleName();
 
-	private final static int MSG_GET_SPEAKER = 0x0010;
-	private final static int MSG_GET_PROCEDURE = 0x0020;
+	private final static int MSG_GET_SPEAKER = 0x001011;
+	private final static int MSG_GET_PROCEDURE = 0x002011;
 //	private final static int MSG_CHECK_START_TIME = 0x0030;
 
 	private final static int COUNT_DOWN_MAX = 30;
@@ -68,7 +68,7 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 	/**
 	 * 每5秒轮询一次会议过程和当前说话人
 	 */
-	private final static int QUERY_PROCEDURE_PERIOD = 1000 * 5;
+	private final static int QUERY_PROCEDURE_PERIOD = 1000 * 3;
 
 	/**
 	 * 会议名字
@@ -146,10 +146,23 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		getPresenter().startMeetingTime(meetingInfo);
 		// 监听手势
 		listenGesture();
-		// 开始手机摇一摇监听
-		startShake();
+
 		// 注册广播监听用户再会状态
 		registerReceiver();
+	}
+
+	@Override
+	public void onResume(){
+		super.onResume();
+		// 开始手机摇一摇监听
+		startShake();
+	}
+
+	@Override
+	public void onStop(){
+		super.onStop();
+		// 结束监听手机摇一摇
+		stopShake();
 	}
 
 	@Override
@@ -157,8 +170,6 @@ public class ThemeDetailActivity extends MVPActivity<ThemeDetailContract.View,
 		super.onDestroy();
 		// 退出界面需要清除过滤条件的时间
 		PreManager.setProcedureFilterTime(this, "");
-		// 结束监听手机摇一摇
-		stopShake();
 		// 一定要结束计时器，避免内存泄露
 		getPresenter().stopMeetingTime();
 		if (meetingTimeCdesc.isTimeStart())

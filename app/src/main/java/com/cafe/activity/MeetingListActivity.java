@@ -140,24 +140,31 @@ public class MeetingListActivity extends MVPActivity<MeetingListContract.View,
 		getPresenter().getUserInfo();
 		// 轮询会议列表
 		getMeetingList();
-		// 开始手机摇一摇检测
-		startShake();
 		// 启动检查FUNF的服务
 		startService(checkIntent);
 	}
 
 	@Override
+	public void onResume(){
+		super.onResume();
+		// 开始手机摇一摇监听
+		startShake();
+	}
+
+	public void onStop(){
+		super.onStop();
+		// 结束监听手机摇一摇
+		stopShake();
+	}
+
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		// 停止手机摇一摇检测
-		stopShake();
 		stopService(checkIntent);
 		if (timerTask != null)
 			timerTask.cancel();
 		if (timer != null)
 			timer.cancel();
-		// 设置会议过程列表的过滤时间为空
-		PreManager.setProcedureFilterTime(this, "");
 		DiskCacheManager.getInstance().clearCache();
 	}
 
