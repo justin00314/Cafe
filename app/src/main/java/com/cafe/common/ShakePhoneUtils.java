@@ -20,9 +20,10 @@ public class ShakePhoneUtils {
 	private final static String TAG = ShakePhoneUtils.class.getSimpleName();
 
 	// 控制摇晃灵敏度
-	private static final int SHAKE_SPEED = 5000;
-
-	private static final int UPDATE_INTERVAL_TIME = 50;
+	// 据说三星的不能超过19
+	private static final int SHAKE_VALUE = 19;
+	// 控制2秒才能摇晃一次
+	private static final int UPDATE_INTERVAL_TIME = 1000 * 2;
 
 	private long lastUpdateTime;
 
@@ -50,7 +51,7 @@ public class ShakePhoneUtils {
 
 	private void init(Context context) {
 //		if (sensorManager == null)
-			sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 		if (vibrator == null)
 			vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 	}
@@ -78,32 +79,25 @@ public class ShakePhoneUtils {
 
 		@Override
 		public void onSensorChanged(SensorEvent event) {
-			long currentUpdateTime = System.currentTimeMillis();
-			long timeInterval = currentUpdateTime - lastUpdateTime;
-			if (timeInterval < UPDATE_INTERVAL_TIME) {
-				LogUtils.i(TAG, "摇晃不能太频繁-->");
-				return;
-			}
-			lastUpdateTime = currentUpdateTime;
 			// 传感器信息改变时执行该方法
 			float[] values = event.values;
 			float x = values[0]; // x轴方向的重力加速度，向右为正
 			float y = values[1]; // y轴方向的重力加速度，向前为正
 			float z = values[2]; // z轴方向的重力加速度，向上为正
 
-			float deltaX = x - lastX;
-			float deltaY = y - lastY;
-			float deltaZ = z - lastZ;
-			lastX = x;
-			lastY = y;
-			lastZ = z;
-			double speed = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ)
-					/ timeInterval * 10000;
-			if (speed > SHAKE_SPEED && onShakeListener != null) {
-				onShakeListener.onShake();
-				if (vibrator != null) {
-					vibrator.vibrate(300);
+			if (Math.abs(x) > SHAKE_VALUE || Math.abs(y) > SHAKE_VALUE ||
+					Math.abs(z) > SHAKE_VALUE) {
+				long currentUpdateTime = System.currentTimeMillis();
+				long timeInterval = currentUpdateTime - lastUpdateTime;
+				if (timeInterval < UPDATE_INTERVAL_TIME) {
+					LogUtils.i(TAG, "摇晃不能太频繁-->");
+					return;
 				}
+				lastUpdateTime = currentUpdateTime;
+				if (onShakeListener != null)
+					onShakeListener.onShake();
+				if (vibrator != null)
+					vibrator.vibrate(300);
 			}
 
 		}
