@@ -49,7 +49,8 @@ public class LoginActivity extends MVPActivity<LoginContract.View,
     private EditText mUserName;
     private EditText mPassword;
 
-    private String[] mPerms = {CAMERA, RECORD_AUDIO};
+    private String[] mPerms = {CAMERA, RECORD_AUDIO,
+		    READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE};
 
 
     @Override

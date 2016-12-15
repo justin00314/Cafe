@@ -23,7 +23,7 @@ public class ShakePhoneUtils {
 	// 据说三星的不能超过19
 	private static final int SHAKE_VALUE = 19;
 	// 控制2秒才能摇晃一次
-	private static final int UPDATE_INTERVAL_TIME = 1000 * 2;
+	private static final int UPDATE_INTERVAL_TIME = 1000 * 3;
 
 	private long lastUpdateTime;
 

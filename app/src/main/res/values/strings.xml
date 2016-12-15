@@ -148,7 +148,7 @@
 	<string name="meeting_start_date">会议开始时间</string>
 	<string name="meeting_finish_date">会议结束时间</string>
 	<string name="meeting_ID">会议ID</string>
-	<string name="camera_rationale">拍摄头像需要使用您的相机</string>
+	<string name="camera_rationale">Cafe需要使用您的相机，麦克风，SD卡权限</string>
 	<string name="rationale_ask_again">获取需要使用您的相机</string>
 	<string name="title_settings_dialog">进入设置</string>
 	<string name="prompt_open_camera_failure">相机打开失败，请重试</string>
@@ -156,6 +156,7 @@
 	<string name="prompt_select_start_date">请先选择会议开始时间</string>
 	<string name="prompt_finish_date_wrong">结束时间必须晚于开始时间</string>
 	<string name="prompt_start_date_wrong">开始时间必须早于结束时间</string>
+	<string name="prompt_date_must_after_now">开始时间和结束时间必须晚于当前时间</string>
 	<string name="prompt_need_photo">请先拍照</string>
 	<string name="register_fail">注册失败</string>
 	<string name="login_fail">登录失败</string>
