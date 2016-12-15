@@ -38,7 +38,7 @@ public abstract class WriteAction extends Action {
 
 	private final static String TIMESTAMP = "_timeStamp";
 
-	private final static int UPLOAD_NUMBER_LIMIT = 30;
+	private final static int UPLOAD_NUMBER_LIMIT = 20;
 	private final static int UPLOAD_DELAY = 5000;
 	private final static int UPLOAD_PERIOD = 3000;
 	/**
