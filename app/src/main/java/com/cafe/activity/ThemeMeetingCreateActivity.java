@@ -359,7 +359,7 @@ public class ThemeMeetingCreateActivity extends MVPActivity<ThemeMeetingCreateCo
 		final Calendar date = selectedDate.getFirstDate();
 		date.set(Calendar.HOUR_OF_DAY, hourOfDay);
 		date.set(Calendar.MINUTE, minute);
-		
+
 		Calendar nowDate = Calendar.getInstance();
 		if (date.before(nowDate)) {
 			ToastUtils.getInstance().showToast(this, R.string.prompt_date_must_after_now);
