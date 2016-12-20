@@ -1,6 +1,8 @@
 package com.cafe.funf.base;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.text.TextUtils;
 
 import com.cafe.common.DiskCacheManager;
@@ -15,6 +17,8 @@ import com.cafe.data.funf.KeysData;
 import org.justin.utils.common.JsonUtils;
 import org.justin.utils.common.LogUtils;
 import org.justin.utils.system.NetworkUtils;
+import org.justin.utils.thread.TaskSimpleRunnable;
+import org.justin.utils.thread.ThreadPoolUtils;
 import org.justin.utils.thread.ThreadUtils;
 
 import java.util.ArrayList;
@@ -222,12 +226,31 @@ public abstract class WriteAction extends Action {
 		public void onHandleSuccess(int statusCode, Header[] headers,
 		                            final FunfDataResponse jsonObj) {
 			// 在线程中处理上传成功后的数据操作
-			ThreadUtils.runOnSubThread(new Runnable() {
+//			ThreadUtils.runOnSubThread(new Runnable() {
+//				@Override
+//				public void run() {
+//					handleUploadSuccess(jsonObj.data.funfDatas);
+//				}
+//			});
+
+//			HandlerThread thread = new HandlerThread(Long.toHexString(System.nanoTime()));
+//			thread.start();
+//			thread.quit();
+//			(new Handler(thread.getLooper())).post(new Runnable() {
+//				@Override
+//				public void run() {
+//					handleUploadSuccess(jsonObj.data.funfDatas);
+//				}
+//			});
+
+			ThreadPoolUtils.execute(new TaskSimpleRunnable() {
 				@Override
-				public void run() {
+				public String doInBackground() {
 					handleUploadSuccess(jsonObj.data.funfDatas);
+					return null;
 				}
 			});
+
 
 		}
 	};
