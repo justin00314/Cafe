@@ -9,6 +9,7 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import org.justin.utils.common.LogUtils;
 import org.justin.utils.common.ResourcesUtils;
+import org.justin.utils.thread.ThreadPoolUtils;
 
 
 /**
@@ -53,6 +54,7 @@ public class BaseApplication extends Application {
 //						.build()
 //		);
 		ZXingLibrary.initDisplayOpinion(this);
+		ThreadPoolUtils.init();
 	}
 
 	@Override
